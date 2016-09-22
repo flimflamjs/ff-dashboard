@@ -1,0 +1,42 @@
+{
+  "name": "ff-dashboard",
+  "version": "0.0.1",
+  "description": "Flimflam dashboard component comprised of a main panel and two side panels",
+  "scripts": {
+    "watch-css": "postcss -c postcss.watch.js -w -l",
+    "build-css": "postcss -c postcss.build.js -l",
+    "mini-css": "postcss --use cssnano -r dist/index.css -m file -l",
+    "watch-js": "watchify scripts/index.js -o dist/index.js -t [babelify --presets es2015] -v",
+    "build-js": "browserify scripts/index.js -o dist/index.js -t [babelify --presets es2015]",
+    "mini-js": "uglifyjs dist/index.js -o dist/index.js --source-map dist/index.js.map -c -m -v",
+    "prepublish": "npm run build-css && npm run mini-css && npm run build-js && npm run mini-js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/flimflamjs/ff-dashboard.git"
+  },
+  "author": "yutakahoulette",
+  "bugs": {
+    "url": "https://github.com/flimflamjs/ff-dashboard/issues"
+  },
+  "devDependencies": {
+    "autoprefixer": "6.4.1",
+    "babel-preset-es2015": "6.14.0",
+    "babelify": "7.3.0",
+    "browserify": "13.1.0",
+    "css-mother-starter": "0.0.21",
+    "cssnano": "3.7.5",
+    "postcss-cli": "2.6.0",
+    "postcss-import": "8.1.2",
+    "uglify-js": "2.7.3",
+    "watchify": "3.7.0"
+  },
+  "dependencies": {
+    "flimflam-render": "0.1.4",
+    "flyd": "0.2.2",
+    "flyd-ajax": "0.1.0",
+    "flyd-flatmap": "1.0.2",
+    "ramda": "0.22.1",
+    "snabbdom": "0.5.3"
+  }
+}
