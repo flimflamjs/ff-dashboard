@@ -1,0 +1,65 @@
+@import '../dist/index.css';
+
+* {
+  box-sizing: border-box;
+}
+
+.container {
+  max-width: 980px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.ff-dashboard-panels {
+  background: grey;
+  position: relative;
+}
+
+.ff-dashboard-header {
+  padding: 20px;
+  background: #e6e6e6;
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+
+.ff-dashboard-closeButton {
+  position: absolute;
+  top: 0;
+  font-size: 26px;
+  padding: 5px;
+  background: red;
+  font-family: monospace;
+  line-height: 1;
+}
+
+.ff-dashboard-leftPanel,
+.ff-dashboard-rightPanel {
+  background: #f3f3f3;
+  z-index: 1;
+}
+
+.ff-dashboard-leftPanel,
+.ff-dashboard-mainPanel,
+.ff-dashboard-rightPanel {
+  padding: 20px;
+  position: absolute;
+  height: 100%;
+  top: 0;
+}
+
+.ff-dashboard-leftPanel {
+  width: 30%;
+  left: 0;
+  border-right: 1px solid rgba(0,0,0,0.1);
+  box-shadow: 5px 5px 5px rgba(0,0,0,0.1);
+}
+.ff-dashboard-mainPanel {
+  width: 40%;
+  background: #fbfbfb;
+  left: 30%;
+}
+
+.ff-dashboard-rightPanel {
+  width: 40%;
+  right: 0;
+  border-left: 1px solid rgba(0,0,0,0.1);
+}
