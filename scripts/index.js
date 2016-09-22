@@ -6,7 +6,7 @@ import snabbdom from 'snabbdom'
 
 const init = _ => {
   const state = {
-    displayPanel$: flyd.stream('main')
+    displayPanel$: flyd.stream('right')
   , headerContent: 'header'
   , mainPanelContent: 'main'
   , leftPanelContent: 'left'
@@ -51,23 +51,38 @@ const closeButton = dir =>
     }}
   })
 
-const leftPanel = content =>
-  h('div.ff-dashboard-leftPanel', [ 
+const leftPanel = state =>
+  h('div.ff-dashboard-leftPanel', {
+    style: {
+      display: state.displayPanel$() === 'left' ? 'block' : 'none'
+    , width: state.panelWidths$().left + '%'
+    }
+  }
+, [ 
     closeButton('left')
-  , content
+  , state.leftPanelContent
   ])
 
 const mainPanel = state => 
   h('div.ff-dashboard-mainPanel', {
-    style: {width: state.panelWidths$().main + '%'}
+    style: {
+      width: state.panelWidths$().main + '%'
+    , left: state.panelWidths$().left + '%'
+    }
   }   
 , state.mainPanelContent)
 
 
-const rightPanel = content =>
-  h('div.ff-dashboard-rightPanel', [ 
+const rightPanel = state =>
+  h('div.ff-dashboard-rightPanel', {
+    style: {
+      display: state.displayPanel$() === 'right' ? 'block' : 'none'
+    , width: state.panelWidths$().right + '%'
+    }
+  }
+, [ 
     closeButton('right')
-  , content
+  , state.rightPanelContent
   ])
 
 const header = content =>
@@ -89,9 +104,9 @@ const view = state =>
     header(state.headerContent)
   , h('div.ff-dashboard-panels'
     , {hook: {insert: setHeight}}
-    , [ leftPanel('left')
+    , [ leftPanel(state)
       , mainPanel(state)
-      , rightPanel('right')
+      , rightPanel(state)
       ]
     ) 
   ]) 

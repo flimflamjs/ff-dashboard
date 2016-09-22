@@ -22,19 +22,9 @@
 }
 
 .ff-dashboard-leftPanel {
-  width: 0;
-  display: none;
-  left: 0;
-}
-.ff-dashboard-mainPanel {
-  width: 100%;
   left: 0;
 }
 
 .ff-dashboard-rightPanel {
-  width: 0;
-  display: none;
   right: 0;
 }
-
-
