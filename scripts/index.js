@@ -5,8 +5,41 @@ import render from 'flimflam-render'
 import snabbdom from 'snabbdom'
 
 const init = _ => {
-  const state = {}
+  const state = {
+    displayPanel$: flyd.stream('main')
+  , headerContent: 'header'
+  , mainPanelContent: 'main'
+  , leftPanelContent: 'left'
+  , rightPanelContent: 'right'
+  , leftPanelWidth: 20 
+  , rightPanelWidth: 60 
+  }
+  state.panelWidths$ = flyd.map(setPanelWidths(state), state.displayPanel$)
   return state
+}
+
+const setPanelWidths = state => s => {
+  if(s === 'right') {
+    let rightWidth = state.rightPanelWidth ? state.rightPanelWidth : 50
+    return {
+      main: 100 - rightWidth,
+      left: 0,
+      right: rightWidth,
+    }
+  }
+  if(s === 'left') {
+    let leftWidth = state.leftPanelWidth ? state.leftPanelWidth : 30
+    return {
+      main: 100 - leftWidth,
+      left: leftWidth,
+      right: 0,
+    }
+  }
+  return {
+    main: 100,
+    left: 0,
+    right: 0,
+  }
 }
 
 const closeButton = dir =>
@@ -24,15 +57,21 @@ const leftPanel = content =>
   , content
   ])
 
-const mainPanel = content =>
-  h('div.ff-dashboard-mainPanel', content)
+const mainPanel = state => 
+  h('div.ff-dashboard-mainPanel', {
+    style: {width: state.panelWidths$().main + '%'}
+  }   
+, state.mainPanelContent)
+
 
 const rightPanel = content =>
-  h('div.ff-dashboard-rightPanel', content)
+  h('div.ff-dashboard-rightPanel', [ 
+    closeButton('right')
+  , content
+  ])
 
 const header = content =>
   h('div.ff-dashboard-header', content)
-
 
 const setHeight = _ => {
   let panels = document.querySelector('.ff-dashboard-panels') 
@@ -47,16 +86,15 @@ window.onresize = setHeight
 
 const view = state => 
   h('div.ff-dashboard', [
-    header('header')
+    header(state.headerContent)
   , h('div.ff-dashboard-panels'
     , {hook: {insert: setHeight}}
     , [ leftPanel('left')
-      , mainPanel('main')
+      , mainPanel(state)
       , rightPanel('right')
       ]
     ) 
   ]) 
-
 
 
 
