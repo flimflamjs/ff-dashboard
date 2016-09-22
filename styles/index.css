@@ -1,5 +1,6 @@
 .ff-dashboard-panels {
   position: relative;
+  overflow: hidden;
 }
 
 .ff-dashboard-closeButton {

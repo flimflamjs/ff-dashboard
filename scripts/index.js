@@ -6,45 +6,31 @@ import snabbdom from 'snabbdom'
 
 const init = _ => {
   const state = {
-    displayPanel$: flyd.stream('right')
+    displayPanel$: flyd.stream('left')
   , headerContent: 'header'
   , mainPanelContent: 'main'
   , leftPanelContent: 'left'
-  , rightPanelContent: 'right'
+  , rightPanelContent: h('h1', 'asdf asdlkj asdflkj asdflkj asdflkj asdflkjas df') 
   , leftPanelWidth: 20 
   , rightPanelWidth: 60 
+  , transitionTime: 0.3
   }
-  state.panelWidths$ = flyd.map(setPanelWidths(state), state.displayPanel$)
+  state.mainPanelWidth$ = flyd.map(setMainPanelWidth(state), state.displayPanel$)
   return state
 }
 
-const setPanelWidths = state => s => {
-  if(s === 'right') {
-    let rightWidth = state.rightPanelWidth ? state.rightPanelWidth : 50
-    return {
-      main: 100 - rightWidth,
-      left: 0,
-      right: rightWidth,
-    }
-  }
-  if(s === 'left') {
-    let leftWidth = state.leftPanelWidth ? state.leftPanelWidth : 30
-    return {
-      main: 100 - leftWidth,
-      left: leftWidth,
-      right: 0,
-    }
-  }
-  return {
-    main: 100,
-    left: 0,
-    right: 0,
-  }
+const setMainPanelWidth = state => s => {
+  if(s === 'right') 
+    return 100 - state.rightPanelWidth 
+  if(s === 'left') 
+    return 100 - state.leftPanelWidth 
+  return  100
 }
 
-const closeButton = dir =>
+const closeButton = state => dir =>
   h('div.ff-dashboard-closeButton', {
-    props: {innerHTML : '&times'}
+    on: {click: _ => state.displayPanel$('main')}
+  , props: {innerHTML : '&times'}
   , hook: {insert: vnode => {
       let elm = vnode.elm
       elm.style[dir === 'left' ? 'right' : 'left'] = `-${elm.offsetWidth}px`
@@ -54,36 +40,40 @@ const closeButton = dir =>
 const leftPanel = state =>
   h('div.ff-dashboard-leftPanel', {
     style: {
-      display: state.displayPanel$() === 'left' ? 'block' : 'none'
-    , width: state.panelWidths$().left + '%'
+      transition: `left ${state.transitionTime}s ease-out`
+    , left: state.displayPanel$() === 'left' ? 0 : `-${state.leftPanelWidth}%`
+    , width: state.leftPanelWidth + '%'
     }
   }
 , [ 
-    closeButton('left')
+    closeButton(state)('left')
   , state.leftPanelContent
+  ])
+
+const rightPanel = state =>
+  h('div.ff-dashboard-rightPanel', {
+    style: {
+      transition: `right ${state.transitionTime}s ease-out`
+    , right: state.displayPanel$() === 'right' ? 0 : `-${state.rightPanelWidth}%`
+    , width: state.rightPanelWidth + '%'
+    }
+  }
+, [ 
+    closeButton(state)('right')
+  , state.rightPanelContent
   ])
 
 const mainPanel = state => 
   h('div.ff-dashboard-mainPanel', {
     style: {
-      width: state.panelWidths$().main + '%'
-    , left: state.panelWidths$().left + '%'
+      transition: `width ${state.transitionTime}s ease-out, left ${state.transitionTime}s ease-out`
+    , width: state.mainPanelWidth$() + '%'
+    , left: state.displayPanel$() === 'left' ? `${state.leftPanelWidth}%` : 0
     }
   }   
 , state.mainPanelContent)
 
 
-const rightPanel = state =>
-  h('div.ff-dashboard-rightPanel', {
-    style: {
-      display: state.displayPanel$() === 'right' ? 'block' : 'none'
-    , width: state.panelWidths$().right + '%'
-    }
-  }
-, [ 
-    closeButton('right')
-  , state.rightPanelContent
-  ])
 
 const header = content =>
   h('div.ff-dashboard-header', content)
