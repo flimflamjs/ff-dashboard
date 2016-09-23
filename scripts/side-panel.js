@@ -6,9 +6,9 @@ module.exports = (state, dir) => {
   let style = {
       transition: `${dir} ${state.transition}, visibility ${state.transition}`
     , visibility: state.displayPanel$() === dir ? 'visible' : 'hidden' 
-    , width: width + '%'
+    , width
     }
-  style[dir] = state.displayPanel$() === dir ? 0 : `-${width}%` 
+  style[dir] = state.displayPanel$() === dir ? 0 : `-${width}` 
   return h(`div.ff-dashboard-${dir}Panel`, {style}, [ 
     closeButton(state)(dir)
   , dir === 'left' ? state.leftPanelContent : state.rightPanelContent 

@@ -17,18 +17,11 @@ const init = state => {
   , mainPanelContent: '' 
   , leftPanelContent: '' 
   , rightPanelContent: '' 
-  , leftPanelWidth: 20 
-  , rightPanelWidth: 60 
+  , leftPanelWidth: '500px' 
+  , rightPanelWidth: '800px'
   , transition: '0.2s ease-out'
   }, state)
-  state.mainPanelWidth$ = flyd.map(setMainPanelWidth(state), state.displayPanel$)
   return state
-}
-
-const setMainPanelWidth = state => s => {
-  if(s === 'right') return 100 - state.rightPanelWidth 
-  if(s === 'left') return 100 - state.leftPanelWidth 
-  return  100
 }
 
 const setHeight = _ => {

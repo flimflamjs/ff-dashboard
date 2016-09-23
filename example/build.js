@@ -19411,22 +19411,13 @@ var init = function init(state) {
     mainPanelContent: '',
     leftPanelContent: '',
     rightPanelContent: '',
-    leftPanelWidth: 20,
-    rightPanelWidth: 60,
+    leftPanelWidth: '500px',
+    rightPanelWidth: '800px',
     transition: '0.2s ease-out'
   }, state);
-  state.mainPanelWidth$ = _flyd2.default.map(setMainPanelWidth(state), state.displayPanel$);
   return state;
 }; // npm
 
-
-var setMainPanelWidth = function setMainPanelWidth(state) {
-  return function (s) {
-    if (s === 'right') return 100 - state.rightPanelWidth;
-    if (s === 'left') return 100 - state.leftPanelWidth;
-    return 100;
-  };
-};
 
 var setHeight = function setHeight(_) {
   var panels = document.querySelector('.ff-dashboard-panels');
@@ -19471,13 +19462,18 @@ var _h2 = _interopRequireDefault(_h);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+var leftWidth = function leftWidth(state) {
+  return function (vnode) {
+    var elm = vnode.elm;
+    var left = state.displayPanel$() === 'left' ? elm.parentElement.querySelector('.ff-dashboard-leftPanel').offsetWidth + 'px' : 0;
+    elm.style.left = left;
+  };
+};
+
 module.exports = function (state) {
   return (0, _h2.default)('div.ff-dashboard-mainPanel', {
-    style: {
-      transition: 'width ' + state.transition + ', left ' + state.transition,
-      width: state.mainPanelWidth$() + '%',
-      left: state.displayPanel$() === 'left' ? state.leftPanelWidth + '%' : 0
-    }
+    style: { transition: 'left ' + state.transition },
+    hook: { update: leftWidth(state) }
   }, [state.mainPanelContent]);
 };
 
@@ -19516,9 +19512,9 @@ module.exports = function (state, dir) {
   var style = {
     transition: dir + ' ' + state.transition + ', visibility ' + state.transition,
     visibility: state.displayPanel$() === dir ? 'visible' : 'hidden',
-    width: width + '%'
+    width: width
   };
-  style[dir] = state.displayPanel$() === dir ? 0 : '-' + width + '%';
+  style[dir] = state.displayPanel$() === dir ? 0 : '-' + width;
   return (0, _h2.default)('div.ff-dashboard-' + dir + 'Panel', { style: style }, [(0, _closeButton2.default)(state)(dir), dir === 'left' ? state.leftPanelContent : state.rightPanelContent]);
 };
 
