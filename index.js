@@ -13,7 +13,7 @@ const mainPanelContent = state =>
 
 const init = _ => {
   const state = {}
-  state.clickPanel$ = flyd.stream('main')
+  state.clickPanel$ = flyd.stream()
 
   state.dashboard = dashboard.init({
     displayPanel$: flyd.map(x => x, state.clickPanel$) 
