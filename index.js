@@ -6,33 +6,37 @@ import snabbdom from 'snabbdom'
 
 import dashboard from '../scripts/index'
 import main from './main'
+import details from './details'
 import data from './data'
 
-const headerContent = state =>
+const header = state =>
   h('a', {on: {click: x => state.showFilters$(true)}}, 'open left panel')
 
 const init = _ => {
   const state = {}
   state.showFilters$ = flyd.stream()
   state.dataId$ = flyd.stream()
-  state.data$ = flyd.map(i => R.find(R.propEq('id', i), data), state.dataId$) 
+  state.data$ = flyd.merge(
+      flyd.stream({})
+    , flyd.map(i => R.find(R.propEq('id', i), data), state.dataId$))
 
   const displayPanel$ = flyd.merge(
       flyd.map(R.always('left'), state.showFilters$)
-    , flyd.map(R.always('right'), state.data$)
+    , flyd.map(x => x.name ? 'right' : undefined , state.data$)
   )
 
-  state.dashboard = dashboard.init({
-    displayPanel$
-  , headerContent: headerContent(state)
-  , mainPanelContent: main(state)
-  })
-  flyd.map(x => console.log(x), state.data$)
-  flyd.map(x => console.log(x), displayPanel$)
+  state.dashboard = dashboard.init({ displayPanel$ })
   return state
 }
 
-const view = state => dashboard.view(state.dashboard)
+const view = state => 
+  h('div', [
+    dashboard.view(state.dashboard, {
+        header: header(state)
+      , mainPanel: main(state)
+      , rightPanel: details(state)
+    })
+  ])
 
 const patch = snabbdom.init([
   require('snabbdom/modules/class')

@@ -11,4 +11,3 @@ const row = state => d =>
 module.exports = state => 
   h('table', R.map(row(state), data))
 
-
