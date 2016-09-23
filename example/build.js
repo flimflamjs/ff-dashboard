@@ -31,6 +31,27 @@ module.exports = [{
 },{}],2:[function(require,module,exports){
 'use strict';
 
+var _ramda = require('ramda');
+
+var _ramda2 = _interopRequireDefault(_ramda);
+
+var _h = require('snabbdom/h');
+
+var _h2 = _interopRequireDefault(_h);
+
+var _flyd = require('flyd');
+
+var _flyd2 = _interopRequireDefault(_flyd);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+module.exports = function (state) {
+  return (0, _h2.default)('div', [(0, _h2.default)('h1', state.data$().name), (0, _h2.default)('img', { props: { src: state.data$().img } }), (0, _h2.default)('p', state.data$().description)]);
+};
+
+},{"flyd":14,"ramda":21,"snabbdom/h":22}],3:[function(require,module,exports){
+'use strict';
+
 var _h = require('snabbdom/h');
 
 var _h2 = _interopRequireDefault(_h);
@@ -59,13 +80,17 @@ var _main = require('./main');
 
 var _main2 = _interopRequireDefault(_main);
 
+var _details = require('./details');
+
+var _details2 = _interopRequireDefault(_details);
+
 var _data = require('./data');
 
 var _data2 = _interopRequireDefault(_data);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var headerContent = function headerContent(state) {
+var header = function header(state) {
   return (0, _h2.default)('a', { on: { click: function click(x) {
         return state.showFilters$(true);
       } } }, 'open left panel');
@@ -75,28 +100,24 @@ var init = function init(_) {
   var state = {};
   state.showFilters$ = _flyd2.default.stream();
   state.dataId$ = _flyd2.default.stream();
-  state.data$ = _flyd2.default.map(function (i) {
+  state.data$ = _flyd2.default.merge(_flyd2.default.stream({}), _flyd2.default.map(function (i) {
     return _ramda2.default.find(_ramda2.default.propEq('id', i), _data2.default);
-  }, state.dataId$);
+  }, state.dataId$));
 
-  var displayPanel$ = _flyd2.default.merge(_flyd2.default.map(_ramda2.default.always('left'), state.showFilters$), _flyd2.default.map(_ramda2.default.always('right'), state.data$));
+  var displayPanel$ = _flyd2.default.merge(_flyd2.default.map(_ramda2.default.always('left'), state.showFilters$), _flyd2.default.map(function (x) {
+    return x.name ? 'right' : undefined;
+  }, state.data$));
 
-  state.dashboard = _index2.default.init({
-    displayPanel$: displayPanel$,
-    headerContent: headerContent(state),
-    mainPanelContent: (0, _main2.default)(state)
-  });
-  _flyd2.default.map(function (x) {
-    return console.log(x);
-  }, state.data$);
-  _flyd2.default.map(function (x) {
-    return console.log(x);
-  }, displayPanel$);
+  state.dashboard = _index2.default.init({ displayPanel$: displayPanel$ });
   return state;
 };
 
 var view = function view(state) {
-  return _index2.default.view(state.dashboard);
+  return (0, _h2.default)('div', [_index2.default.view(state.dashboard, {
+    header: header(state),
+    mainPanel: (0, _main2.default)(state),
+    rightPanel: (0, _details2.default)(state)
+  })]);
 };
 
 var patch = _snabbdom2.default.init([require('snabbdom/modules/class'), require('snabbdom/modules/props'), require('snabbdom/modules/style'), require('snabbdom/modules/eventlisteners'), require('snabbdom/modules/attributes')]);
@@ -105,7 +126,7 @@ var container = document.querySelector('#container');
 
 (0, _flimflamRender2.default)({ patch: patch, container: container, view: view, state: init() });
 
-},{"../scripts/index":33,"./data":1,"./main":3,"flimflam-render":4,"flyd":13,"ramda":20,"snabbdom":29,"snabbdom/h":21,"snabbdom/modules/attributes":24,"snabbdom/modules/class":25,"snabbdom/modules/eventlisteners":26,"snabbdom/modules/props":27,"snabbdom/modules/style":28}],3:[function(require,module,exports){
+},{"../scripts/index":34,"./data":1,"./details":2,"./main":4,"flimflam-render":5,"flyd":14,"ramda":21,"snabbdom":30,"snabbdom/h":22,"snabbdom/modules/attributes":25,"snabbdom/modules/class":26,"snabbdom/modules/eventlisteners":27,"snabbdom/modules/props":28,"snabbdom/modules/style":29}],4:[function(require,module,exports){
 'use strict';
 
 var _ramda = require('ramda');
@@ -134,7 +155,7 @@ module.exports = function (state) {
   return (0, _h2.default)('table', _ramda2.default.map(row(state), _data2.default));
 };
 
-},{"./data":1,"ramda":20,"snabbdom/h":21}],4:[function(require,module,exports){
+},{"./data":1,"ramda":21,"snabbdom/h":22}],5:[function(require,module,exports){
 'use strict';
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
@@ -184,7 +205,7 @@ var isObj = function isObj(x) {
 module.exports = render;
 
 
-},{"flyd":5,"flyd/module/mergeall":6,"ramda":12}],5:[function(require,module,exports){
+},{"flyd":6,"flyd/module/mergeall":7,"ramda":13}],6:[function(require,module,exports){
 var curryN = require('ramda/src/curryN');
 
 'use strict';
@@ -485,7 +506,7 @@ module.exports = {
   immediate: immediate,
 };
 
-},{"ramda/src/curryN":7}],6:[function(require,module,exports){
+},{"ramda/src/curryN":8}],7:[function(require,module,exports){
 var flyd = require('../../lib');
 
 module.exports = function mergeAll(streams) {
@@ -510,7 +531,7 @@ module.exports = function mergeAll(streams) {
 };
 
 
-},{"../../lib":5}],7:[function(require,module,exports){
+},{"../../lib":6}],8:[function(require,module,exports){
 var _arity = require('./internal/_arity');
 var _curry1 = require('./internal/_curry1');
 var _curry2 = require('./internal/_curry2');
@@ -567,7 +588,7 @@ module.exports = _curry2(function curryN(length, fn) {
   return _arity(length, _curryN(length, [], fn));
 });
 
-},{"./internal/_arity":8,"./internal/_curry1":9,"./internal/_curry2":10,"./internal/_curryN":11}],8:[function(require,module,exports){
+},{"./internal/_arity":9,"./internal/_curry1":10,"./internal/_curry2":11,"./internal/_curryN":12}],9:[function(require,module,exports){
 module.exports = function _arity(n, fn) {
   // jshint unused:vars
   switch (n) {
@@ -586,7 +607,7 @@ module.exports = function _arity(n, fn) {
   }
 };
 
-},{}],9:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 /**
  * Optimized internal two-arity curry function.
  *
@@ -607,7 +628,7 @@ module.exports = function _curry1(fn) {
   };
 };
 
-},{}],10:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 var _curry1 = require('./_curry1');
 
 
@@ -641,7 +662,7 @@ module.exports = function _curry2(fn) {
   };
 };
 
-},{"./_curry1":9}],11:[function(require,module,exports){
+},{"./_curry1":10}],12:[function(require,module,exports){
 var _arity = require('./_arity');
 
 
@@ -681,7 +702,7 @@ module.exports = function _curryN(length, received, fn) {
   };
 };
 
-},{"./_arity":8}],12:[function(require,module,exports){
+},{"./_arity":9}],13:[function(require,module,exports){
 //  Ramda v0.19.1
 //  https://github.com/ramda/ramda
 //  (c) 2013-2016 Scott Sauyet, Michael Hurley, and David Chambers
@@ -9129,7 +9150,7 @@ module.exports = function _curryN(length, received, fn) {
 
 }.call(this));
 
-},{}],13:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 'use strict';
 
 var curryN = require('ramda/src/curryN');
@@ -9757,7 +9778,7 @@ StreamTransformer.prototype['@@transducer/step'] = function(s, v) { return v; };
 
 module.exports = flyd;
 
-},{"ramda/src/curryN":14}],14:[function(require,module,exports){
+},{"ramda/src/curryN":15}],15:[function(require,module,exports){
 var _arity = require('./internal/_arity');
 var _curry1 = require('./internal/_curry1');
 var _curry2 = require('./internal/_curry2');
@@ -9813,7 +9834,7 @@ module.exports = _curry2(function curryN(length, fn) {
   return _arity(length, _curryN(length, [], fn));
 });
 
-},{"./internal/_arity":15,"./internal/_curry1":16,"./internal/_curry2":17,"./internal/_curryN":18}],15:[function(require,module,exports){
+},{"./internal/_arity":16,"./internal/_curry1":17,"./internal/_curry2":18,"./internal/_curryN":19}],16:[function(require,module,exports){
 module.exports = function _arity(n, fn) {
   /* eslint-disable no-unused-vars */
   switch (n) {
@@ -9832,7 +9853,7 @@ module.exports = function _arity(n, fn) {
   }
 };
 
-},{}],16:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 var _isPlaceholder = require('./_isPlaceholder');
 
 
@@ -9854,7 +9875,7 @@ module.exports = function _curry1(fn) {
   };
 };
 
-},{"./_isPlaceholder":19}],17:[function(require,module,exports){
+},{"./_isPlaceholder":20}],18:[function(require,module,exports){
 var _curry1 = require('./_curry1');
 var _isPlaceholder = require('./_isPlaceholder');
 
@@ -9884,7 +9905,7 @@ module.exports = function _curry2(fn) {
   };
 };
 
-},{"./_curry1":16,"./_isPlaceholder":19}],18:[function(require,module,exports){
+},{"./_curry1":17,"./_isPlaceholder":20}],19:[function(require,module,exports){
 var _arity = require('./_arity');
 var _isPlaceholder = require('./_isPlaceholder');
 
@@ -9926,14 +9947,14 @@ module.exports = function _curryN(length, received, fn) {
   };
 };
 
-},{"./_arity":15,"./_isPlaceholder":19}],19:[function(require,module,exports){
+},{"./_arity":16,"./_isPlaceholder":20}],20:[function(require,module,exports){
 module.exports = function _isPlaceholder(a) {
   return a != null &&
          typeof a === 'object' &&
          a['@@functional/placeholder'] === true;
 };
 
-},{}],20:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 //  Ramda v0.22.1
 //  https://github.com/ramda/ramda
 //  (c) 2013-2016 Scott Sauyet, Michael Hurley, and David Chambers
@@ -18766,7 +18787,7 @@ module.exports = function _isPlaceholder(a) {
 
 }.call(this));
 
-},{}],21:[function(require,module,exports){
+},{}],22:[function(require,module,exports){
 var VNode = require('./vnode');
 var is = require('./is');
 
@@ -18802,7 +18823,7 @@ module.exports = function h(sel, b, c) {
   return VNode(sel, data, children, text, undefined);
 };
 
-},{"./is":23,"./vnode":30}],22:[function(require,module,exports){
+},{"./is":24,"./vnode":31}],23:[function(require,module,exports){
 function createElement(tagName){
   return document.createElement(tagName);
 }
@@ -18858,13 +18879,13 @@ module.exports = {
   setTextContent: setTextContent
 };
 
-},{}],23:[function(require,module,exports){
+},{}],24:[function(require,module,exports){
 module.exports = {
   array: Array.isArray,
   primitive: function(s) { return typeof s === 'string' || typeof s === 'number'; },
 };
 
-},{}],24:[function(require,module,exports){
+},{}],25:[function(require,module,exports){
 var booleanAttrs = ["allowfullscreen", "async", "autofocus", "autoplay", "checked", "compact", "controls", "declare",
                 "default", "defaultchecked", "defaultmuted", "defaultselected", "defer", "disabled", "draggable",
                 "enabled", "formnovalidate", "hidden", "indeterminate", "inert", "ismap", "itemscope", "loop", "multiple",
@@ -18909,7 +18930,7 @@ function updateAttrs(oldVnode, vnode) {
 
 module.exports = {create: updateAttrs, update: updateAttrs};
 
-},{}],25:[function(require,module,exports){
+},{}],26:[function(require,module,exports){
 function updateClass(oldVnode, vnode) {
   var cur, name, elm = vnode.elm,
       oldClass = oldVnode.data.class,
@@ -18934,7 +18955,7 @@ function updateClass(oldVnode, vnode) {
 
 module.exports = {create: updateClass, update: updateClass};
 
-},{}],26:[function(require,module,exports){
+},{}],27:[function(require,module,exports){
 function invokeHandler(handler, vnode, event) {
   if (typeof handler === "function") {
     // call function handler
@@ -19037,7 +19058,7 @@ module.exports = {
   destroy: updateEventListeners
 };
 
-},{}],27:[function(require,module,exports){
+},{}],28:[function(require,module,exports){
 function updateProps(oldVnode, vnode) {
   var key, cur, old, elm = vnode.elm,
       oldProps = oldVnode.data.props, props = vnode.data.props;
@@ -19062,7 +19083,7 @@ function updateProps(oldVnode, vnode) {
 
 module.exports = {create: updateProps, update: updateProps};
 
-},{}],28:[function(require,module,exports){
+},{}],29:[function(require,module,exports){
 var raf = (typeof window !== 'undefined' && window.requestAnimationFrame) || setTimeout;
 var nextFrame = function(fn) { raf(function() { raf(fn); }); };
 
@@ -19133,7 +19154,7 @@ function applyRemoveStyle(vnode, rm) {
 
 module.exports = {create: updateStyle, update: updateStyle, destroy: applyDestroyStyle, remove: applyRemoveStyle};
 
-},{}],29:[function(require,module,exports){
+},{}],30:[function(require,module,exports){
 // jshint newcap: false
 /* global require, module, document, Node */
 'use strict';
@@ -19395,14 +19416,14 @@ function init(modules, api) {
 
 module.exports = {init: init};
 
-},{"./htmldomapi":22,"./is":23,"./vnode":30}],30:[function(require,module,exports){
+},{"./htmldomapi":23,"./is":24,"./vnode":31}],31:[function(require,module,exports){
 module.exports = function(sel, data, children, text, elm) {
   var key = data === undefined ? undefined : data.key;
   return {sel: sel, data: data, children: children,
           text: text, elm: elm, key: key};
 };
 
-},{}],31:[function(require,module,exports){
+},{}],32:[function(require,module,exports){
 'use strict';
 
 var _h = require('snabbdom/h');
@@ -19430,7 +19451,7 @@ module.exports = function (state) {
   };
 };
 
-},{"snabbdom/h":21}],32:[function(require,module,exports){
+},{"snabbdom/h":22}],33:[function(require,module,exports){
 'use strict';
 
 var _h = require('snabbdom/h');
@@ -19443,7 +19464,7 @@ module.exports = function (content) {
   return (0, _h2.default)('div.ff-dashboard-header', [content]);
 };
 
-},{"snabbdom/h":21}],33:[function(require,module,exports){
+},{"snabbdom/h":22}],34:[function(require,module,exports){
 'use strict';
 
 var _h = require('snabbdom/h');
@@ -19480,10 +19501,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var init = function init(state) {
   state = _ramda2.default.merge({
     displayPanel$: _flyd2.default.stream('main'),
-    headerContent: '',
-    mainPanelContent: '',
-    leftPanelContent: '',
-    rightPanelContent: '',
     leftPanelWidth: '300px',
     rightPanelWidth: '500px',
     transition: '0.2s ease-out'
@@ -19499,20 +19516,20 @@ var setHeight = function setHeight(panels) {
   panels.style.height = bodyHeight - headerHeight + 'px';
 };
 
-var view = function view(state) {
-  return (0, _h2.default)('div.ff-dashboard', { attrs: { 'data-display-panel': state.displayPanel$() } }, [(0, _header2.default)(state.headerContent), (0, _h2.default)('div.ff-dashboard-panels', { hook: { insert: function insert(vnode) {
+var view = function view(state, content) {
+  return (0, _h2.default)('div.ff-dashboard', { attrs: { 'data-display-panel': state.displayPanel$() } }, [(0, _header2.default)(content.header), (0, _h2.default)('div.ff-dashboard-panels', { hook: { insert: function insert(vnode) {
         setHeight(vnode.elm);
         window.addEventListener('resize', function (ev) {
           return setHeight(vnode.elm);
         });
       }
     }
-  }, [(0, _leftPanel2.default)(state), (0, _mainPanel2.default)(state), (0, _rightPanel2.default)(state)])]);
+  }, [(0, _leftPanel2.default)(state, content.leftPanel || ''), (0, _mainPanel2.default)(state, content.mainPanel || ''), (0, _rightPanel2.default)(state, content.rightPanel || '')])]);
 };
 
 module.exports = { init: init, view: view };
 
-},{"./header":32,"./left-panel":34,"./main-panel":35,"./right-panel":36,"flyd":13,"ramda":20,"snabbdom/h":21}],34:[function(require,module,exports){
+},{"./header":33,"./left-panel":35,"./main-panel":36,"./right-panel":37,"flyd":14,"ramda":21,"snabbdom/h":22}],35:[function(require,module,exports){
 'use strict';
 
 var _h = require('snabbdom/h');
@@ -19525,11 +19542,11 @@ var _sidePanel2 = _interopRequireDefault(_sidePanel);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-module.exports = function (state) {
-  return (0, _sidePanel2.default)(state, 'left');
+module.exports = function (state, content) {
+  return (0, _sidePanel2.default)(state, content, 'left');
 };
 
-},{"./side-panel":37,"snabbdom/h":21}],35:[function(require,module,exports){
+},{"./side-panel":38,"snabbdom/h":22}],36:[function(require,module,exports){
 'use strict';
 
 var _h = require('snabbdom/h');
@@ -19546,14 +19563,14 @@ var left = function left(state) {
   };
 };
 
-module.exports = function (state) {
+module.exports = function (state, content) {
   return (0, _h2.default)('div.ff-dashboard-mainPanel', {
     style: { transition: 'left ' + state.transition },
     hook: { update: left(state) }
-  }, [state.mainPanelContent]);
+  }, [content]);
 };
 
-},{"snabbdom/h":21}],36:[function(require,module,exports){
+},{"snabbdom/h":22}],37:[function(require,module,exports){
 'use strict';
 
 var _h = require('snabbdom/h');
@@ -19566,11 +19583,11 @@ var _sidePanel2 = _interopRequireDefault(_sidePanel);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-module.exports = function (state) {
-  return (0, _sidePanel2.default)(state, 'right');
+module.exports = function (state, content) {
+  return (0, _sidePanel2.default)(state, content, 'right');
 };
 
-},{"./side-panel":37,"snabbdom/h":21}],37:[function(require,module,exports){
+},{"./side-panel":38,"snabbdom/h":22}],38:[function(require,module,exports){
 'use strict';
 
 var _h = require('snabbdom/h');
@@ -19583,7 +19600,7 @@ var _closeButton2 = _interopRequireDefault(_closeButton);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-module.exports = function (state, dir) {
+module.exports = function (state, content, dir) {
   var width = dir === 'left' ? state.leftPanelWidth : state.rightPanelWidth;
   var style = {
     transition: dir + ' ' + state.transition + ', visibility ' + state.transition,
@@ -19591,7 +19608,7 @@ module.exports = function (state, dir) {
     width: width
   };
   style[dir] = state.displayPanel$() === dir ? 0 : '-' + width;
-  return (0, _h2.default)('div.ff-dashboard-' + dir + 'Panel', { style: style }, [(0, _closeButton2.default)(state)(dir), dir === 'left' ? [state.leftPanelContent] : [state.rightPanelContent]]);
+  return (0, _h2.default)('div.ff-dashboard-' + dir + 'Panel', { style: style }, [(0, _closeButton2.default)(state)(dir), content]);
 };
 
-},{"./close-button":31,"snabbdom/h":21}]},{},[2]);
+},{"./close-button":32,"snabbdom/h":22}]},{},[3]);

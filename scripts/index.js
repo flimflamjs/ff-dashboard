@@ -12,10 +12,6 @@ import rightPanel from './right-panel'
 const init = state => {
   state = R.merge({
     displayPanel$: flyd.stream('main')
-  , headerContent: '' 
-  , mainPanelContent: '' 
-  , leftPanelContent: '' 
-  , rightPanelContent: '' 
   , leftPanelWidth: '300px' 
   , rightPanelWidth: '500px'
   , transition: '0.2s ease-out'
@@ -30,9 +26,9 @@ const setHeight = panels => {
   panels.style.height = `${bodyHeight - headerHeight}px`
 }
 
-const view = state => 
+const view = (state, content) => 
   h('div.ff-dashboard', {attrs: {'data-display-panel': state.displayPanel$()}}, [
-    header(state.headerContent)
+    header(content.header)
   , h('div.ff-dashboard-panels'
     , {hook: {insert: vnode => {
         setHeight(vnode.elm)
@@ -40,9 +36,9 @@ const view = state =>
         }
       }
     }
-    , [ leftPanel(state)
-      , mainPanel(state)
-      , rightPanel(state)
+    , [ leftPanel(state, content.leftPanel || '')
+      , mainPanel(state, content.mainPanel || '')
+      , rightPanel(state, content.rightPanel || '')
       ]
     ) 
   ]) 

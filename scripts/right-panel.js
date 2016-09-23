@@ -1,5 +1,5 @@
 import h from 'snabbdom/h'
 import sidePanel from './side-panel'
 
-module.exports = state => sidePanel(state, 'right')
+module.exports = (state, content) => sidePanel(state, content, 'right')
 

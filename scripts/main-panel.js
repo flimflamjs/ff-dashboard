@@ -8,12 +8,12 @@ const left = state => vnode => {
   elm.style.left = left
 }
 
-module.exports = state => 
+module.exports = (state, content) => 
   h('div.ff-dashboard-mainPanel', {
     style: { transition: `left ${state.transition}` }
   , hook: {update: left(state)}
   }   
-, [state.mainPanelContent])
+, [content])
 
 
 
