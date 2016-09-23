@@ -19,7 +19,6 @@ const init = _ => {
     displayPanel$: flyd.map(x => x, state.clickPanel$) 
   , headerContent: headerContent(state)
   , mainPanelContent: mainPanelContent(state)
-  , transition: '0.1s' 
   })
   return state
 }
