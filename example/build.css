@@ -1,4 +1,39 @@
-@import '../dist/index.css';
+.ff-dashboard-panels {
+  position: relative;
+  overflow: hidden;
+}
+
+.ff-dashboard-closeButton {
+  position: absolute;
+  top: 0;
+  cursor: pointer;
+}
+
+.ff-dashboard-leftPanel,
+.ff-dashboard-rightPanel {
+  max-width: 70%;
+  z-index: 1;
+}
+
+.ff-dashboard-leftPanel,
+.ff-dashboard-mainPanel,
+.ff-dashboard-rightPanel {
+  position: absolute;
+  height: 100%;
+  top: 0;
+}
+
+.ff-dashboard-mainPanel {
+  width: 100%;
+}
+
+.ff-dashboard-leftPanel {
+  left: 0;
+}
+
+.ff-dashboard-rightPanel {
+  right: 0;
+}
 
 body {
    font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 

@@ -1,25 +1,34 @@
 import h from 'snabbdom/h'
 import flyd from 'flyd'
+import R from 'ramda'
 import render from 'flimflam-render'
 import snabbdom from 'snabbdom'
 
 import dashboard from '../scripts/index'
+import main from './main'
+import data from './data'
 
 const headerContent = state =>
-  h('a', {on: {click: x => state.clickPanel$('left')}}, 'open left panel')
-
-const mainPanelContent = state =>
-  h('a', {on: {click: x => state.clickPanel$('right')}}, 'open right panel')
+  h('a', {on: {click: x => state.showFilters$(true)}}, 'open left panel')
 
 const init = _ => {
   const state = {}
-  state.clickPanel$ = flyd.stream()
+  state.showFilters$ = flyd.stream()
+  state.dataId$ = flyd.stream()
+  state.data$ = flyd.map(i => R.find(R.propEq('id', i), data), state.dataId$) 
+
+  const displayPanel$ = flyd.merge(
+      flyd.map(R.always('left'), state.showFilters$)
+    , flyd.map(R.always('right'), state.data$)
+  )
 
   state.dashboard = dashboard.init({
-    displayPanel$: flyd.map(x => x, state.clickPanel$) 
+    displayPanel$
   , headerContent: headerContent(state)
-  , mainPanelContent: mainPanelContent(state)
+  , mainPanelContent: main(state)
   })
+  flyd.map(x => console.log(x), state.data$)
+  flyd.map(x => console.log(x), displayPanel$)
   return state
 }
 
