@@ -37,7 +37,7 @@ var mainPanelContent = function mainPanelContent(state) {
 
 var init = function init(_) {
   var state = {};
-  state.clickPanel$ = _flyd2.default.stream('main');
+  state.clickPanel$ = _flyd2.default.stream();
 
   state.dashboard = _index2.default.init({
     displayPanel$: _flyd2.default.map(function (x) {
@@ -19403,7 +19403,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 // local
 var init = function init(state) {
-  state = state || {};
   state = _ramda2.default.merge({
     displayPanel$: _flyd2.default.stream('main'),
     headerContent: '',

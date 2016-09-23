@@ -10,7 +10,6 @@ import leftPanel from './left-panel'
 import rightPanel from './right-panel'
 
 const init = state => {
-  state = state || {}
   state = R.merge({
     displayPanel$: flyd.stream('main')
   , headerContent: '' 
