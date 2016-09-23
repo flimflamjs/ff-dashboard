@@ -8,5 +8,5 @@ module.exports = state =>
     , left: state.displayPanel$() === 'left' ? `${state.leftPanelWidth}%` : 0
     }
   }   
-, state.mainPanelContent)
+, [state.mainPanelContent])
 
