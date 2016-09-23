@@ -1,6 +1,36 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 'use strict';
 
+module.exports = [{
+  id: 1,
+  name: 'Sugar Apple',
+  img: 'http://i2.wp.com/listverse.com/wp-content/uploads/2011/07/screen-shot-2011-07-08-at-8-13-22-am.jpg?resize=550%2C409',
+  description: "Sugar Apples or Sweetsop, is native to the tropical Americas, but is also widely grown in Pakistan, India and the Philippines. The fruit looks a bit like a pine cone, and are about 10 cm in diameter. Under the hard, lumpy skin is the fragrant, whitish flesh of the fruit, which covers several seeds inside, and has a slight taste of custard."
+}, {
+  id: 2,
+  name: 'Mammee Apple',
+  img: 'http://i2.wp.com/listverse.com/wp-content/uploads/2011/07/2528934267_75bda1b29a.jpg?resize=550%2C412',
+  description: "Mammee Apple, Mamey Apple or Santo Domingo Apricot is an evergreen tree, native to South America, which was introduced to various other regions of the world including West Africa and South East Asia. They can also be found in Florida and Hawaii. The Mammee apple is actually a berry and gets up to 20 cm in diameter. It has a thick outer rind, with soft orange to yellow pulp on the inside. It usually had one seed in the centre, but larger fruit have been known to carry up to 4. The pulp is sweet and fragrant."
+}, {
+  id: 3,
+  name: 'Cherymoya',
+  img: 'http://i0.wp.com/listverse.com/wp-content/uploads/2011/07/annona.jpg?resize=550%2C451',
+  description: "Cherymoya, or custard apple, is a deciduous plant found in the high lying mountainous areas of South America. The fruit is vaguely round and is found with 3 types of skin – Impressa (indented), Tuberculate (covered in nodules) or intermediate (a combination of the first two). The flesh inside the skin is very fragrant, white, juicy and has a custard like consistency. It is said that the fruit tastes like a combination of banana, passion fruit, papaya and pineapple. Mark Twain said in 1866 ' the most delicious fruit known to men, cherimoya'"
+}, {
+  id: 4,
+  name: "Platonia",
+  img: 'http://i2.wp.com/listverse.com/wp-content/uploads/2011/07/bacuri_platonia_insignis.jpg?resize=550%2C412',
+  description: "Platonia or Bacuri is a large tree (reaching 40m) found in the rain forests of Brazil and Paraguay. The fruit become the size of a orange, and have a thick yellow peel which oozes a yellow latex when pressed. Inside there is a sticky white pulp, wrapped around several black seeds, which tastes pleasant and has a sweet and sour flavor."
+}, {
+  id: 5,
+  name: 'Cocona',
+  img: 'http://i2.wp.com/listverse.com/wp-content/uploads/2011/07/solanum-sessiliflorum2.jpg?resize=550%2C458',
+  description: "Cocona fruit is another tropical fruit found in the mountainous regions of South America. It grows on a small shrub, and can miraculously grow from seed to fruit in less than 9 months, after which the fruit will take another 2 months to ripen. The fruit is a berry and comes in red, orange or yellow. It has a similar appearance to tomatoes, and is said to taste like a mixture between tomatoes and lemons."
+}];
+
+},{}],2:[function(require,module,exports){
+'use strict';
+
 var _h = require('snabbdom/h');
 
 var _h2 = _interopRequireDefault(_h);
@@ -8,6 +38,10 @@ var _h2 = _interopRequireDefault(_h);
 var _flyd = require('flyd');
 
 var _flyd2 = _interopRequireDefault(_flyd);
+
+var _ramda = require('ramda');
+
+var _ramda2 = _interopRequireDefault(_ramda);
 
 var _flimflamRender = require('flimflam-render');
 
@@ -21,31 +55,43 @@ var _index = require('../scripts/index');
 
 var _index2 = _interopRequireDefault(_index);
 
+var _main = require('./main');
+
+var _main2 = _interopRequireDefault(_main);
+
+var _data = require('./data');
+
+var _data2 = _interopRequireDefault(_data);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var headerContent = function headerContent(state) {
   return (0, _h2.default)('a', { on: { click: function click(x) {
-        return state.clickPanel$('left');
+        return state.showFilters$(true);
       } } }, 'open left panel');
-};
-
-var mainPanelContent = function mainPanelContent(state) {
-  return (0, _h2.default)('a', { on: { click: function click(x) {
-        return state.clickPanel$('right');
-      } } }, 'open right panel');
 };
 
 var init = function init(_) {
   var state = {};
-  state.clickPanel$ = _flyd2.default.stream();
+  state.showFilters$ = _flyd2.default.stream();
+  state.dataId$ = _flyd2.default.stream();
+  state.data$ = _flyd2.default.map(function (i) {
+    return _ramda2.default.find(_ramda2.default.propEq('id', i), _data2.default);
+  }, state.dataId$);
+
+  var displayPanel$ = _flyd2.default.merge(_flyd2.default.map(_ramda2.default.always('left'), state.showFilters$), _flyd2.default.map(_ramda2.default.always('right'), state.data$));
 
   state.dashboard = _index2.default.init({
-    displayPanel$: _flyd2.default.map(function (x) {
-      return x;
-    }, state.clickPanel$),
+    displayPanel$: displayPanel$,
     headerContent: headerContent(state),
-    mainPanelContent: mainPanelContent(state)
+    mainPanelContent: (0, _main2.default)(state)
   });
+  _flyd2.default.map(function (x) {
+    return console.log(x);
+  }, state.data$);
+  _flyd2.default.map(function (x) {
+    return console.log(x);
+  }, displayPanel$);
   return state;
 };
 
@@ -59,7 +105,36 @@ var container = document.querySelector('#container');
 
 (0, _flimflamRender2.default)({ patch: patch, container: container, view: view, state: init() });
 
-},{"../scripts/index":31,"flimflam-render":2,"flyd":11,"snabbdom":27,"snabbdom/h":19,"snabbdom/modules/attributes":22,"snabbdom/modules/class":23,"snabbdom/modules/eventlisteners":24,"snabbdom/modules/props":25,"snabbdom/modules/style":26}],2:[function(require,module,exports){
+},{"../scripts/index":33,"./data":1,"./main":3,"flimflam-render":4,"flyd":13,"ramda":20,"snabbdom":29,"snabbdom/h":21,"snabbdom/modules/attributes":24,"snabbdom/modules/class":25,"snabbdom/modules/eventlisteners":26,"snabbdom/modules/props":27,"snabbdom/modules/style":28}],3:[function(require,module,exports){
+'use strict';
+
+var _ramda = require('ramda');
+
+var _ramda2 = _interopRequireDefault(_ramda);
+
+var _h = require('snabbdom/h');
+
+var _h2 = _interopRequireDefault(_h);
+
+var _data = require('./data');
+
+var _data2 = _interopRequireDefault(_data);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var row = function row(state) {
+  return function (d) {
+    return (0, _h2.default)('tr', [(0, _h2.default)('td', [(0, _h2.default)('a', { on: { click: function click(x) {
+          return state.dataId$(d.id);
+        } } }, d.name)]), (0, _h2.default)('td', d.description.substring(0, 70) + '...')]);
+  };
+};
+
+module.exports = function (state) {
+  return (0, _h2.default)('table', _ramda2.default.map(row(state), _data2.default));
+};
+
+},{"./data":1,"ramda":20,"snabbdom/h":21}],4:[function(require,module,exports){
 'use strict';
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
@@ -109,7 +184,7 @@ var isObj = function isObj(x) {
 module.exports = render;
 
 
-},{"flyd":3,"flyd/module/mergeall":4,"ramda":10}],3:[function(require,module,exports){
+},{"flyd":5,"flyd/module/mergeall":6,"ramda":12}],5:[function(require,module,exports){
 var curryN = require('ramda/src/curryN');
 
 'use strict';
@@ -410,7 +485,7 @@ module.exports = {
   immediate: immediate,
 };
 
-},{"ramda/src/curryN":5}],4:[function(require,module,exports){
+},{"ramda/src/curryN":7}],6:[function(require,module,exports){
 var flyd = require('../../lib');
 
 module.exports = function mergeAll(streams) {
@@ -435,7 +510,7 @@ module.exports = function mergeAll(streams) {
 };
 
 
-},{"../../lib":3}],5:[function(require,module,exports){
+},{"../../lib":5}],7:[function(require,module,exports){
 var _arity = require('./internal/_arity');
 var _curry1 = require('./internal/_curry1');
 var _curry2 = require('./internal/_curry2');
@@ -492,7 +567,7 @@ module.exports = _curry2(function curryN(length, fn) {
   return _arity(length, _curryN(length, [], fn));
 });
 
-},{"./internal/_arity":6,"./internal/_curry1":7,"./internal/_curry2":8,"./internal/_curryN":9}],6:[function(require,module,exports){
+},{"./internal/_arity":8,"./internal/_curry1":9,"./internal/_curry2":10,"./internal/_curryN":11}],8:[function(require,module,exports){
 module.exports = function _arity(n, fn) {
   // jshint unused:vars
   switch (n) {
@@ -511,7 +586,7 @@ module.exports = function _arity(n, fn) {
   }
 };
 
-},{}],7:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 /**
  * Optimized internal two-arity curry function.
  *
@@ -532,7 +607,7 @@ module.exports = function _curry1(fn) {
   };
 };
 
-},{}],8:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 var _curry1 = require('./_curry1');
 
 
@@ -566,7 +641,7 @@ module.exports = function _curry2(fn) {
   };
 };
 
-},{"./_curry1":7}],9:[function(require,module,exports){
+},{"./_curry1":9}],11:[function(require,module,exports){
 var _arity = require('./_arity');
 
 
@@ -606,7 +681,7 @@ module.exports = function _curryN(length, received, fn) {
   };
 };
 
-},{"./_arity":6}],10:[function(require,module,exports){
+},{"./_arity":8}],12:[function(require,module,exports){
 //  Ramda v0.19.1
 //  https://github.com/ramda/ramda
 //  (c) 2013-2016 Scott Sauyet, Michael Hurley, and David Chambers
@@ -9054,7 +9129,7 @@ module.exports = function _curryN(length, received, fn) {
 
 }.call(this));
 
-},{}],11:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 'use strict';
 
 var curryN = require('ramda/src/curryN');
@@ -9682,7 +9757,7 @@ StreamTransformer.prototype['@@transducer/step'] = function(s, v) { return v; };
 
 module.exports = flyd;
 
-},{"ramda/src/curryN":12}],12:[function(require,module,exports){
+},{"ramda/src/curryN":14}],14:[function(require,module,exports){
 var _arity = require('./internal/_arity');
 var _curry1 = require('./internal/_curry1');
 var _curry2 = require('./internal/_curry2');
@@ -9738,7 +9813,7 @@ module.exports = _curry2(function curryN(length, fn) {
   return _arity(length, _curryN(length, [], fn));
 });
 
-},{"./internal/_arity":13,"./internal/_curry1":14,"./internal/_curry2":15,"./internal/_curryN":16}],13:[function(require,module,exports){
+},{"./internal/_arity":15,"./internal/_curry1":16,"./internal/_curry2":17,"./internal/_curryN":18}],15:[function(require,module,exports){
 module.exports = function _arity(n, fn) {
   /* eslint-disable no-unused-vars */
   switch (n) {
@@ -9757,7 +9832,7 @@ module.exports = function _arity(n, fn) {
   }
 };
 
-},{}],14:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 var _isPlaceholder = require('./_isPlaceholder');
 
 
@@ -9779,7 +9854,7 @@ module.exports = function _curry1(fn) {
   };
 };
 
-},{"./_isPlaceholder":17}],15:[function(require,module,exports){
+},{"./_isPlaceholder":19}],17:[function(require,module,exports){
 var _curry1 = require('./_curry1');
 var _isPlaceholder = require('./_isPlaceholder');
 
@@ -9809,7 +9884,7 @@ module.exports = function _curry2(fn) {
   };
 };
 
-},{"./_curry1":14,"./_isPlaceholder":17}],16:[function(require,module,exports){
+},{"./_curry1":16,"./_isPlaceholder":19}],18:[function(require,module,exports){
 var _arity = require('./_arity');
 var _isPlaceholder = require('./_isPlaceholder');
 
@@ -9851,14 +9926,14 @@ module.exports = function _curryN(length, received, fn) {
   };
 };
 
-},{"./_arity":13,"./_isPlaceholder":17}],17:[function(require,module,exports){
+},{"./_arity":15,"./_isPlaceholder":19}],19:[function(require,module,exports){
 module.exports = function _isPlaceholder(a) {
   return a != null &&
          typeof a === 'object' &&
          a['@@functional/placeholder'] === true;
 };
 
-},{}],18:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 //  Ramda v0.22.1
 //  https://github.com/ramda/ramda
 //  (c) 2013-2016 Scott Sauyet, Michael Hurley, and David Chambers
@@ -18691,7 +18766,7 @@ module.exports = function _isPlaceholder(a) {
 
 }.call(this));
 
-},{}],19:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 var VNode = require('./vnode');
 var is = require('./is');
 
@@ -18727,7 +18802,7 @@ module.exports = function h(sel, b, c) {
   return VNode(sel, data, children, text, undefined);
 };
 
-},{"./is":21,"./vnode":28}],20:[function(require,module,exports){
+},{"./is":23,"./vnode":30}],22:[function(require,module,exports){
 function createElement(tagName){
   return document.createElement(tagName);
 }
@@ -18783,13 +18858,13 @@ module.exports = {
   setTextContent: setTextContent
 };
 
-},{}],21:[function(require,module,exports){
+},{}],23:[function(require,module,exports){
 module.exports = {
   array: Array.isArray,
   primitive: function(s) { return typeof s === 'string' || typeof s === 'number'; },
 };
 
-},{}],22:[function(require,module,exports){
+},{}],24:[function(require,module,exports){
 var booleanAttrs = ["allowfullscreen", "async", "autofocus", "autoplay", "checked", "compact", "controls", "declare",
                 "default", "defaultchecked", "defaultmuted", "defaultselected", "defer", "disabled", "draggable",
                 "enabled", "formnovalidate", "hidden", "indeterminate", "inert", "ismap", "itemscope", "loop", "multiple",
@@ -18834,7 +18909,7 @@ function updateAttrs(oldVnode, vnode) {
 
 module.exports = {create: updateAttrs, update: updateAttrs};
 
-},{}],23:[function(require,module,exports){
+},{}],25:[function(require,module,exports){
 function updateClass(oldVnode, vnode) {
   var cur, name, elm = vnode.elm,
       oldClass = oldVnode.data.class,
@@ -18859,7 +18934,7 @@ function updateClass(oldVnode, vnode) {
 
 module.exports = {create: updateClass, update: updateClass};
 
-},{}],24:[function(require,module,exports){
+},{}],26:[function(require,module,exports){
 function invokeHandler(handler, vnode, event) {
   if (typeof handler === "function") {
     // call function handler
@@ -18962,7 +19037,7 @@ module.exports = {
   destroy: updateEventListeners
 };
 
-},{}],25:[function(require,module,exports){
+},{}],27:[function(require,module,exports){
 function updateProps(oldVnode, vnode) {
   var key, cur, old, elm = vnode.elm,
       oldProps = oldVnode.data.props, props = vnode.data.props;
@@ -18987,7 +19062,7 @@ function updateProps(oldVnode, vnode) {
 
 module.exports = {create: updateProps, update: updateProps};
 
-},{}],26:[function(require,module,exports){
+},{}],28:[function(require,module,exports){
 var raf = (typeof window !== 'undefined' && window.requestAnimationFrame) || setTimeout;
 var nextFrame = function(fn) { raf(function() { raf(fn); }); };
 
@@ -19058,7 +19133,7 @@ function applyRemoveStyle(vnode, rm) {
 
 module.exports = {create: updateStyle, update: updateStyle, destroy: applyDestroyStyle, remove: applyRemoveStyle};
 
-},{}],27:[function(require,module,exports){
+},{}],29:[function(require,module,exports){
 // jshint newcap: false
 /* global require, module, document, Node */
 'use strict';
@@ -19320,14 +19395,14 @@ function init(modules, api) {
 
 module.exports = {init: init};
 
-},{"./htmldomapi":20,"./is":21,"./vnode":28}],28:[function(require,module,exports){
+},{"./htmldomapi":22,"./is":23,"./vnode":30}],30:[function(require,module,exports){
 module.exports = function(sel, data, children, text, elm) {
   var key = data === undefined ? undefined : data.key;
   return {sel: sel, data: data, children: children,
           text: text, elm: elm, key: key};
 };
 
-},{}],29:[function(require,module,exports){
+},{}],31:[function(require,module,exports){
 'use strict';
 
 var _h = require('snabbdom/h');
@@ -19355,7 +19430,7 @@ module.exports = function (state) {
   };
 };
 
-},{"snabbdom/h":19}],30:[function(require,module,exports){
+},{"snabbdom/h":21}],32:[function(require,module,exports){
 'use strict';
 
 var _h = require('snabbdom/h');
@@ -19368,7 +19443,7 @@ module.exports = function (content) {
   return (0, _h2.default)('div.ff-dashboard-header', [content]);
 };
 
-},{"snabbdom/h":19}],31:[function(require,module,exports){
+},{"snabbdom/h":21}],33:[function(require,module,exports){
 'use strict';
 
 var _h = require('snabbdom/h');
@@ -19437,7 +19512,7 @@ var view = function view(state) {
 
 module.exports = { init: init, view: view };
 
-},{"./header":30,"./left-panel":32,"./main-panel":33,"./right-panel":34,"flyd":11,"ramda":18,"snabbdom/h":19}],32:[function(require,module,exports){
+},{"./header":32,"./left-panel":34,"./main-panel":35,"./right-panel":36,"flyd":13,"ramda":20,"snabbdom/h":21}],34:[function(require,module,exports){
 'use strict';
 
 var _h = require('snabbdom/h');
@@ -19454,7 +19529,7 @@ module.exports = function (state) {
   return (0, _sidePanel2.default)(state, 'left');
 };
 
-},{"./side-panel":35,"snabbdom/h":19}],33:[function(require,module,exports){
+},{"./side-panel":37,"snabbdom/h":21}],35:[function(require,module,exports){
 'use strict';
 
 var _h = require('snabbdom/h');
@@ -19478,7 +19553,7 @@ module.exports = function (state) {
   }, [state.mainPanelContent]);
 };
 
-},{"snabbdom/h":19}],34:[function(require,module,exports){
+},{"snabbdom/h":21}],36:[function(require,module,exports){
 'use strict';
 
 var _h = require('snabbdom/h');
@@ -19495,7 +19570,7 @@ module.exports = function (state) {
   return (0, _sidePanel2.default)(state, 'right');
 };
 
-},{"./side-panel":35,"snabbdom/h":19}],35:[function(require,module,exports){
+},{"./side-panel":37,"snabbdom/h":21}],37:[function(require,module,exports){
 'use strict';
 
 var _h = require('snabbdom/h');
@@ -19519,4 +19594,4 @@ module.exports = function (state, dir) {
   return (0, _h2.default)('div.ff-dashboard-' + dir + 'Panel', { style: style }, [(0, _closeButton2.default)(state)(dir), dir === 'left' ? [state.leftPanelContent] : [state.rightPanelContent]]);
 };
 
-},{"./close-button":29,"snabbdom/h":19}]},{},[1]);
+},{"./close-button":31,"snabbdom/h":21}]},{},[2]);
