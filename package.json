@@ -7,6 +7,7 @@
     "build-css": "postcss -c postcss.build.js -l",
     "mini-css": "postcss --use cssnano -r dist/index.css -m file -l",
     "watch-js": "watchify scripts/index.js -o dist/index.js -t [babelify --presets es2015] -v",
+    "watch-example-js": "watchify example/index.js -o example/build.js -t [babelify --presets es2015] -v",
     "build-js": "browserify scripts/index.js -o dist/index.js -t [babelify --presets es2015]",
     "mini-js": "uglifyjs dist/index.js -o dist/index.js --source-map dist/index.js.map -c -m -v",
     "prepublish": "npm run build-css && npm run mini-css && npm run build-js && npm run mini-js"
