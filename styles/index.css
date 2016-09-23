@@ -11,7 +11,7 @@
 
 .ff-dashboard-leftPanel,
 .ff-dashboard-rightPanel {
-  max-width: 80%;
+  max-width: 70%;
   z-index: 1;
 }
 
@@ -34,3 +34,4 @@
 .ff-dashboard-rightPanel {
   right: 0;
 }
+
