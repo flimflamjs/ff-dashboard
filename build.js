@@ -23,31 +23,29 @@ var _index2 = _interopRequireDefault(_index);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// displayPanel$: flyd.stream('main')
-// , headerContent: '' 
-// , mainPanelContent: '' 
-// , leftPanelContent: '' 
-// , rightPanelContent: '' 
-// , leftPanelWidth: 20 
-// , rightPanelWidth: 60 
-// , transition: '0.2s ease-out'
-// }, state)
-
 var headerContent = function headerContent(state) {
-  return (0, _h2.default)('div', [(0, _h2.default)('a', { on: { click: function click(x) {
+  return (0, _h2.default)('a', { on: { click: function click(x) {
         return state.clickPanel$('left');
-      } } }, 'left')]);
+      } } }, 'open left panel');
+};
+
+var mainPanelContent = function mainPanelContent(state) {
+  return (0, _h2.default)('a', { on: { click: function click(x) {
+        return state.clickPanel$('right');
+      } } }, 'open right panel');
 };
 
 var init = function init(_) {
   var state = {};
-  state.clickPanel$ = _flyd2.default.stream('right');
+  state.clickPanel$ = _flyd2.default.stream('main');
 
   state.dashboard = _index2.default.init({
     displayPanel$: _flyd2.default.map(function (x) {
       return x;
     }, state.clickPanel$),
-    headerContent: headerContent(state)
+    headerContent: headerContent(state),
+    mainPanelContent: mainPanelContent(state),
+    transition: '0.1s'
   });
   return state;
 };
@@ -19480,7 +19478,7 @@ module.exports = function (state) {
       width: state.mainPanelWidth$() + '%',
       left: state.displayPanel$() === 'left' ? state.leftPanelWidth + '%' : 0
     }
-  }, state.mainPanelContent);
+  }, [state.mainPanelContent]);
 };
 
 },{"snabbdom/h":19}],34:[function(require,module,exports){

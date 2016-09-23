@@ -5,29 +5,21 @@ import snabbdom from 'snabbdom'
 
 import dashboard from '../scripts/index'
 
-    // displayPanel$: flyd.stream('main')
-  // , headerContent: '' 
-  // , mainPanelContent: '' 
-  // , leftPanelContent: '' 
-  // , rightPanelContent: '' 
-  // , leftPanelWidth: 20 
-  // , rightPanelWidth: 60 
-  // , transition: '0.2s ease-out'
-  // }, state)
-
 const headerContent = state =>
-  h('div', [
-    h('a', {on: {click: x => state.clickPanel$('left')}}, 'left')
-  ])
+  h('a', {on: {click: x => state.clickPanel$('left')}}, 'open left panel')
 
+const mainPanelContent = state =>
+  h('a', {on: {click: x => state.clickPanel$('right')}}, 'open right panel')
 
 const init = _ => {
   const state = {}
-  state.clickPanel$ = flyd.stream('right')
+  state.clickPanel$ = flyd.stream('main')
 
   state.dashboard = dashboard.init({
     displayPanel$: flyd.map(x => x, state.clickPanel$) 
   , headerContent: headerContent(state)
+  , mainPanelContent: mainPanelContent(state)
+  , transition: '0.1s' 
   })
   return state
 }
@@ -45,3 +37,4 @@ const patch = snabbdom.init([
 let container = document.querySelector('#container')
 
 render({patch, container, view, state: init()})
+
