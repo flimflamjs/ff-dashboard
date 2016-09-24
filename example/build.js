@@ -19567,7 +19567,7 @@ module.exports = function (state, content) {
   return (0, _h2.default)('div.ff-dashboard-mainPanel', {
     style: { transition: 'left ' + state.transition },
     hook: { update: left(state) }
-  }, [content]);
+  }, [(0, _h2.default)('div.ff-dashboard-panelContent', [content])]);
 };
 
 },{"snabbdom/h":22}],37:[function(require,module,exports){
@@ -19608,7 +19608,7 @@ module.exports = function (state, content, dir) {
     width: width
   };
   style[dir] = state.displayPanel$() === dir ? 0 : '-' + width;
-  return (0, _h2.default)('div.ff-dashboard-' + dir + 'Panel', { style: style }, [(0, _closeButton2.default)(state)(dir), content]);
+  return (0, _h2.default)('div.ff-dashboard-' + dir + 'Panel', { style: style }, [(0, _closeButton2.default)(state)(dir), (0, _h2.default)('div.ff-dashboard-panelContent', [content])]);
 };
 
 },{"./close-button":32,"snabbdom/h":22}]},{},[3]);

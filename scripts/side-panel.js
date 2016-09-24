@@ -11,7 +11,7 @@ module.exports = (state, content, dir) => {
   style[dir] = state.displayPanel$() === dir ? 0 : `-${width}` 
   return h(`div.ff-dashboard-${dir}Panel`, {style}, [ 
     closeButton(state)(dir)
-  , content
+  , h('div.ff-dashboard-panelContent', [content])
   ])
 }
 

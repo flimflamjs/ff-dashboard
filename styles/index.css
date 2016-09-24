@@ -23,6 +23,12 @@
   top: 0;
 }
 
+.ff-dashboard-panelContent {
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 100%;
+}
+
 .ff-dashboard-mainPanel {
   width: 100%;
 }
