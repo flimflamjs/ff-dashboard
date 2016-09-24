@@ -13,6 +13,6 @@ module.exports = (state, content) =>
     style: { transition: `left ${state.transition}` }
   , hook: {update: left(state)}
   }   
-, [h('div.ff-dashboard-panelContent', [content])])
+, [h('div.ff-dashboard-panelBody', [content])])
 
 

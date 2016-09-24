@@ -33,8 +33,9 @@ const view = state =>
   h('div', [
     dashboard.view(state.dashboard, {
         header: header(state)
-      , mainPanel: main(state)
-      , rightPanel: details(state)
+      , mainPanelBody: main(state)
+      , rightPanelHeader: h('h3', state.data$().name)
+      , rightPanelBody: details(state)
     })
   ])
 

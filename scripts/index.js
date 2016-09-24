@@ -36,9 +36,9 @@ const view = (state, content) =>
         }
       }
     }
-    , [ leftPanel(state, content.leftPanel || '')
-      , mainPanel(state, content.mainPanel || '')
-      , rightPanel(state, content.rightPanel || '')
+    , [ leftPanel(state, content.leftPanelHeader || '', content.leftPanelBody || '')
+      , mainPanel(state, content.mainPanelBody || '')
+      , rightPanel(state, content.rightPanelHeader || '', content.rightPanelBody || '')
       ]
     ) 
   ]) 

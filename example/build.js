@@ -46,7 +46,7 @@ var _flyd2 = _interopRequireDefault(_flyd);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 module.exports = function (state) {
-  return (0, _h2.default)('div', [(0, _h2.default)('h1', state.data$().name), (0, _h2.default)('img', { props: { src: state.data$().img } }), (0, _h2.default)('p', state.data$().description)]);
+  return (0, _h2.default)('div', [(0, _h2.default)('img', { props: { src: state.data$().img } }), (0, _h2.default)('p', state.data$().description)]);
 };
 
 },{"flyd":14,"ramda":21,"snabbdom/h":22}],3:[function(require,module,exports){
@@ -115,8 +115,9 @@ var init = function init(_) {
 var view = function view(state) {
   return (0, _h2.default)('div', [_index2.default.view(state.dashboard, {
     header: header(state),
-    mainPanel: (0, _main2.default)(state),
-    rightPanel: (0, _details2.default)(state)
+    mainPanelBody: (0, _main2.default)(state),
+    rightPanelHeader: (0, _h2.default)('h3', state.data$().name),
+    rightPanelBody: (0, _details2.default)(state)
   })]);
 };
 
@@ -19433,22 +19434,12 @@ var _h2 = _interopRequireDefault(_h);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 module.exports = function (state) {
-  return function (dir) {
-    return (0, _h2.default)('div.ff-dashboard-closeButton', {
-      on: { click: function click(_) {
-          return state.displayPanel$('main');
-        } },
-      props: { innerHTML: '&times' },
-      hook: { insert: function insert(vnode) {
-          var elm = vnode.elm;
-          elm.style[dir === 'left' ? 'right' : 'left'] = '-' + elm.offsetWidth + 'px';
-        } },
-      style: {
-        transition: 'opacity ' + state.transition,
-        opacity: state.displayPanel$() === dir ? 1 : 0
-      }
-    });
-  };
+  return (0, _h2.default)('div.ff-dashboard-closeButton', {
+    on: { click: function click(_) {
+        return state.displayPanel$('main');
+      } },
+    props: { innerHTML: '&times' }
+  });
 };
 
 },{"snabbdom/h":22}],33:[function(require,module,exports){
@@ -19524,7 +19515,7 @@ var view = function view(state, content) {
         });
       }
     }
-  }, [(0, _leftPanel2.default)(state, content.leftPanel || ''), (0, _mainPanel2.default)(state, content.mainPanel || ''), (0, _rightPanel2.default)(state, content.rightPanel || '')])]);
+  }, [(0, _leftPanel2.default)(state, content.leftPanelHeader || '', content.leftPanelBody || ''), (0, _mainPanel2.default)(state, content.mainPanelBody || ''), (0, _rightPanel2.default)(state, content.rightPanelHeader || '', content.rightPanelBody || '')])]);
 };
 
 module.exports = { init: init, view: view };
@@ -19542,8 +19533,8 @@ var _sidePanel2 = _interopRequireDefault(_sidePanel);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-module.exports = function (state, content) {
-  return (0, _sidePanel2.default)(state, content, 'left');
+module.exports = function (state, header, body) {
+  return (0, _sidePanel2.default)(state, header, body, 'left');
 };
 
 },{"./side-panel":38,"snabbdom/h":22}],36:[function(require,module,exports){
@@ -19567,7 +19558,7 @@ module.exports = function (state, content) {
   return (0, _h2.default)('div.ff-dashboard-mainPanel', {
     style: { transition: 'left ' + state.transition },
     hook: { update: left(state) }
-  }, [(0, _h2.default)('div.ff-dashboard-panelContent', [content])]);
+  }, [(0, _h2.default)('div.ff-dashboard-panelBody', [content])]);
 };
 
 },{"snabbdom/h":22}],37:[function(require,module,exports){
@@ -19583,8 +19574,8 @@ var _sidePanel2 = _interopRequireDefault(_sidePanel);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-module.exports = function (state, content) {
-  return (0, _sidePanel2.default)(state, content, 'right');
+module.exports = function (state, header, body) {
+  return (0, _sidePanel2.default)(state, header, body, 'right');
 };
 
 },{"./side-panel":38,"snabbdom/h":22}],38:[function(require,module,exports){
@@ -19600,15 +19591,16 @@ var _closeButton2 = _interopRequireDefault(_closeButton);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-module.exports = function (state, content, dir) {
-  var width = dir === 'left' ? state.leftPanelWidth : state.rightPanelWidth;
+module.exports = function (state, header, body, dir) {
+  var isLeft = dir === 'left';
+  var width = isLeft ? state.leftPanelWidth : state.rightPanelWidth;
   var style = {
     transition: dir + ' ' + state.transition + ', visibility ' + state.transition,
     visibility: state.displayPanel$() === dir ? 'visible' : 'hidden',
     width: width
   };
   style[dir] = state.displayPanel$() === dir ? 0 : '-' + width;
-  return (0, _h2.default)('div.ff-dashboard-' + dir + 'Panel', { style: style }, [(0, _closeButton2.default)(state)(dir), (0, _h2.default)('div.ff-dashboard-panelContent', [content])]);
+  return (0, _h2.default)('div.ff-dashboard-' + dir + 'Panel', { style: style }, [(0, _h2.default)('div.ff-dashboard-panelHeader', [isLeft ? header : (0, _closeButton2.default)(state), !isLeft ? header : (0, _closeButton2.default)(state)]), (0, _h2.default)('div.ff-dashboard-panelBody', [body])]);
 };
 
 },{"./close-button":32,"snabbdom/h":22}]},{},[3]);
