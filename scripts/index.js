@@ -1,6 +1,7 @@
 // npm
 import h from 'snabbdom/h'
 import flyd from 'flyd'
+import filter from 'flyd/module/filter'
 import R from 'ramda'
 
 // local
@@ -16,6 +17,11 @@ const init = state => {
   , rightPanelWidth: '500px'
   , transition: '0.2s ease-out'
   }, state)
+  
+  const isShowingRightPanel$ = filter(x => x === 'right', state.displayPanel$)
+
+  flyd.map(resetRightPanelScroll, isShowingRightPanel$)
+
   return state
 }
 
@@ -24,6 +30,11 @@ const setHeight = panels => {
   let headerHeight = document.querySelector('.ff-dashboard-header').offsetHeight 
   let bodyHeight = document.body.offsetHeight
   panels.style.height = `${bodyHeight - headerHeight}px`
+}
+
+const resetRightPanelScroll = _ => {
+  let elm = document.querySelector('.ff-dashboard-rightPanel .ff-dashboard-panelBody') 
+  elm.scrollTop = 0
 }
 
 const view = (state, content) => 

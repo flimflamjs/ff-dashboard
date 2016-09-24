@@ -36,6 +36,7 @@ const view = state =>
       , mainPanelBody: main(state)
       , rightPanelHeader: h('h3', state.data$().name)
       , rightPanelBody: details(state)
+      , leftPanelHeader: h('h3', 'Filter')
     })
   ])
 
