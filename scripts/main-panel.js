@@ -11,7 +11,11 @@ const left = state => vnode => {
 module.exports = (state, content) => 
   h('div.ff-dashboard-mainPanel', {
     style: { transition: `left ${state.transition}` }
-  , hook: {update: left(state)}
+  , hook: {update: vnode => {
+        left(state)(vnode)
+        window.addEventListener('resize', ev => left(state)(vnode))
+      }
+    }
   }   
 , [h('div.ff-dashboard-panelBody', [content])])
 

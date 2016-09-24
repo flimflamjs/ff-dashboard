@@ -19507,8 +19507,10 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var init = function init(state) {
   state = _ramda2.default.merge({
     displayPanel$: _flyd2.default.stream('main'),
-    leftPanelWidth: '300px',
-    rightPanelWidth: '500px',
+    leftPanelWidth: 400,
+    leftPanelOffset: 100,
+    rightPanelWidth: 600,
+    rightPanelOffset: 100,
     transition: '0.2s ease-out'
   }, state);
 
@@ -19583,7 +19585,13 @@ var left = function left(state) {
 module.exports = function (state, content) {
   return (0, _h2.default)('div.ff-dashboard-mainPanel', {
     style: { transition: 'left ' + state.transition },
-    hook: { update: left(state) }
+    hook: { update: function update(vnode) {
+        left(state)(vnode);
+        window.addEventListener('resize', function (ev) {
+          return left(state)(vnode);
+        });
+      }
+    }
   }, [(0, _h2.default)('div.ff-dashboard-panelBody', [content])]);
 };
 
@@ -19619,14 +19627,35 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 module.exports = function (state, header, body, dir) {
   var isLeft = dir === 'left';
-  var width = isLeft ? state.leftPanelWidth : state.rightPanelWidth;
   var style = {
     transition: dir + ' ' + state.transition + ', visibility ' + state.transition,
-    visibility: state.displayPanel$() === dir ? 'visible' : 'hidden',
-    width: width
+    visibility: state.displayPanel$() === dir ? 'visible' : 'hidden'
   };
-  style[dir] = state.displayPanel$() === dir ? 0 : '-' + width;
-  return (0, _h2.default)('div.ff-dashboard-' + dir + 'Panel', { style: style }, [(0, _h2.default)('div.ff-dashboard-panelHeader', [isLeft ? header : (0, _closeButton2.default)(state), !isLeft ? header : (0, _closeButton2.default)(state)]), (0, _h2.default)('div.ff-dashboard-panelBody', [body])]);
+
+  return (0, _h2.default)('div.ff-dashboard-' + dir + 'Panel', {
+    style: style,
+    hook: { insert: function insert(vnode) {
+        setWidth(state, isLeft)(vnode.elm);
+        window.addEventListener('resize', function (ev) {
+          return setWidth(state, isLeft)(vnode.elm);
+        });
+      },
+      update: function update(vnode) {
+        var elm = vnode.elm;
+        elm.style[dir] = dir === state.displayPanel$() ? 0 : '-' + elm.offsetWidth + 'px';
+      }
+    }
+  }, [(0, _h2.default)('div.ff-dashboard-panelHeader', [isLeft ? header : (0, _closeButton2.default)(state), !isLeft ? header : (0, _closeButton2.default)(state)]), (0, _h2.default)('div.ff-dashboard-panelBody', [body])]);
+};
+
+var setWidth = function setWidth(state, isLeft) {
+  return function (panel) {
+    var parentWidth = panel.parentElement.offsetWidth;
+    var width = isLeft ? state.leftPanelWidth : state.rightPanelWidth;
+    var offset = isLeft ? state.leftPanelOffset : state.rightPanelOffset;
+    var remainder = parentWidth - offset;
+    panel.style.width = parentWidth >= width + offset ? width + 'px' : remainder + 'px';
+  };
 };
 
 },{"./close-button":33,"snabbdom/h":23}]},{},[3]);
