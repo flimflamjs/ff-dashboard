@@ -49,7 +49,7 @@ module.exports = function (state) {
   return (0, _h2.default)('div', [(0, _h2.default)('img', { props: { src: state.data$().img } }), (0, _h2.default)('p', state.data$().description)]);
 };
 
-},{"flyd":14,"ramda":21,"snabbdom/h":22}],3:[function(require,module,exports){
+},{"flyd":14,"ramda":22,"snabbdom/h":23}],3:[function(require,module,exports){
 'use strict';
 
 var _h = require('snabbdom/h');
@@ -117,7 +117,8 @@ var view = function view(state) {
     header: header(state),
     mainPanelBody: (0, _main2.default)(state),
     rightPanelHeader: (0, _h2.default)('h3', state.data$().name),
-    rightPanelBody: (0, _details2.default)(state)
+    rightPanelBody: (0, _details2.default)(state),
+    leftPanelHeader: (0, _h2.default)('h3', 'Filter')
   })]);
 };
 
@@ -127,7 +128,7 @@ var container = document.querySelector('#container');
 
 (0, _flimflamRender2.default)({ patch: patch, container: container, view: view, state: init() });
 
-},{"../scripts/index":34,"./data":1,"./details":2,"./main":4,"flimflam-render":5,"flyd":14,"ramda":21,"snabbdom":30,"snabbdom/h":22,"snabbdom/modules/attributes":25,"snabbdom/modules/class":26,"snabbdom/modules/eventlisteners":27,"snabbdom/modules/props":28,"snabbdom/modules/style":29}],4:[function(require,module,exports){
+},{"../scripts/index":35,"./data":1,"./details":2,"./main":4,"flimflam-render":5,"flyd":14,"ramda":22,"snabbdom":31,"snabbdom/h":23,"snabbdom/modules/attributes":26,"snabbdom/modules/class":27,"snabbdom/modules/eventlisteners":28,"snabbdom/modules/props":29,"snabbdom/modules/style":30}],4:[function(require,module,exports){
 'use strict';
 
 var _ramda = require('ramda');
@@ -156,7 +157,7 @@ module.exports = function (state) {
   return (0, _h2.default)('table', _ramda2.default.map(row(state), _data2.default));
 };
 
-},{"./data":1,"ramda":21,"snabbdom/h":22}],5:[function(require,module,exports){
+},{"./data":1,"ramda":22,"snabbdom/h":23}],5:[function(require,module,exports){
 'use strict';
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
@@ -9779,7 +9780,16 @@ StreamTransformer.prototype['@@transducer/step'] = function(s, v) { return v; };
 
 module.exports = flyd;
 
-},{"ramda/src/curryN":15}],15:[function(require,module,exports){
+},{"ramda/src/curryN":16}],15:[function(require,module,exports){
+var flyd = require('../../lib');
+
+module.exports = flyd.curryN(2, function(fn, s) {
+  return flyd.combine(function(s, self) {
+    if (fn(s())) self(s.val);
+  }, [s]);
+});
+
+},{"../../lib":14}],16:[function(require,module,exports){
 var _arity = require('./internal/_arity');
 var _curry1 = require('./internal/_curry1');
 var _curry2 = require('./internal/_curry2');
@@ -9835,7 +9845,7 @@ module.exports = _curry2(function curryN(length, fn) {
   return _arity(length, _curryN(length, [], fn));
 });
 
-},{"./internal/_arity":16,"./internal/_curry1":17,"./internal/_curry2":18,"./internal/_curryN":19}],16:[function(require,module,exports){
+},{"./internal/_arity":17,"./internal/_curry1":18,"./internal/_curry2":19,"./internal/_curryN":20}],17:[function(require,module,exports){
 module.exports = function _arity(n, fn) {
   /* eslint-disable no-unused-vars */
   switch (n) {
@@ -9854,7 +9864,7 @@ module.exports = function _arity(n, fn) {
   }
 };
 
-},{}],17:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 var _isPlaceholder = require('./_isPlaceholder');
 
 
@@ -9876,7 +9886,7 @@ module.exports = function _curry1(fn) {
   };
 };
 
-},{"./_isPlaceholder":20}],18:[function(require,module,exports){
+},{"./_isPlaceholder":21}],19:[function(require,module,exports){
 var _curry1 = require('./_curry1');
 var _isPlaceholder = require('./_isPlaceholder');
 
@@ -9906,7 +9916,7 @@ module.exports = function _curry2(fn) {
   };
 };
 
-},{"./_curry1":17,"./_isPlaceholder":20}],19:[function(require,module,exports){
+},{"./_curry1":18,"./_isPlaceholder":21}],20:[function(require,module,exports){
 var _arity = require('./_arity');
 var _isPlaceholder = require('./_isPlaceholder');
 
@@ -9948,14 +9958,14 @@ module.exports = function _curryN(length, received, fn) {
   };
 };
 
-},{"./_arity":16,"./_isPlaceholder":20}],20:[function(require,module,exports){
+},{"./_arity":17,"./_isPlaceholder":21}],21:[function(require,module,exports){
 module.exports = function _isPlaceholder(a) {
   return a != null &&
          typeof a === 'object' &&
          a['@@functional/placeholder'] === true;
 };
 
-},{}],21:[function(require,module,exports){
+},{}],22:[function(require,module,exports){
 //  Ramda v0.22.1
 //  https://github.com/ramda/ramda
 //  (c) 2013-2016 Scott Sauyet, Michael Hurley, and David Chambers
@@ -18788,7 +18798,7 @@ module.exports = function _isPlaceholder(a) {
 
 }.call(this));
 
-},{}],22:[function(require,module,exports){
+},{}],23:[function(require,module,exports){
 var VNode = require('./vnode');
 var is = require('./is');
 
@@ -18824,7 +18834,7 @@ module.exports = function h(sel, b, c) {
   return VNode(sel, data, children, text, undefined);
 };
 
-},{"./is":24,"./vnode":31}],23:[function(require,module,exports){
+},{"./is":25,"./vnode":32}],24:[function(require,module,exports){
 function createElement(tagName){
   return document.createElement(tagName);
 }
@@ -18880,13 +18890,13 @@ module.exports = {
   setTextContent: setTextContent
 };
 
-},{}],24:[function(require,module,exports){
+},{}],25:[function(require,module,exports){
 module.exports = {
   array: Array.isArray,
   primitive: function(s) { return typeof s === 'string' || typeof s === 'number'; },
 };
 
-},{}],25:[function(require,module,exports){
+},{}],26:[function(require,module,exports){
 var booleanAttrs = ["allowfullscreen", "async", "autofocus", "autoplay", "checked", "compact", "controls", "declare",
                 "default", "defaultchecked", "defaultmuted", "defaultselected", "defer", "disabled", "draggable",
                 "enabled", "formnovalidate", "hidden", "indeterminate", "inert", "ismap", "itemscope", "loop", "multiple",
@@ -18931,7 +18941,7 @@ function updateAttrs(oldVnode, vnode) {
 
 module.exports = {create: updateAttrs, update: updateAttrs};
 
-},{}],26:[function(require,module,exports){
+},{}],27:[function(require,module,exports){
 function updateClass(oldVnode, vnode) {
   var cur, name, elm = vnode.elm,
       oldClass = oldVnode.data.class,
@@ -18956,7 +18966,7 @@ function updateClass(oldVnode, vnode) {
 
 module.exports = {create: updateClass, update: updateClass};
 
-},{}],27:[function(require,module,exports){
+},{}],28:[function(require,module,exports){
 function invokeHandler(handler, vnode, event) {
   if (typeof handler === "function") {
     // call function handler
@@ -19059,7 +19069,7 @@ module.exports = {
   destroy: updateEventListeners
 };
 
-},{}],28:[function(require,module,exports){
+},{}],29:[function(require,module,exports){
 function updateProps(oldVnode, vnode) {
   var key, cur, old, elm = vnode.elm,
       oldProps = oldVnode.data.props, props = vnode.data.props;
@@ -19084,7 +19094,7 @@ function updateProps(oldVnode, vnode) {
 
 module.exports = {create: updateProps, update: updateProps};
 
-},{}],29:[function(require,module,exports){
+},{}],30:[function(require,module,exports){
 var raf = (typeof window !== 'undefined' && window.requestAnimationFrame) || setTimeout;
 var nextFrame = function(fn) { raf(function() { raf(fn); }); };
 
@@ -19155,7 +19165,7 @@ function applyRemoveStyle(vnode, rm) {
 
 module.exports = {create: updateStyle, update: updateStyle, destroy: applyDestroyStyle, remove: applyRemoveStyle};
 
-},{}],30:[function(require,module,exports){
+},{}],31:[function(require,module,exports){
 // jshint newcap: false
 /* global require, module, document, Node */
 'use strict';
@@ -19417,14 +19427,14 @@ function init(modules, api) {
 
 module.exports = {init: init};
 
-},{"./htmldomapi":23,"./is":24,"./vnode":31}],31:[function(require,module,exports){
+},{"./htmldomapi":24,"./is":25,"./vnode":32}],32:[function(require,module,exports){
 module.exports = function(sel, data, children, text, elm) {
   var key = data === undefined ? undefined : data.key;
   return {sel: sel, data: data, children: children,
           text: text, elm: elm, key: key};
 };
 
-},{}],32:[function(require,module,exports){
+},{}],33:[function(require,module,exports){
 'use strict';
 
 var _h = require('snabbdom/h');
@@ -19442,7 +19452,7 @@ module.exports = function (state) {
   });
 };
 
-},{"snabbdom/h":22}],33:[function(require,module,exports){
+},{"snabbdom/h":23}],34:[function(require,module,exports){
 'use strict';
 
 var _h = require('snabbdom/h');
@@ -19455,7 +19465,7 @@ module.exports = function (content) {
   return (0, _h2.default)('div.ff-dashboard-header', [content]);
 };
 
-},{"snabbdom/h":22}],34:[function(require,module,exports){
+},{"snabbdom/h":23}],35:[function(require,module,exports){
 'use strict';
 
 var _h = require('snabbdom/h');
@@ -19465,6 +19475,10 @@ var _h2 = _interopRequireDefault(_h);
 var _flyd = require('flyd');
 
 var _flyd2 = _interopRequireDefault(_flyd);
+
+var _filter = require('flyd/module/filter');
+
+var _filter2 = _interopRequireDefault(_filter);
 
 var _ramda = require('ramda');
 
@@ -19489,6 +19503,7 @@ var _rightPanel2 = _interopRequireDefault(_rightPanel);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // local
+// npm
 var init = function init(state) {
   state = _ramda2.default.merge({
     displayPanel$: _flyd2.default.stream('main'),
@@ -19496,15 +19511,26 @@ var init = function init(state) {
     rightPanelWidth: '500px',
     transition: '0.2s ease-out'
   }, state);
-  return state;
-}; // npm
 
+  var isShowingRightPanel$ = (0, _filter2.default)(function (x) {
+    return x === 'right';
+  }, state.displayPanel$);
+
+  _flyd2.default.map(resetRightPanelScroll, isShowingRightPanel$);
+
+  return state;
+};
 
 var setHeight = function setHeight(panels) {
   panels.style.height = '0px';
   var headerHeight = document.querySelector('.ff-dashboard-header').offsetHeight;
   var bodyHeight = document.body.offsetHeight;
   panels.style.height = bodyHeight - headerHeight + 'px';
+};
+
+var resetRightPanelScroll = function resetRightPanelScroll(_) {
+  var elm = document.querySelector('.ff-dashboard-rightPanel .ff-dashboard-panelBody');
+  elm.scrollTop = 0;
 };
 
 var view = function view(state, content) {
@@ -19520,7 +19546,7 @@ var view = function view(state, content) {
 
 module.exports = { init: init, view: view };
 
-},{"./header":33,"./left-panel":35,"./main-panel":36,"./right-panel":37,"flyd":14,"ramda":21,"snabbdom/h":22}],35:[function(require,module,exports){
+},{"./header":34,"./left-panel":36,"./main-panel":37,"./right-panel":38,"flyd":14,"flyd/module/filter":15,"ramda":22,"snabbdom/h":23}],36:[function(require,module,exports){
 'use strict';
 
 var _h = require('snabbdom/h');
@@ -19537,7 +19563,7 @@ module.exports = function (state, header, body) {
   return (0, _sidePanel2.default)(state, header, body, 'left');
 };
 
-},{"./side-panel":38,"snabbdom/h":22}],36:[function(require,module,exports){
+},{"./side-panel":39,"snabbdom/h":23}],37:[function(require,module,exports){
 'use strict';
 
 var _h = require('snabbdom/h');
@@ -19561,7 +19587,7 @@ module.exports = function (state, content) {
   }, [(0, _h2.default)('div.ff-dashboard-panelBody', [content])]);
 };
 
-},{"snabbdom/h":22}],37:[function(require,module,exports){
+},{"snabbdom/h":23}],38:[function(require,module,exports){
 'use strict';
 
 var _h = require('snabbdom/h');
@@ -19578,7 +19604,7 @@ module.exports = function (state, header, body) {
   return (0, _sidePanel2.default)(state, header, body, 'right');
 };
 
-},{"./side-panel":38,"snabbdom/h":22}],38:[function(require,module,exports){
+},{"./side-panel":39,"snabbdom/h":23}],39:[function(require,module,exports){
 'use strict';
 
 var _h = require('snabbdom/h');
@@ -19603,4 +19629,4 @@ module.exports = function (state, header, body, dir) {
   return (0, _h2.default)('div.ff-dashboard-' + dir + 'Panel', { style: style }, [(0, _h2.default)('div.ff-dashboard-panelHeader', [isLeft ? header : (0, _closeButton2.default)(state), !isLeft ? header : (0, _closeButton2.default)(state)]), (0, _h2.default)('div.ff-dashboard-panelBody', [body])]);
 };
 
-},{"./close-button":32,"snabbdom/h":22}]},{},[3]);
+},{"./close-button":33,"snabbdom/h":23}]},{},[3]);
