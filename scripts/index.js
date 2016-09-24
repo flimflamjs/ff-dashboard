@@ -13,10 +13,10 @@ import rightPanel from './right-panel'
 const init = state => {
   state = R.merge({
     displayPanel$: flyd.stream('main')
-  , leftPanelWidth: 400 
-  , leftPanelOffset: 100 
+  , leftPanelWidth: 300 
+  , leftPanelOffset: 80 
   , rightPanelWidth: 600
-  , rightPanelOffset: 100
+  , rightPanelOffset: 0
   , transition: '0.2s ease-out'
   }, state)
   

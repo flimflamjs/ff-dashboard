@@ -19507,10 +19507,10 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var init = function init(state) {
   state = _ramda2.default.merge({
     displayPanel$: _flyd2.default.stream('main'),
-    leftPanelWidth: 400,
-    leftPanelOffset: 100,
+    leftPanelWidth: 300,
+    leftPanelOffset: 80,
     rightPanelWidth: 600,
-    rightPanelOffset: 100,
+    rightPanelOffset: 0,
     transition: '0.2s ease-out'
   }, state);
 

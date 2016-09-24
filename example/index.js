@@ -25,7 +25,7 @@ const init = _ => {
     , flyd.map(x => x.name ? 'right' : undefined , state.data$)
   )
 
-  state.dashboard = dashboard.init({ displayPanel$ })
+  state.dashboard = dashboard.init({displayPanel$})
   return state
 }
 
