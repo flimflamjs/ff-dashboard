@@ -19524,7 +19524,7 @@ var init = function init(state) {
 };
 
 var setHeight = function setHeight(panels) {
-  panels.style.height = '0px';
+  panels.style.height = 0;
   var headerHeight = document.querySelector('.ff-dashboard-header').offsetHeight;
   var bodyHeight = document.body.offsetHeight;
   panels.style.height = bodyHeight - headerHeight + 'px';
