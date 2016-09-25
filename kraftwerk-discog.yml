@@ -19,7 +19,7 @@
         - guitar
         - tubon
     - 
-      name: Florian Schneider-Esleben 
+      name: Florian Schneider
       instruments: 
         - flute 
         - violin
@@ -59,7 +59,7 @@
         - xylophone
         - harmonica
     - 
-      name: Florian Schneider-Esleben 
+      name: Florian Schneider
       instruments: 
         - flute 
         - violin
@@ -94,7 +94,7 @@
         - drums
         - percussion
     - 
-      name: Florian Schneider-Esleben 
+      name: Florian Schneider
       instruments: 
         - vocals
         - keyboards
@@ -103,3 +103,96 @@
         - violin
         - guitar
         - percussion
+-
+  name: Autobahn 
+  year: 1974
+  img: https://upload.wikimedia.org/wikipedia/en/thumb/1/1a/A74-D-front-250.jpg/220px-A74-D-front-250.jpg
+  length: 42.26
+  label: 
+    - Phillips
+    - Vertigo
+  blurb: Autobahn is the fourth studio album by German electronic band Kraftwerk, released in November 1974. The 22-minute title track "Autobahn" was edited to 3:27 for single release and reached number 25 on the US Billboard Hot 100 chart, number 30 in the Australian chart, and performed even higher around Europe, reaching number 11 in the UK and number 12 in the Netherlands. This commercial success came after the band had released three experimental and purely instrumental albums.
+  tracks: 
+    - Autobahn
+    - Kometenmelodie 1
+    - Kometenmelodie 2
+    - Mitternacht
+    - Morgenspaziergang
+  personnel: 
+    - 
+      name: Ralf Hütter 
+      instruments: 
+        - vocals
+        - electronics
+        - synthesizer
+        - organ
+        - piano
+        - guitar
+        - electric drums
+    - 
+      name: Florian Schneider
+      instruments: 
+        - vocals
+        - vocoder
+        - electronics
+        - synthesizer
+        - flute
+        - electronic drums
+    - 
+      name: Klaus Röder  
+      instruments: 
+        - electric violin
+    - 
+      name: Wolfgang Flür  
+      instruments: 
+        - electronic drums
+-
+  name: Radio-Activity 
+  year: 1975
+  img: https://upload.wikimedia.org/wikipedia/en/thumb/1/15/Kraftwerk_Radio_Activity_album_cover.jpg/220px-Kraftwerk_Radio_Activity_album_cover.jpg
+  length: 37.38
+  label: 
+    - Kling Klang
+    - EMI
+    - Capitol
+  blurb: Radio-Activity (German title: Radio-Aktivität) is the fifth studio album by German electronic band Kraftwerk, released in October 1975. Unlike Kraftwerk's later albums, which featured language-specific lyrics, only the titles differ between the English and German editions. A concept album, Radio-Activity is bilingual, featuring lyrics in both languages. \n The album peaked at number one in France, becoming Kraftwerk's first album to reach a number one spot.
+  tracks: 
+    - Geiger Counter
+    - Radioactivity
+    - Radioland
+    - Airwaves
+    - Intermission
+    - News
+    - The Voice of Energy
+    - Antenna
+    - Radio Stars
+    - Uranium
+    - Transistor
+    - Ohm Sweet Ohm
+  personnel: 
+    - 
+      name: Ralf Hütter 
+      instruments: 
+        - vocals
+        - electronics
+        - synthesizer
+        - Vako Orchestron model A
+        - drum machine
+        - minimoog 
+    - 
+      name: Florian Schneider 
+      instruments: 
+        - vocals
+        - vocoder
+        - votrax
+        - electronics
+        - synthesizer
+    - 
+      name: Karl Bartos  
+      instruments: 
+        - electronic percussion
+    - 
+      name: Wolfgang Flür  
+      instruments: 
+        - electronic percussion
+
