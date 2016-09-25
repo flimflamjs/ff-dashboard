@@ -28,7 +28,7 @@ const init = state => {
 }
 
 const setHeight = panels => {
-  panels.style.height = '0px'
+  panels.style.height = 0
   let headerHeight = document.querySelector('.ff-dashboard-header').offsetHeight 
   let bodyHeight = document.body.offsetHeight
   panels.style.height = `${bodyHeight - headerHeight}px`
