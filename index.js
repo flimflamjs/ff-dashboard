@@ -11,8 +11,8 @@ import data from './data'
 
 const header = state => 
   h('div.table.fullWidth', [
-    h('a.table-cell', {on: {click: x => state.showFilters$(true)}}, 'Filter')
-  , h('h4.table-cell', 'Kraftwerk Discography')
+    h('a.table-cell.align-middle.bold', {on: {click: x => state.showFilters$(true)}}, 'Filter')
+  , h('h4.table-cell.align-middle', 'Kraftwerk Discography')
   ])
 
 const init = _ => {
