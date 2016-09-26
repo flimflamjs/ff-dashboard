@@ -21,15 +21,17 @@ var _flyd2 = _interopRequireDefault(_flyd);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var personnel = function personnel(d) {
-  return (0, _h2.default)('tr', [(0, _h2.default)('td', d.name), (0, _h2.default)('td', '' + _ramda2.default.map(function (x) {
+  return (0, _h2.default)('tr', [(0, _h2.default)('td.bold', d.name), (0, _h2.default)('td', '' + _ramda2.default.map(function (x) {
     return x;
   }, d.instruments).join(', '))]);
 };
 
 module.exports = function (state) {
-  return (0, _h2.default)('div', [(0, _h2.default)('div.clearfix', [(0, _h2.default)('img.left.pr2', { props: { src: state.data$().img } }), (0, _h2.default)('table.small', [(0, _h2.default)('tr', [(0, _h2.default)('td.bold', 'Name'), (0, _h2.default)('td', state.data$().name)]), (0, _h2.default)('tr', [(0, _h2.default)('td.bold', 'Year'), (0, _h2.default)('td', state.data$().year)]), (0, _h2.default)('tr', [(0, _h2.default)('td.bold', 'Length'), (0, _h2.default)('td', Number(state.data$().length).toFixed(2).replace('.', ':'))]), (0, _h2.default)('tr', [(0, _h2.default)('td.bold', 'Label'), (0, _h2.default)('td', _ramda2.default.map(function (x) {
+  return (0, _h2.default)('div.pb2', [(0, _h2.default)('div.table', [(0, _h2.default)('img.table-cell.align-middle', { props: { src: state.data$().img } }), (0, _h2.default)('table.small.table-cell.align-middle.pl1', [(0, _h2.default)('tr', [(0, _h2.default)('td.bold', 'Year'), (0, _h2.default)('td', state.data$().year)]), (0, _h2.default)('tr', [(0, _h2.default)('td.bold', 'Length'), (0, _h2.default)('td', Number(state.data$().length).toFixed(2).replace('.', ':'))]), (0, _h2.default)('tr', [(0, _h2.default)('td.bold', 'Label'), (0, _h2.default)('td', _ramda2.default.map(function (x) {
     return x;
-  }, state.data$().label || []).join(', '))])])]), (0, _h2.default)('p.mt2', state.data$().blurb), (0, _h2.default)('table.mt2.small', _ramda2.default.map(personnel, state.data$().personnel || []))]);
+  }, state.data$().label || []).join(', '))])])]), (0, _h2.default)('p.mt2', state.data$().blurb), (0, _h2.default)('h4.mb1', 'Tracks'), (0, _h2.default)('ol.small', _ramda2.default.map(function (x) {
+    return (0, _h2.default)('li', x);
+  }, state.data$().tracks || [])), (0, _h2.default)('h4.mb1', 'Musicians'), (0, _h2.default)('table.small', _ramda2.default.map(personnel, state.data$().personnel || []))]);
 };
 
 },{"flyd":14,"ramda":22,"snabbdom/h":23}],3:[function(require,module,exports){
@@ -74,9 +76,9 @@ var _data2 = _interopRequireDefault(_data);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var header = function header(state) {
-  return (0, _h2.default)('div.table.fullWidth', [(0, _h2.default)('a.table-cell', { on: { click: function click(x) {
+  return (0, _h2.default)('div.table.fullWidth', [(0, _h2.default)('a.table-cell.align-middle.bold', { on: { click: function click(x) {
         return state.showFilters$(true);
-      } } }, 'Filter'), (0, _h2.default)('h4.table-cell', 'Kraftwerk Discography')]);
+      } } }, 'Filter'), (0, _h2.default)('h4.table-cell.align-middle', 'Kraftwerk Discography')]);
 };
 
 var init = function init(_) {
@@ -130,16 +132,16 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var row = function row(state) {
   return function (d) {
-    return (0, _h2.default)('tr.small', [(0, _h2.default)('td', [(0, _h2.default)('a', { on: { click: function click(x) {
+    return (0, _h2.default)('tr', [(0, _h2.default)('td', [(0, _h2.default)('a', { on: { click: function click(x) {
           return state.dataId$(d.id);
-        } } }, d.name)]), (0, _h2.default)('td', d.year), (0, _h2.default)('td', Number(d.length).toFixed(2).replace('.', ':')), (0, _h2.default)('td', _ramda2.default.map(function (x) {
+        } } }, d.name)]), (0, _h2.default)('td', d.year), (0, _h2.default)('td', Number(d.length).toFixed(2).replace('.', ':')), (0, _h2.default)('td.small', _ramda2.default.map(function (x) {
       return x.name;
     }, d.personnel).join(', '))]);
   };
 };
 
 module.exports = function (state) {
-  return (0, _h2.default)('table.fullWidth', _ramda2.default.concat([(0, _h2.default)('tr.bold.small', [(0, _h2.default)('td', 'Name'), (0, _h2.default)('td', 'Year'), (0, _h2.default)('td', 'Length'), (0, _h2.default)('td', 'Musicians')])], _ramda2.default.map(row(state), _data2.default)));
+  return (0, _h2.default)('table.fullWidth', _ramda2.default.concat([(0, _h2.default)('tr.bold', [(0, _h2.default)('td', 'Name'), (0, _h2.default)('td', 'Year'), (0, _h2.default)('td', 'Length'), (0, _h2.default)('td', 'Musicians')])], _ramda2.default.map(row(state), _data2.default)));
 };
 
 },{"./data":1,"ramda":22,"snabbdom/h":23}],5:[function(require,module,exports){
@@ -19621,6 +19623,10 @@ module.exports = function (state, header, body, dir) {
     style: style,
     hook: { insert: function insert(vnode) {
         setWidth(state, isLeft)(vnode.elm);
+        setHeight(vnode.elm);
+        window.addEventListener('resize', function (ev) {
+          return setHeight(vnode.elm);
+        });
         window.addEventListener('resize', function (ev) {
           return setWidth(state, isLeft)(vnode.elm);
         });
@@ -19628,9 +19634,15 @@ module.exports = function (state, header, body, dir) {
       update: function update(vnode) {
         var elm = vnode.elm;
         elm.style[dir] = dir === state.displayPanel$() ? 0 : '-' + elm.offsetWidth + 'px';
+        setHeight(elm);
       }
     }
   }, [(0, _h2.default)('div.ff-dashboard-panelHeader', [isLeft ? header : (0, _closeButton2.default)(state), !isLeft ? header : (0, _closeButton2.default)(state)]), (0, _h2.default)('div.ff-dashboard-panelBody', [body])]);
+};
+
+var setHeight = function setHeight(panel) {
+  var header = panel.parentElement.querySelector('.ff-dashboard-panelHeader');
+  panel.style.paddingTop = header.offsetHeight + 'px';
 };
 
 var setWidth = function setWidth(state, isLeft) {

@@ -12,11 +12,14 @@ module.exports = (state, header, body, dir) => {
     style
   , hook: {insert: vnode => {
       setWidth(state, isLeft)(vnode.elm)
+      setHeight(vnode.elm)
+      window.addEventListener('resize', ev => setHeight(vnode.elm))
       window.addEventListener('resize', ev => setWidth(state, isLeft)(vnode.elm))
       }
     , update: vnode => {
         let elm = vnode.elm
         elm.style[dir] = (dir === state.displayPanel$() ? 0 : `-${elm.offsetWidth}px`)
+        setHeight(elm)
       }
     }
   }, [ 
@@ -26,6 +29,11 @@ module.exports = (state, header, body, dir) => {
       ])
   , h('div.ff-dashboard-panelBody', [body])
   ])
+}
+
+const setHeight = panel => {
+  let header = panel.parentElement.querySelector('.ff-dashboard-panelHeader')
+  panel.style.paddingTop = header.offsetHeight + 'px' 
 }
 
 const setWidth = (state, isLeft) => panel => {

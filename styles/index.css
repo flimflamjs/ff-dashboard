@@ -6,6 +6,8 @@
 .ff-dashboard-panelHeader {
   width: 100%;
   display: table;
+  position: absolute;
+  top: 0;
 }
 
 .ff-dashboard-leftPanel .ff-dashboard-closeButton {
