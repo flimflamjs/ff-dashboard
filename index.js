@@ -9,8 +9,11 @@ import main from './main'
 import details from './details'
 import data from './data'
 
-const header = state =>
-  h('a', {on: {click: x => state.showFilters$(true)}}, 'open left panel')
+const header = state => 
+  h('div.table.fullWidth', [
+    h('a.table-cell', {on: {click: x => state.showFilters$(true)}}, 'Filter')
+  , h('h4.table-cell', 'Kraftwerk Discography')
+  ])
 
 const init = _ => {
   const state = {}
