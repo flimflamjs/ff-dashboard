@@ -1,7 +1,5 @@
 import R from 'ramda'
 import h from 'snabbdom/h'
-import data from './data'
-
 
 const row = state => d =>
   h('tr', [
@@ -20,6 +18,6 @@ module.exports = state =>
       , h('td', 'Length')
       , h('td', 'Musicians')
       ])
-    ], R.map(row(state), data))
+    ], R.map(row(state), state.dataMain$() || []))
   )
 

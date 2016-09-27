@@ -8,24 +8,23 @@ import dashboard from '../scripts/index'
 import main from './main'
 import details from './details'
 import data from './data'
+import header from './header'
+import filter from './filter'
 
-const header = state => 
-  h('div.table.fullWidth', [
-    h('a.table-cell.align-middle.bold', {on: {click: x => state.showFilters$(true)}}, 'Filter')
-  , h('h4.table-cell.align-middle', 'Kraftwerk Discography')
-  ])
 
 const init = _ => {
   const state = {}
   state.showFilters$ = flyd.stream()
   state.dataId$ = flyd.stream()
-  state.data$ = flyd.merge(
+  state.dataDetails$ = flyd.merge(
       flyd.stream({})
     , flyd.map(i => R.find(R.propEq('id', i), data), state.dataId$))
 
+  state.dataMain$ = flyd.stream(data)
+
   const displayPanel$ = flyd.merge(
       flyd.map(R.always('left'), state.showFilters$)
-    , flyd.map(x => x.name ? 'right' : undefined , state.data$)
+    , flyd.map(x => x.name ? 'right' : undefined , state.dataDetails$)
   )
 
   state.dashboard = dashboard.init({displayPanel$})
@@ -37,9 +36,10 @@ const view = state =>
     dashboard.view(state.dashboard, {
         header: header(state)
       , mainPanelBody: main(state)
-      , rightPanelHeader: h('h3', state.data$().name)
+      , rightPanelHeader: h('h3', state.dataDetails$().name)
       , rightPanelBody: details(state)
       , leftPanelHeader: h('h3', 'Filter')
+      , leftPanelBody: filter(state)
     })
   ])
 
