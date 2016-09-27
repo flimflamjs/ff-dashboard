@@ -27,14 +27,77 @@ var personnel = function personnel(d) {
 };
 
 module.exports = function (state) {
-  return (0, _h2.default)('div.pb2', [(0, _h2.default)('div.table', [(0, _h2.default)('img.table-cell.align-middle', { props: { src: state.data$().img } }), (0, _h2.default)('table.small.table-cell.align-middle.pl1', [(0, _h2.default)('tr', [(0, _h2.default)('td.bold', 'Year'), (0, _h2.default)('td', state.data$().year)]), (0, _h2.default)('tr', [(0, _h2.default)('td.bold', 'Length'), (0, _h2.default)('td', Number(state.data$().length).toFixed(2).replace('.', ':'))]), (0, _h2.default)('tr', [(0, _h2.default)('td.bold', 'Label'), (0, _h2.default)('td', _ramda2.default.map(function (x) {
+  return (0, _h2.default)('div.pb2', [(0, _h2.default)('div.table', [(0, _h2.default)('img.table-cell.align-middle', { props: { src: state.dataDetails$().img } }), (0, _h2.default)('table.small.table-cell.align-middle.pl1', [(0, _h2.default)('tr', [(0, _h2.default)('td.bold', 'Year'), (0, _h2.default)('td', state.dataDetails$().year)]), (0, _h2.default)('tr', [(0, _h2.default)('td.bold', 'Length'), (0, _h2.default)('td', Number(state.dataDetails$().length).toFixed(2).replace('.', ':'))]), (0, _h2.default)('tr', [(0, _h2.default)('td.bold', 'Label'), (0, _h2.default)('td', _ramda2.default.map(function (x) {
     return x;
-  }, state.data$().label || []).join(', '))])])]), (0, _h2.default)('p.mt2', state.data$().blurb), (0, _h2.default)('h4.mb1', 'Tracks'), (0, _h2.default)('ol.small', _ramda2.default.map(function (x) {
+  }, state.dataDetails$().label || []).join(', '))])])]), (0, _h2.default)('p.mt2', state.dataDetails$().blurb), (0, _h2.default)('h4.mb1', 'Tracks'), (0, _h2.default)('ol.small', _ramda2.default.map(function (x) {
     return (0, _h2.default)('li', x);
-  }, state.data$().tracks || [])), (0, _h2.default)('h4.mb1', 'Musicians'), (0, _h2.default)('table.small', _ramda2.default.map(personnel, state.data$().personnel || []))]);
+  }, state.dataDetails$().tracks || [])), (0, _h2.default)('h4.mb1', 'Musicians'), (0, _h2.default)('table.small', _ramda2.default.map(personnel, state.dataDetails$().personnel || []))]);
 };
 
-},{"flyd":14,"ramda":22,"snabbdom/h":23}],3:[function(require,module,exports){
+},{"flyd":16,"ramda":24,"snabbdom/h":25}],3:[function(require,module,exports){
+'use strict';
+
+var _h = require('snabbdom/h');
+
+var _h2 = _interopRequireDefault(_h);
+
+var _flyd = require('flyd');
+
+var _flyd2 = _interopRequireDefault(_flyd);
+
+var _ramda = require('ramda');
+
+var _ramda2 = _interopRequireDefault(_ramda);
+
+var _data = require('./data');
+
+var _data2 = _interopRequireDefault(_data);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var input = function input(type, name) {
+  return function (value) {
+    return (0, _h2.default)('div.small', [(0, _h2.default)('input', { props: { type: type, name: name, value: value } }), (0, _h2.default)('span.pl1', value)]);
+  };
+};
+
+var checkboxes = function checkboxes(arr, name) {
+  return (0, _h2.default)('div', _ramda2.default.map(function (x) {
+    return input('checkbox', name)(x);
+  }, arr));
+};
+
+var getPersonnel = function getPersonnel(_) {
+  return _ramda2.default.uniq(_ramda2.default.reduce(function (a, b) {
+    return _ramda2.default.concat(a, _ramda2.default.map(function (x) {
+      return x.name;
+    }, b.personnel));
+  }, [], _data2.default));
+};
+
+module.exports = function (state) {
+  // let instruments = R.map(x => R.concat(R.map(y => y.instruments, x.personnel)), data)
+  var personnel = getPersonnel();
+
+  return (0, _h2.default)('div', [(0, _h2.default)('p.bold.mt0.mb1', 'Personnel'), checkboxes(personnel, 'personnel')]);
+};
+
+},{"./data":1,"flyd":16,"ramda":24,"snabbdom/h":25}],4:[function(require,module,exports){
+'use strict';
+
+var _h = require('snabbdom/h');
+
+var _h2 = _interopRequireDefault(_h);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+module.exports = function (state) {
+  return (0, _h2.default)('div.table.fullWidth', [(0, _h2.default)('a.table-cell.align-middle.bold', { on: { click: function click(x) {
+        return state.showFilters$(true);
+      } } }, 'Filter'), (0, _h2.default)('h4.table-cell.align-middle', 'Kraftwerk Discography')]);
+};
+
+},{"snabbdom/h":25}],5:[function(require,module,exports){
 'use strict';
 
 var _h = require('snabbdom/h');
@@ -73,25 +136,29 @@ var _data = require('./data');
 
 var _data2 = _interopRequireDefault(_data);
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+var _header = require('./header');
 
-var header = function header(state) {
-  return (0, _h2.default)('div.table.fullWidth', [(0, _h2.default)('a.table-cell.align-middle.bold', { on: { click: function click(x) {
-        return state.showFilters$(true);
-      } } }, 'Filter'), (0, _h2.default)('h4.table-cell.align-middle', 'Kraftwerk Discography')]);
-};
+var _header2 = _interopRequireDefault(_header);
+
+var _filter = require('./filter');
+
+var _filter2 = _interopRequireDefault(_filter);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var init = function init(_) {
   var state = {};
   state.showFilters$ = _flyd2.default.stream();
   state.dataId$ = _flyd2.default.stream();
-  state.data$ = _flyd2.default.merge(_flyd2.default.stream({}), _flyd2.default.map(function (i) {
+  state.dataDetails$ = _flyd2.default.merge(_flyd2.default.stream({}), _flyd2.default.map(function (i) {
     return _ramda2.default.find(_ramda2.default.propEq('id', i), _data2.default);
   }, state.dataId$));
 
+  state.dataMain$ = _flyd2.default.stream(_data2.default);
+
   var displayPanel$ = _flyd2.default.merge(_flyd2.default.map(_ramda2.default.always('left'), state.showFilters$), _flyd2.default.map(function (x) {
     return x.name ? 'right' : undefined;
-  }, state.data$));
+  }, state.dataDetails$));
 
   state.dashboard = _index2.default.init({ displayPanel$: displayPanel$ });
   return state;
@@ -99,11 +166,12 @@ var init = function init(_) {
 
 var view = function view(state) {
   return (0, _h2.default)('div', [_index2.default.view(state.dashboard, {
-    header: header(state),
+    header: (0, _header2.default)(state),
     mainPanelBody: (0, _main2.default)(state),
-    rightPanelHeader: (0, _h2.default)('h3', state.data$().name),
+    rightPanelHeader: (0, _h2.default)('h3', state.dataDetails$().name),
     rightPanelBody: (0, _details2.default)(state),
-    leftPanelHeader: (0, _h2.default)('h3', 'Filter')
+    leftPanelHeader: (0, _h2.default)('h3', 'Filter'),
+    leftPanelBody: (0, _filter2.default)(state)
   })]);
 };
 
@@ -113,7 +181,7 @@ var container = document.querySelector('#container');
 
 (0, _flimflamRender2.default)({ patch: patch, container: container, view: view, state: init() });
 
-},{"../scripts/index":35,"./data":1,"./details":2,"./main":4,"flimflam-render":5,"flyd":14,"ramda":22,"snabbdom":31,"snabbdom/h":23,"snabbdom/modules/attributes":26,"snabbdom/modules/class":27,"snabbdom/modules/eventlisteners":28,"snabbdom/modules/props":29,"snabbdom/modules/style":30}],4:[function(require,module,exports){
+},{"../scripts/index":37,"./data":1,"./details":2,"./filter":3,"./header":4,"./main":6,"flimflam-render":7,"flyd":16,"ramda":24,"snabbdom":33,"snabbdom/h":25,"snabbdom/modules/attributes":28,"snabbdom/modules/class":29,"snabbdom/modules/eventlisteners":30,"snabbdom/modules/props":31,"snabbdom/modules/style":32}],6:[function(require,module,exports){
 'use strict';
 
 var _ramda = require('ramda');
@@ -123,10 +191,6 @@ var _ramda2 = _interopRequireDefault(_ramda);
 var _h = require('snabbdom/h');
 
 var _h2 = _interopRequireDefault(_h);
-
-var _data = require('./data');
-
-var _data2 = _interopRequireDefault(_data);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -141,10 +205,10 @@ var row = function row(state) {
 };
 
 module.exports = function (state) {
-  return (0, _h2.default)('table.fullWidth', _ramda2.default.concat([(0, _h2.default)('tr.bold', [(0, _h2.default)('td', 'Name'), (0, _h2.default)('td', 'Year'), (0, _h2.default)('td', 'Length'), (0, _h2.default)('td', 'Musicians')])], _ramda2.default.map(row(state), _data2.default)));
+  return (0, _h2.default)('table.fullWidth', _ramda2.default.concat([(0, _h2.default)('tr.bold', [(0, _h2.default)('td', 'Name'), (0, _h2.default)('td', 'Year'), (0, _h2.default)('td', 'Length'), (0, _h2.default)('td', 'Musicians')])], _ramda2.default.map(row(state), state.dataMain$() || [])));
 };
 
-},{"./data":1,"ramda":22,"snabbdom/h":23}],5:[function(require,module,exports){
+},{"ramda":24,"snabbdom/h":25}],7:[function(require,module,exports){
 'use strict';
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
@@ -194,7 +258,7 @@ var isObj = function isObj(x) {
 module.exports = render;
 
 
-},{"flyd":6,"flyd/module/mergeall":7,"ramda":13}],6:[function(require,module,exports){
+},{"flyd":8,"flyd/module/mergeall":9,"ramda":15}],8:[function(require,module,exports){
 var curryN = require('ramda/src/curryN');
 
 'use strict';
@@ -495,7 +559,7 @@ module.exports = {
   immediate: immediate,
 };
 
-},{"ramda/src/curryN":8}],7:[function(require,module,exports){
+},{"ramda/src/curryN":10}],9:[function(require,module,exports){
 var flyd = require('../../lib');
 
 module.exports = function mergeAll(streams) {
@@ -520,7 +584,7 @@ module.exports = function mergeAll(streams) {
 };
 
 
-},{"../../lib":6}],8:[function(require,module,exports){
+},{"../../lib":8}],10:[function(require,module,exports){
 var _arity = require('./internal/_arity');
 var _curry1 = require('./internal/_curry1');
 var _curry2 = require('./internal/_curry2');
@@ -577,7 +641,7 @@ module.exports = _curry2(function curryN(length, fn) {
   return _arity(length, _curryN(length, [], fn));
 });
 
-},{"./internal/_arity":9,"./internal/_curry1":10,"./internal/_curry2":11,"./internal/_curryN":12}],9:[function(require,module,exports){
+},{"./internal/_arity":11,"./internal/_curry1":12,"./internal/_curry2":13,"./internal/_curryN":14}],11:[function(require,module,exports){
 module.exports = function _arity(n, fn) {
   // jshint unused:vars
   switch (n) {
@@ -596,7 +660,7 @@ module.exports = function _arity(n, fn) {
   }
 };
 
-},{}],10:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 /**
  * Optimized internal two-arity curry function.
  *
@@ -617,7 +681,7 @@ module.exports = function _curry1(fn) {
   };
 };
 
-},{}],11:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 var _curry1 = require('./_curry1');
 
 
@@ -651,7 +715,7 @@ module.exports = function _curry2(fn) {
   };
 };
 
-},{"./_curry1":10}],12:[function(require,module,exports){
+},{"./_curry1":12}],14:[function(require,module,exports){
 var _arity = require('./_arity');
 
 
@@ -691,7 +755,7 @@ module.exports = function _curryN(length, received, fn) {
   };
 };
 
-},{"./_arity":9}],13:[function(require,module,exports){
+},{"./_arity":11}],15:[function(require,module,exports){
 //  Ramda v0.19.1
 //  https://github.com/ramda/ramda
 //  (c) 2013-2016 Scott Sauyet, Michael Hurley, and David Chambers
@@ -9139,7 +9203,7 @@ module.exports = function _curryN(length, received, fn) {
 
 }.call(this));
 
-},{}],14:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 'use strict';
 
 var curryN = require('ramda/src/curryN');
@@ -9767,7 +9831,7 @@ StreamTransformer.prototype['@@transducer/step'] = function(s, v) { return v; };
 
 module.exports = flyd;
 
-},{"ramda/src/curryN":16}],15:[function(require,module,exports){
+},{"ramda/src/curryN":18}],17:[function(require,module,exports){
 var flyd = require('../../lib');
 
 module.exports = flyd.curryN(2, function(fn, s) {
@@ -9776,7 +9840,7 @@ module.exports = flyd.curryN(2, function(fn, s) {
   }, [s]);
 });
 
-},{"../../lib":14}],16:[function(require,module,exports){
+},{"../../lib":16}],18:[function(require,module,exports){
 var _arity = require('./internal/_arity');
 var _curry1 = require('./internal/_curry1');
 var _curry2 = require('./internal/_curry2');
@@ -9832,7 +9896,7 @@ module.exports = _curry2(function curryN(length, fn) {
   return _arity(length, _curryN(length, [], fn));
 });
 
-},{"./internal/_arity":17,"./internal/_curry1":18,"./internal/_curry2":19,"./internal/_curryN":20}],17:[function(require,module,exports){
+},{"./internal/_arity":19,"./internal/_curry1":20,"./internal/_curry2":21,"./internal/_curryN":22}],19:[function(require,module,exports){
 module.exports = function _arity(n, fn) {
   /* eslint-disable no-unused-vars */
   switch (n) {
@@ -9851,7 +9915,7 @@ module.exports = function _arity(n, fn) {
   }
 };
 
-},{}],18:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 var _isPlaceholder = require('./_isPlaceholder');
 
 
@@ -9873,7 +9937,7 @@ module.exports = function _curry1(fn) {
   };
 };
 
-},{"./_isPlaceholder":21}],19:[function(require,module,exports){
+},{"./_isPlaceholder":23}],21:[function(require,module,exports){
 var _curry1 = require('./_curry1');
 var _isPlaceholder = require('./_isPlaceholder');
 
@@ -9903,7 +9967,7 @@ module.exports = function _curry2(fn) {
   };
 };
 
-},{"./_curry1":18,"./_isPlaceholder":21}],20:[function(require,module,exports){
+},{"./_curry1":20,"./_isPlaceholder":23}],22:[function(require,module,exports){
 var _arity = require('./_arity');
 var _isPlaceholder = require('./_isPlaceholder');
 
@@ -9945,14 +10009,14 @@ module.exports = function _curryN(length, received, fn) {
   };
 };
 
-},{"./_arity":17,"./_isPlaceholder":21}],21:[function(require,module,exports){
+},{"./_arity":19,"./_isPlaceholder":23}],23:[function(require,module,exports){
 module.exports = function _isPlaceholder(a) {
   return a != null &&
          typeof a === 'object' &&
          a['@@functional/placeholder'] === true;
 };
 
-},{}],22:[function(require,module,exports){
+},{}],24:[function(require,module,exports){
 //  Ramda v0.22.1
 //  https://github.com/ramda/ramda
 //  (c) 2013-2016 Scott Sauyet, Michael Hurley, and David Chambers
@@ -18785,7 +18849,7 @@ module.exports = function _isPlaceholder(a) {
 
 }.call(this));
 
-},{}],23:[function(require,module,exports){
+},{}],25:[function(require,module,exports){
 var VNode = require('./vnode');
 var is = require('./is');
 
@@ -18821,7 +18885,7 @@ module.exports = function h(sel, b, c) {
   return VNode(sel, data, children, text, undefined);
 };
 
-},{"./is":25,"./vnode":32}],24:[function(require,module,exports){
+},{"./is":27,"./vnode":34}],26:[function(require,module,exports){
 function createElement(tagName){
   return document.createElement(tagName);
 }
@@ -18877,13 +18941,13 @@ module.exports = {
   setTextContent: setTextContent
 };
 
-},{}],25:[function(require,module,exports){
+},{}],27:[function(require,module,exports){
 module.exports = {
   array: Array.isArray,
   primitive: function(s) { return typeof s === 'string' || typeof s === 'number'; },
 };
 
-},{}],26:[function(require,module,exports){
+},{}],28:[function(require,module,exports){
 var booleanAttrs = ["allowfullscreen", "async", "autofocus", "autoplay", "checked", "compact", "controls", "declare",
                 "default", "defaultchecked", "defaultmuted", "defaultselected", "defer", "disabled", "draggable",
                 "enabled", "formnovalidate", "hidden", "indeterminate", "inert", "ismap", "itemscope", "loop", "multiple",
@@ -18928,7 +18992,7 @@ function updateAttrs(oldVnode, vnode) {
 
 module.exports = {create: updateAttrs, update: updateAttrs};
 
-},{}],27:[function(require,module,exports){
+},{}],29:[function(require,module,exports){
 function updateClass(oldVnode, vnode) {
   var cur, name, elm = vnode.elm,
       oldClass = oldVnode.data.class,
@@ -18953,7 +19017,7 @@ function updateClass(oldVnode, vnode) {
 
 module.exports = {create: updateClass, update: updateClass};
 
-},{}],28:[function(require,module,exports){
+},{}],30:[function(require,module,exports){
 function invokeHandler(handler, vnode, event) {
   if (typeof handler === "function") {
     // call function handler
@@ -19056,7 +19120,7 @@ module.exports = {
   destroy: updateEventListeners
 };
 
-},{}],29:[function(require,module,exports){
+},{}],31:[function(require,module,exports){
 function updateProps(oldVnode, vnode) {
   var key, cur, old, elm = vnode.elm,
       oldProps = oldVnode.data.props, props = vnode.data.props;
@@ -19081,7 +19145,7 @@ function updateProps(oldVnode, vnode) {
 
 module.exports = {create: updateProps, update: updateProps};
 
-},{}],30:[function(require,module,exports){
+},{}],32:[function(require,module,exports){
 var raf = (typeof window !== 'undefined' && window.requestAnimationFrame) || setTimeout;
 var nextFrame = function(fn) { raf(function() { raf(fn); }); };
 
@@ -19152,7 +19216,7 @@ function applyRemoveStyle(vnode, rm) {
 
 module.exports = {create: updateStyle, update: updateStyle, destroy: applyDestroyStyle, remove: applyRemoveStyle};
 
-},{}],31:[function(require,module,exports){
+},{}],33:[function(require,module,exports){
 // jshint newcap: false
 /* global require, module, document, Node */
 'use strict';
@@ -19414,14 +19478,14 @@ function init(modules, api) {
 
 module.exports = {init: init};
 
-},{"./htmldomapi":24,"./is":25,"./vnode":32}],32:[function(require,module,exports){
+},{"./htmldomapi":26,"./is":27,"./vnode":34}],34:[function(require,module,exports){
 module.exports = function(sel, data, children, text, elm) {
   var key = data === undefined ? undefined : data.key;
   return {sel: sel, data: data, children: children,
           text: text, elm: elm, key: key};
 };
 
-},{}],33:[function(require,module,exports){
+},{}],35:[function(require,module,exports){
 'use strict';
 
 var _h = require('snabbdom/h');
@@ -19439,7 +19503,7 @@ module.exports = function (state) {
   });
 };
 
-},{"snabbdom/h":23}],34:[function(require,module,exports){
+},{"snabbdom/h":25}],36:[function(require,module,exports){
 'use strict';
 
 var _h = require('snabbdom/h');
@@ -19452,7 +19516,7 @@ module.exports = function (content) {
   return (0, _h2.default)('div.ff-dashboard-header', [content]);
 };
 
-},{"snabbdom/h":23}],35:[function(require,module,exports){
+},{"snabbdom/h":25}],37:[function(require,module,exports){
 'use strict';
 
 var _h = require('snabbdom/h');
@@ -19535,7 +19599,7 @@ var view = function view(state, content) {
 
 module.exports = { init: init, view: view };
 
-},{"./header":34,"./left-panel":36,"./main-panel":37,"./right-panel":38,"flyd":14,"flyd/module/filter":15,"ramda":22,"snabbdom/h":23}],36:[function(require,module,exports){
+},{"./header":36,"./left-panel":38,"./main-panel":39,"./right-panel":40,"flyd":16,"flyd/module/filter":17,"ramda":24,"snabbdom/h":25}],38:[function(require,module,exports){
 'use strict';
 
 var _h = require('snabbdom/h');
@@ -19552,7 +19616,7 @@ module.exports = function (state, header, body) {
   return (0, _sidePanel2.default)(state, header, body, 'left');
 };
 
-},{"./side-panel":39,"snabbdom/h":23}],37:[function(require,module,exports){
+},{"./side-panel":41,"snabbdom/h":25}],39:[function(require,module,exports){
 'use strict';
 
 var _h = require('snabbdom/h');
@@ -19582,7 +19646,7 @@ module.exports = function (state, content) {
   }, [(0, _h2.default)('div.ff-dashboard-panelBody', [content])]);
 };
 
-},{"snabbdom/h":23}],38:[function(require,module,exports){
+},{"snabbdom/h":25}],40:[function(require,module,exports){
 'use strict';
 
 var _h = require('snabbdom/h');
@@ -19599,7 +19663,7 @@ module.exports = function (state, header, body) {
   return (0, _sidePanel2.default)(state, header, body, 'right');
 };
 
-},{"./side-panel":39,"snabbdom/h":23}],39:[function(require,module,exports){
+},{"./side-panel":41,"snabbdom/h":25}],41:[function(require,module,exports){
 'use strict';
 
 var _h = require('snabbdom/h');
@@ -19655,4 +19719,4 @@ var setWidth = function setWidth(state, isLeft) {
   };
 };
 
-},{"./close-button":33,"snabbdom/h":23}]},{},[3]);
+},{"./close-button":35,"snabbdom/h":25}]},{},[5]);
