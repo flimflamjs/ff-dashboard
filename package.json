@@ -4,14 +4,13 @@
   "description": "Flimflam dashboard component comprised of a main panel and two side panels",
   "scripts": {
     "watch-css": "postcss -c postcss.watch.js -w -l",
-    "build-css": "postcss -c postcss.build.js -l",
-    "mini-css": "postcss --use cssnano -r dist/index.css -m file -l",
     "watch-js": "watchify scripts/index.js -o dist/index.js -t [babelify --presets es2015] -v",
+    "build-css": "postcss -c postcss.build.js -m file -l",
+    "build-js": "browserify scripts/index.js -o dist/index.js -t [babelify --presets es2015] && uglifyjs dist/index.js -o dist/index.js --source-map dist/index.js.map -c -m -v",
     "watch-example-js": "watchify example/index.js -o example/build.js -t [babelify --presets es2015] -v",
     "watch-example-css": "postcss -c postcss.watch-example.js -w -l",
-    "build-js": "browserify scripts/index.js -o dist/index.js -t [babelify --presets es2015]",
-    "mini-js": "uglifyjs dist/index.js -o dist/index.js --source-map dist/index.js.map -c -m -v",
-    "prepublish": "npm run build-css && npm run mini-css && npm run build-js && npm run mini-js"
+    "build-example-css": "postcss -c postcss.build-example.js -m file -l",
+    "build-example-js": "browserify example/index.js -o example/index.js -t [babelify --presets es2015] && uglifyjs example/build.js -o example/build.js --source-map example/build.js.map -c -m -v"
   },
   "repository": {
     "type": "git",

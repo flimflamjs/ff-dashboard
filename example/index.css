@@ -5,36 +5,18 @@ body {
    font-weight: 300;
 }
 
-* {
-  box-sizing: border-box;
-}
-
-
-td {
-  padding: 10px;
-}
-
-.ff-dashboard-panelHeader h3 {
-  margin: 0;
-}
-
-img {
-  max-width: 100%;
-  height: auto;
-}
-
-p {
-  line-height: 1.6;
-}
 
 tr:nth-of-type(2n) {
   background: rgba(0,0,0,0.04);
 }
 
-.container {
-  max-width: 980px;
-  margin-left: auto;
-  margin-right: auto;
+td {
+  padding: 10px;
+}
+
+.ff-dashboard-panelHeader h4 {
+  padding: 0;
+  margin: 0;
 }
 
 .ff-dashboard-closeButton,
@@ -50,13 +32,14 @@ a {
 .ff-dashboard-panelHeader,
 .ff-dashboard-header {
   background: #fbfbfb;
-  padding: 20px 10px;
+  padding: 10px;
   border-bottom: 1px solid rgba(0,0,0,0.1);
 }
 
 .ff-dashboard-closeButton {
-  font-size: 30px;
+  font-size: 42px;
   line-height: 1;
+  font-family: monospace;
 }
 
 .ff-dashboard-leftPanel,
