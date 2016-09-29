@@ -10,7 +10,7 @@
     "watch-example-js": "watchify example/index.js -o example/build.js -t [babelify --presets es2015] -v",
     "watch-example-css": "postcss -c postcss.watch-example.js -w -l",
     "build-example-css": "postcss -c postcss.build-example.js -m file -l",
-    "build-example-js": "browserify example/index.js -o example/index.js -t [babelify --presets es2015] && uglifyjs example/build.js -o example/build.js --source-map example/build.js.map -c -m -v"
+    "build-example-js": "browserify example/index.js -o example/build.js -t [babelify --presets es2015] && uglifyjs example/build.js -o example/build.js --source-map example/build.js.map -c -m -v"
   },
   "repository": {
     "type": "git",
