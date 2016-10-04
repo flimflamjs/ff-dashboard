@@ -12,8 +12,6 @@ import data from './data'
 import header from './header'
 import filter from './filter'
 
-window.R = R
-
 const init = _ => {
   const state = {}
   state.showFilters$ = flyd.stream()
@@ -24,7 +22,9 @@ const init = _ => {
 
   const data$ = flyd.stream(data)
 
-  state.filterBy$ = flyd.stream({personnel: ['Henning Schmitz']})
+  state.filterClick$ = flyd.stream()
+
+  state.filterBy$ = flyd.stream()
 
   state.dataMain$ = flyd.map(filterData(state.filterBy$()), data$)
 
@@ -37,6 +37,7 @@ const init = _ => {
   return state
 }
 
+
 const filterByPersonnel = (searchNames, data) => 
    R.filter(d => { 
      let names = R.pluck('name', d.personnel)
@@ -45,6 +46,7 @@ const filterByPersonnel = (searchNames, data) =>
   , data)
 
 const filterData = filterBy => data => {
+  if(!filterBy) return data
   let filteredData = []
   if(R.has('personnel')(filterBy)) {
     filteredData = R.concat(filteredData, filterByPersonnel(filterBy.personnel, data))
