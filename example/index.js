@@ -5,7 +5,7 @@ import R from 'ramda'
 import render from 'flimflam-render'
 import snabbdom from 'snabbdom'
 
-import dashboard from '../scripts/index'
+import dashboard from '../lib/index'
 import main from './main'
 import details from './details'
 import data from './data'
