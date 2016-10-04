@@ -150,8 +150,6 @@ var _filter4 = _interopRequireDefault(_filter3);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-window.R = _ramda2.default;
-
 var init = function init(_) {
   var state = {};
   state.showFilters$ = _flyd2.default.stream();
@@ -162,7 +160,9 @@ var init = function init(_) {
 
   var data$ = _flyd2.default.stream(_data2.default);
 
-  state.filterBy$ = _flyd2.default.stream({ personnel: ['Henning Schmitz'] });
+  state.filterClick$ = _flyd2.default.stream();
+
+  state.filterBy$ = _flyd2.default.stream();
 
   state.dataMain$ = _flyd2.default.map(filterData(state.filterBy$()), data$);
 
@@ -183,6 +183,7 @@ var filterByPersonnel = function filterByPersonnel(searchNames, data) {
 
 var filterData = function filterData(filterBy) {
   return function (data) {
+    if (!filterBy) return data;
     var filteredData = [];
     if (_ramda2.default.has('personnel')(filterBy)) {
       filteredData = _ramda2.default.concat(filteredData, filterByPersonnel(filterBy.personnel, data));
