@@ -34,7 +34,7 @@ module.exports = function (state) {
   }, state.dataDetails$().tracks || [])), (0, _h2.default)('h4.mb1', 'Musicians'), (0, _h2.default)('table.small', _ramda2.default.map(personnel, state.dataDetails$().personnel || []))]);
 };
 
-},{"flyd":16,"ramda":24,"snabbdom/h":25}],3:[function(require,module,exports){
+},{"flyd":23,"ramda":31,"snabbdom/h":32}],3:[function(require,module,exports){
 'use strict';
 
 var _h = require('snabbdom/h');
@@ -82,7 +82,7 @@ module.exports = function (state) {
   return (0, _h2.default)('div', [(0, _h2.default)('p.bold.mt0.mb1', 'Personnel'), checkboxes(personnel, 'personnel')]);
 };
 
-},{"./data":1,"flyd":16,"ramda":24,"snabbdom/h":25}],4:[function(require,module,exports){
+},{"./data":1,"flyd":23,"ramda":31,"snabbdom/h":32}],4:[function(require,module,exports){
 'use strict';
 
 var _h = require('snabbdom/h');
@@ -97,7 +97,7 @@ module.exports = function (state) {
       } } }, 'Filter'), (0, _h2.default)('h4.table-cell.align-middle', 'Kraftwerk Discography')]);
 };
 
-},{"snabbdom/h":25}],5:[function(require,module,exports){
+},{"snabbdom/h":32}],5:[function(require,module,exports){
 'use strict';
 
 var _h = require('snabbdom/h');
@@ -124,7 +124,7 @@ var _snabbdom = require('snabbdom');
 
 var _snabbdom2 = _interopRequireDefault(_snabbdom);
 
-var _index = require('../scripts/index');
+var _index = require('../lib/index');
 
 var _index2 = _interopRequireDefault(_index);
 
@@ -209,7 +209,7 @@ var container = document.querySelector('#container');
 
 (0, _flimflamRender2.default)({ patch: patch, container: container, view: view, state: init() });
 
-},{"../scripts/index":37,"./data":1,"./details":2,"./filter":3,"./header":4,"./main":6,"flimflam-render":7,"flyd":16,"flyd/module/filter":17,"ramda":24,"snabbdom":33,"snabbdom/h":25,"snabbdom/modules/attributes":28,"snabbdom/modules/class":29,"snabbdom/modules/eventlisteners":30,"snabbdom/modules/props":31,"snabbdom/modules/style":32}],6:[function(require,module,exports){
+},{"../lib/index":9,"./data":1,"./details":2,"./filter":3,"./header":4,"./main":6,"flimflam-render":14,"flyd":23,"flyd/module/filter":24,"ramda":31,"snabbdom":40,"snabbdom/h":32,"snabbdom/modules/attributes":35,"snabbdom/modules/class":36,"snabbdom/modules/eventlisteners":37,"snabbdom/modules/props":38,"snabbdom/modules/style":39}],6:[function(require,module,exports){
 'use strict';
 
 var _ramda = require('ramda');
@@ -236,7 +236,255 @@ module.exports = function (state) {
   return (0, _h2.default)('table.fullWidth', _ramda2.default.concat([(0, _h2.default)('tr.bold', [(0, _h2.default)('td', 'Name'), (0, _h2.default)('td', 'Year'), (0, _h2.default)('td', 'Length'), (0, _h2.default)('td', 'Musicians')])], _ramda2.default.map(row(state), state.dataMain$() || [])));
 };
 
-},{"ramda":24,"snabbdom/h":25}],7:[function(require,module,exports){
+},{"ramda":31,"snabbdom/h":32}],7:[function(require,module,exports){
+'use strict';
+
+var _h = require('snabbdom/h');
+
+var _h2 = _interopRequireDefault(_h);
+
+function _interopRequireDefault(obj) {
+  return obj && obj.__esModule ? obj : { default: obj };
+}
+
+module.exports = function (state) {
+  return (0, _h2.default)('div.ff-dashboard-closeButton', {
+    on: { click: function click(_) {
+        return state.displayPanel$('main');
+      } },
+    props: { innerHTML: '&times' }
+  });
+};
+
+},{"snabbdom/h":32}],8:[function(require,module,exports){
+'use strict';
+
+var _h = require('snabbdom/h');
+
+var _h2 = _interopRequireDefault(_h);
+
+function _interopRequireDefault(obj) {
+  return obj && obj.__esModule ? obj : { default: obj };
+}
+
+module.exports = function (content) {
+  return (0, _h2.default)('div.ff-dashboard-header', [content]);
+};
+
+},{"snabbdom/h":32}],9:[function(require,module,exports){
+'use strict';
+
+var _h = require('snabbdom/h');
+
+var _h2 = _interopRequireDefault(_h);
+
+var _flyd = require('flyd');
+
+var _flyd2 = _interopRequireDefault(_flyd);
+
+var _filter = require('flyd/module/filter');
+
+var _filter2 = _interopRequireDefault(_filter);
+
+var _ramda = require('ramda');
+
+var _ramda2 = _interopRequireDefault(_ramda);
+
+var _header = require('./header');
+
+var _header2 = _interopRequireDefault(_header);
+
+var _mainPanel = require('./main-panel');
+
+var _mainPanel2 = _interopRequireDefault(_mainPanel);
+
+var _leftPanel = require('./left-panel');
+
+var _leftPanel2 = _interopRequireDefault(_leftPanel);
+
+var _rightPanel = require('./right-panel');
+
+var _rightPanel2 = _interopRequireDefault(_rightPanel);
+
+function _interopRequireDefault(obj) {
+  return obj && obj.__esModule ? obj : { default: obj };
+}
+
+// local
+// npm
+var init = function init(state) {
+  state = _ramda2.default.merge({
+    displayPanel$: _flyd2.default.stream('main'),
+    leftPanelWidth: 300,
+    leftPanelOffset: 80,
+    rightPanelWidth: 600,
+    rightPanelOffset: 0,
+    transition: '0.2s ease-out'
+  }, state);
+
+  var isShowingRightPanel$ = (0, _filter2.default)(function (x) {
+    return x === 'right';
+  }, state.displayPanel$);
+
+  _flyd2.default.map(resetRightPanelScroll, isShowingRightPanel$);
+
+  return state;
+};
+
+var setHeight = function setHeight(panels) {
+  panels.style.height = 0;
+  var headerHeight = document.querySelector('.ff-dashboard-header').offsetHeight;
+  var bodyHeight = document.body.offsetHeight;
+  panels.style.height = bodyHeight - headerHeight + 'px';
+};
+
+var resetRightPanelScroll = function resetRightPanelScroll(_) {
+  var elm = document.querySelector('.ff-dashboard-rightPanel .ff-dashboard-panelBody');
+  elm.scrollTop = 0;
+};
+
+var view = function view(state, content) {
+  return (0, _h2.default)('div.ff-dashboard', { attrs: { 'data-display-panel': state.displayPanel$() } }, [(0, _header2.default)(content.header), (0, _h2.default)('div.ff-dashboard-panels', { hook: { insert: function insert(vnode) {
+        setHeight(vnode.elm);
+        window.addEventListener('resize', function (ev) {
+          return setHeight(vnode.elm);
+        });
+      }
+    }
+  }, [(0, _leftPanel2.default)(state, content.leftPanelHeader || '', content.leftPanelBody || ''), (0, _mainPanel2.default)(state, content.mainPanelBody || ''), (0, _rightPanel2.default)(state, content.rightPanelHeader || '', content.rightPanelBody || '')])]);
+};
+
+module.exports = { init: init, view: view };
+
+},{"./header":8,"./left-panel":10,"./main-panel":11,"./right-panel":12,"flyd":23,"flyd/module/filter":24,"ramda":31,"snabbdom/h":32}],10:[function(require,module,exports){
+'use strict';
+
+var _h = require('snabbdom/h');
+
+var _h2 = _interopRequireDefault(_h);
+
+var _sidePanel = require('./side-panel');
+
+var _sidePanel2 = _interopRequireDefault(_sidePanel);
+
+function _interopRequireDefault(obj) {
+  return obj && obj.__esModule ? obj : { default: obj };
+}
+
+module.exports = function (state, header, body) {
+  return (0, _sidePanel2.default)(state, header, body, 'left');
+};
+
+},{"./side-panel":13,"snabbdom/h":32}],11:[function(require,module,exports){
+'use strict';
+
+var _h = require('snabbdom/h');
+
+var _h2 = _interopRequireDefault(_h);
+
+function _interopRequireDefault(obj) {
+  return obj && obj.__esModule ? obj : { default: obj };
+}
+
+var left = function left(state) {
+  return function (vnode) {
+    var elm = vnode.elm;
+    var left = state.displayPanel$() === 'left' ? elm.parentElement.querySelector('.ff-dashboard-leftPanel').offsetWidth + 'px' : 0;
+    elm.style.left = left;
+  };
+};
+
+module.exports = function (state, content) {
+  return (0, _h2.default)('div.ff-dashboard-mainPanel', {
+    style: { transition: 'left ' + state.transition },
+    hook: { update: function update(vnode) {
+        left(state)(vnode);
+        window.addEventListener('resize', function (ev) {
+          return left(state)(vnode);
+        });
+      }
+    }
+  }, [(0, _h2.default)('div.ff-dashboard-panelBody', [content])]);
+};
+
+},{"snabbdom/h":32}],12:[function(require,module,exports){
+'use strict';
+
+var _h = require('snabbdom/h');
+
+var _h2 = _interopRequireDefault(_h);
+
+var _sidePanel = require('./side-panel');
+
+var _sidePanel2 = _interopRequireDefault(_sidePanel);
+
+function _interopRequireDefault(obj) {
+  return obj && obj.__esModule ? obj : { default: obj };
+}
+
+module.exports = function (state, header, body) {
+  return (0, _sidePanel2.default)(state, header, body, 'right');
+};
+
+},{"./side-panel":13,"snabbdom/h":32}],13:[function(require,module,exports){
+'use strict';
+
+var _h = require('snabbdom/h');
+
+var _h2 = _interopRequireDefault(_h);
+
+var _closeButton = require('./close-button');
+
+var _closeButton2 = _interopRequireDefault(_closeButton);
+
+function _interopRequireDefault(obj) {
+  return obj && obj.__esModule ? obj : { default: obj };
+}
+
+module.exports = function (state, header, body, dir) {
+  var isLeft = dir === 'left';
+  var style = {
+    transition: dir + ' ' + state.transition + ', visibility ' + state.transition,
+    visibility: state.displayPanel$() === dir ? 'visible' : 'hidden'
+  };
+
+  return (0, _h2.default)('div.ff-dashboard-' + dir + 'Panel', {
+    style: style,
+    hook: { insert: function insert(vnode) {
+        setWidth(state, isLeft)(vnode.elm);
+        setHeight(vnode.elm);
+        window.addEventListener('resize', function (ev) {
+          return setHeight(vnode.elm);
+        });
+        window.addEventListener('resize', function (ev) {
+          return setWidth(state, isLeft)(vnode.elm);
+        });
+      },
+      update: function update(vnode) {
+        var elm = vnode.elm;
+        elm.style[dir] = dir === state.displayPanel$() ? 0 : '-' + elm.offsetWidth + 'px';
+        setHeight(elm);
+      }
+    }
+  }, [(0, _h2.default)('div.ff-dashboard-panelHeader', [isLeft ? header : (0, _closeButton2.default)(state), !isLeft ? header : (0, _closeButton2.default)(state)]), (0, _h2.default)('div.ff-dashboard-panelBody', [body])]);
+};
+
+var setHeight = function setHeight(panel) {
+  var header = panel.parentElement.querySelector('.ff-dashboard-panelHeader');
+  panel.style.paddingTop = header.offsetHeight + 'px';
+};
+
+var setWidth = function setWidth(state, isLeft) {
+  return function (panel) {
+    var parentWidth = panel.parentElement.offsetWidth;
+    var width = isLeft ? state.leftPanelWidth : state.rightPanelWidth;
+    var offset = isLeft ? state.leftPanelOffset : state.rightPanelOffset;
+    var remainder = parentWidth - offset;
+    panel.style.width = parentWidth >= width + offset ? width + 'px' : remainder + 'px';
+  };
+};
+
+},{"./close-button":7,"snabbdom/h":32}],14:[function(require,module,exports){
 'use strict';
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
@@ -286,7 +534,7 @@ var isObj = function isObj(x) {
 module.exports = render;
 
 
-},{"flyd":8,"flyd/module/mergeall":9,"ramda":15}],8:[function(require,module,exports){
+},{"flyd":15,"flyd/module/mergeall":16,"ramda":22}],15:[function(require,module,exports){
 var curryN = require('ramda/src/curryN');
 
 'use strict';
@@ -587,7 +835,7 @@ module.exports = {
   immediate: immediate,
 };
 
-},{"ramda/src/curryN":10}],9:[function(require,module,exports){
+},{"ramda/src/curryN":17}],16:[function(require,module,exports){
 var flyd = require('../../lib');
 
 module.exports = function mergeAll(streams) {
@@ -612,7 +860,7 @@ module.exports = function mergeAll(streams) {
 };
 
 
-},{"../../lib":8}],10:[function(require,module,exports){
+},{"../../lib":15}],17:[function(require,module,exports){
 var _arity = require('./internal/_arity');
 var _curry1 = require('./internal/_curry1');
 var _curry2 = require('./internal/_curry2');
@@ -669,7 +917,7 @@ module.exports = _curry2(function curryN(length, fn) {
   return _arity(length, _curryN(length, [], fn));
 });
 
-},{"./internal/_arity":11,"./internal/_curry1":12,"./internal/_curry2":13,"./internal/_curryN":14}],11:[function(require,module,exports){
+},{"./internal/_arity":18,"./internal/_curry1":19,"./internal/_curry2":20,"./internal/_curryN":21}],18:[function(require,module,exports){
 module.exports = function _arity(n, fn) {
   // jshint unused:vars
   switch (n) {
@@ -688,7 +936,7 @@ module.exports = function _arity(n, fn) {
   }
 };
 
-},{}],12:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 /**
  * Optimized internal two-arity curry function.
  *
@@ -709,7 +957,7 @@ module.exports = function _curry1(fn) {
   };
 };
 
-},{}],13:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 var _curry1 = require('./_curry1');
 
 
@@ -743,7 +991,7 @@ module.exports = function _curry2(fn) {
   };
 };
 
-},{"./_curry1":12}],14:[function(require,module,exports){
+},{"./_curry1":19}],21:[function(require,module,exports){
 var _arity = require('./_arity');
 
 
@@ -783,7 +1031,7 @@ module.exports = function _curryN(length, received, fn) {
   };
 };
 
-},{"./_arity":11}],15:[function(require,module,exports){
+},{"./_arity":18}],22:[function(require,module,exports){
 //  Ramda v0.19.1
 //  https://github.com/ramda/ramda
 //  (c) 2013-2016 Scott Sauyet, Michael Hurley, and David Chambers
@@ -9231,7 +9479,7 @@ module.exports = function _curryN(length, received, fn) {
 
 }.call(this));
 
-},{}],16:[function(require,module,exports){
+},{}],23:[function(require,module,exports){
 'use strict';
 
 var curryN = require('ramda/src/curryN');
@@ -9859,7 +10107,7 @@ StreamTransformer.prototype['@@transducer/step'] = function(s, v) { return v; };
 
 module.exports = flyd;
 
-},{"ramda/src/curryN":18}],17:[function(require,module,exports){
+},{"ramda/src/curryN":25}],24:[function(require,module,exports){
 var flyd = require('../../lib');
 
 module.exports = flyd.curryN(2, function(fn, s) {
@@ -9868,7 +10116,7 @@ module.exports = flyd.curryN(2, function(fn, s) {
   }, [s]);
 });
 
-},{"../../lib":16}],18:[function(require,module,exports){
+},{"../../lib":23}],25:[function(require,module,exports){
 var _arity = require('./internal/_arity');
 var _curry1 = require('./internal/_curry1');
 var _curry2 = require('./internal/_curry2');
@@ -9924,7 +10172,7 @@ module.exports = _curry2(function curryN(length, fn) {
   return _arity(length, _curryN(length, [], fn));
 });
 
-},{"./internal/_arity":19,"./internal/_curry1":20,"./internal/_curry2":21,"./internal/_curryN":22}],19:[function(require,module,exports){
+},{"./internal/_arity":26,"./internal/_curry1":27,"./internal/_curry2":28,"./internal/_curryN":29}],26:[function(require,module,exports){
 module.exports = function _arity(n, fn) {
   /* eslint-disable no-unused-vars */
   switch (n) {
@@ -9943,7 +10191,7 @@ module.exports = function _arity(n, fn) {
   }
 };
 
-},{}],20:[function(require,module,exports){
+},{}],27:[function(require,module,exports){
 var _isPlaceholder = require('./_isPlaceholder');
 
 
@@ -9965,7 +10213,7 @@ module.exports = function _curry1(fn) {
   };
 };
 
-},{"./_isPlaceholder":23}],21:[function(require,module,exports){
+},{"./_isPlaceholder":30}],28:[function(require,module,exports){
 var _curry1 = require('./_curry1');
 var _isPlaceholder = require('./_isPlaceholder');
 
@@ -9995,7 +10243,7 @@ module.exports = function _curry2(fn) {
   };
 };
 
-},{"./_curry1":20,"./_isPlaceholder":23}],22:[function(require,module,exports){
+},{"./_curry1":27,"./_isPlaceholder":30}],29:[function(require,module,exports){
 var _arity = require('./_arity');
 var _isPlaceholder = require('./_isPlaceholder');
 
@@ -10037,14 +10285,14 @@ module.exports = function _curryN(length, received, fn) {
   };
 };
 
-},{"./_arity":19,"./_isPlaceholder":23}],23:[function(require,module,exports){
+},{"./_arity":26,"./_isPlaceholder":30}],30:[function(require,module,exports){
 module.exports = function _isPlaceholder(a) {
   return a != null &&
          typeof a === 'object' &&
          a['@@functional/placeholder'] === true;
 };
 
-},{}],24:[function(require,module,exports){
+},{}],31:[function(require,module,exports){
 //  Ramda v0.22.1
 //  https://github.com/ramda/ramda
 //  (c) 2013-2016 Scott Sauyet, Michael Hurley, and David Chambers
@@ -18877,7 +19125,7 @@ module.exports = function _isPlaceholder(a) {
 
 }.call(this));
 
-},{}],25:[function(require,module,exports){
+},{}],32:[function(require,module,exports){
 var VNode = require('./vnode');
 var is = require('./is');
 
@@ -18913,7 +19161,7 @@ module.exports = function h(sel, b, c) {
   return VNode(sel, data, children, text, undefined);
 };
 
-},{"./is":27,"./vnode":34}],26:[function(require,module,exports){
+},{"./is":34,"./vnode":41}],33:[function(require,module,exports){
 function createElement(tagName){
   return document.createElement(tagName);
 }
@@ -18969,13 +19217,13 @@ module.exports = {
   setTextContent: setTextContent
 };
 
-},{}],27:[function(require,module,exports){
+},{}],34:[function(require,module,exports){
 module.exports = {
   array: Array.isArray,
   primitive: function(s) { return typeof s === 'string' || typeof s === 'number'; },
 };
 
-},{}],28:[function(require,module,exports){
+},{}],35:[function(require,module,exports){
 var booleanAttrs = ["allowfullscreen", "async", "autofocus", "autoplay", "checked", "compact", "controls", "declare",
                 "default", "defaultchecked", "defaultmuted", "defaultselected", "defer", "disabled", "draggable",
                 "enabled", "formnovalidate", "hidden", "indeterminate", "inert", "ismap", "itemscope", "loop", "multiple",
@@ -19020,7 +19268,7 @@ function updateAttrs(oldVnode, vnode) {
 
 module.exports = {create: updateAttrs, update: updateAttrs};
 
-},{}],29:[function(require,module,exports){
+},{}],36:[function(require,module,exports){
 function updateClass(oldVnode, vnode) {
   var cur, name, elm = vnode.elm,
       oldClass = oldVnode.data.class,
@@ -19045,7 +19293,7 @@ function updateClass(oldVnode, vnode) {
 
 module.exports = {create: updateClass, update: updateClass};
 
-},{}],30:[function(require,module,exports){
+},{}],37:[function(require,module,exports){
 function invokeHandler(handler, vnode, event) {
   if (typeof handler === "function") {
     // call function handler
@@ -19148,7 +19396,7 @@ module.exports = {
   destroy: updateEventListeners
 };
 
-},{}],31:[function(require,module,exports){
+},{}],38:[function(require,module,exports){
 function updateProps(oldVnode, vnode) {
   var key, cur, old, elm = vnode.elm,
       oldProps = oldVnode.data.props, props = vnode.data.props;
@@ -19173,7 +19421,7 @@ function updateProps(oldVnode, vnode) {
 
 module.exports = {create: updateProps, update: updateProps};
 
-},{}],32:[function(require,module,exports){
+},{}],39:[function(require,module,exports){
 var raf = (typeof window !== 'undefined' && window.requestAnimationFrame) || setTimeout;
 var nextFrame = function(fn) { raf(function() { raf(fn); }); };
 
@@ -19244,7 +19492,7 @@ function applyRemoveStyle(vnode, rm) {
 
 module.exports = {create: updateStyle, update: updateStyle, destroy: applyDestroyStyle, remove: applyRemoveStyle};
 
-},{}],33:[function(require,module,exports){
+},{}],40:[function(require,module,exports){
 // jshint newcap: false
 /* global require, module, document, Node */
 'use strict';
@@ -19506,245 +19754,11 @@ function init(modules, api) {
 
 module.exports = {init: init};
 
-},{"./htmldomapi":26,"./is":27,"./vnode":34}],34:[function(require,module,exports){
+},{"./htmldomapi":33,"./is":34,"./vnode":41}],41:[function(require,module,exports){
 module.exports = function(sel, data, children, text, elm) {
   var key = data === undefined ? undefined : data.key;
   return {sel: sel, data: data, children: children,
           text: text, elm: elm, key: key};
 };
 
-},{}],35:[function(require,module,exports){
-'use strict';
-
-var _h = require('snabbdom/h');
-
-var _h2 = _interopRequireDefault(_h);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-module.exports = function (state) {
-  return (0, _h2.default)('div.ff-dashboard-closeButton', {
-    on: { click: function click(_) {
-        return state.displayPanel$('main');
-      } },
-    props: { innerHTML: '&times' }
-  });
-};
-
-},{"snabbdom/h":25}],36:[function(require,module,exports){
-'use strict';
-
-var _h = require('snabbdom/h');
-
-var _h2 = _interopRequireDefault(_h);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-module.exports = function (content) {
-  return (0, _h2.default)('div.ff-dashboard-header', [content]);
-};
-
-},{"snabbdom/h":25}],37:[function(require,module,exports){
-'use strict';
-
-var _h = require('snabbdom/h');
-
-var _h2 = _interopRequireDefault(_h);
-
-var _flyd = require('flyd');
-
-var _flyd2 = _interopRequireDefault(_flyd);
-
-var _filter = require('flyd/module/filter');
-
-var _filter2 = _interopRequireDefault(_filter);
-
-var _ramda = require('ramda');
-
-var _ramda2 = _interopRequireDefault(_ramda);
-
-var _header = require('./header');
-
-var _header2 = _interopRequireDefault(_header);
-
-var _mainPanel = require('./main-panel');
-
-var _mainPanel2 = _interopRequireDefault(_mainPanel);
-
-var _leftPanel = require('./left-panel');
-
-var _leftPanel2 = _interopRequireDefault(_leftPanel);
-
-var _rightPanel = require('./right-panel');
-
-var _rightPanel2 = _interopRequireDefault(_rightPanel);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-// local
-// npm
-var init = function init(state) {
-  state = _ramda2.default.merge({
-    displayPanel$: _flyd2.default.stream('main'),
-    leftPanelWidth: 300,
-    leftPanelOffset: 80,
-    rightPanelWidth: 600,
-    rightPanelOffset: 0,
-    transition: '0.2s ease-out'
-  }, state);
-
-  var isShowingRightPanel$ = (0, _filter2.default)(function (x) {
-    return x === 'right';
-  }, state.displayPanel$);
-
-  _flyd2.default.map(resetRightPanelScroll, isShowingRightPanel$);
-
-  return state;
-};
-
-var setHeight = function setHeight(panels) {
-  panels.style.height = 0;
-  var headerHeight = document.querySelector('.ff-dashboard-header').offsetHeight;
-  var bodyHeight = document.body.offsetHeight;
-  panels.style.height = bodyHeight - headerHeight + 'px';
-};
-
-var resetRightPanelScroll = function resetRightPanelScroll(_) {
-  var elm = document.querySelector('.ff-dashboard-rightPanel .ff-dashboard-panelBody');
-  elm.scrollTop = 0;
-};
-
-var view = function view(state, content) {
-  return (0, _h2.default)('div.ff-dashboard', { attrs: { 'data-display-panel': state.displayPanel$() } }, [(0, _header2.default)(content.header), (0, _h2.default)('div.ff-dashboard-panels', { hook: { insert: function insert(vnode) {
-        setHeight(vnode.elm);
-        window.addEventListener('resize', function (ev) {
-          return setHeight(vnode.elm);
-        });
-      }
-    }
-  }, [(0, _leftPanel2.default)(state, content.leftPanelHeader || '', content.leftPanelBody || ''), (0, _mainPanel2.default)(state, content.mainPanelBody || ''), (0, _rightPanel2.default)(state, content.rightPanelHeader || '', content.rightPanelBody || '')])]);
-};
-
-module.exports = { init: init, view: view };
-
-},{"./header":36,"./left-panel":38,"./main-panel":39,"./right-panel":40,"flyd":16,"flyd/module/filter":17,"ramda":24,"snabbdom/h":25}],38:[function(require,module,exports){
-'use strict';
-
-var _h = require('snabbdom/h');
-
-var _h2 = _interopRequireDefault(_h);
-
-var _sidePanel = require('./side-panel');
-
-var _sidePanel2 = _interopRequireDefault(_sidePanel);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-module.exports = function (state, header, body) {
-  return (0, _sidePanel2.default)(state, header, body, 'left');
-};
-
-},{"./side-panel":41,"snabbdom/h":25}],39:[function(require,module,exports){
-'use strict';
-
-var _h = require('snabbdom/h');
-
-var _h2 = _interopRequireDefault(_h);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var left = function left(state) {
-  return function (vnode) {
-    var elm = vnode.elm;
-    var left = state.displayPanel$() === 'left' ? elm.parentElement.querySelector('.ff-dashboard-leftPanel').offsetWidth + 'px' : 0;
-    elm.style.left = left;
-  };
-};
-
-module.exports = function (state, content) {
-  return (0, _h2.default)('div.ff-dashboard-mainPanel', {
-    style: { transition: 'left ' + state.transition },
-    hook: { update: function update(vnode) {
-        left(state)(vnode);
-        window.addEventListener('resize', function (ev) {
-          return left(state)(vnode);
-        });
-      }
-    }
-  }, [(0, _h2.default)('div.ff-dashboard-panelBody', [content])]);
-};
-
-},{"snabbdom/h":25}],40:[function(require,module,exports){
-'use strict';
-
-var _h = require('snabbdom/h');
-
-var _h2 = _interopRequireDefault(_h);
-
-var _sidePanel = require('./side-panel');
-
-var _sidePanel2 = _interopRequireDefault(_sidePanel);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-module.exports = function (state, header, body) {
-  return (0, _sidePanel2.default)(state, header, body, 'right');
-};
-
-},{"./side-panel":41,"snabbdom/h":25}],41:[function(require,module,exports){
-'use strict';
-
-var _h = require('snabbdom/h');
-
-var _h2 = _interopRequireDefault(_h);
-
-var _closeButton = require('./close-button');
-
-var _closeButton2 = _interopRequireDefault(_closeButton);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-module.exports = function (state, header, body, dir) {
-  var isLeft = dir === 'left';
-  var style = {
-    transition: dir + ' ' + state.transition + ', visibility ' + state.transition,
-    visibility: state.displayPanel$() === dir ? 'visible' : 'hidden'
-  };
-
-  return (0, _h2.default)('div.ff-dashboard-' + dir + 'Panel', {
-    style: style,
-    hook: { insert: function insert(vnode) {
-        setWidth(state, isLeft)(vnode.elm);
-        setHeight(vnode.elm);
-        window.addEventListener('resize', function (ev) {
-          return setHeight(vnode.elm);
-        });
-        window.addEventListener('resize', function (ev) {
-          return setWidth(state, isLeft)(vnode.elm);
-        });
-      },
-      update: function update(vnode) {
-        var elm = vnode.elm;
-        elm.style[dir] = dir === state.displayPanel$() ? 0 : '-' + elm.offsetWidth + 'px';
-        setHeight(elm);
-      }
-    }
-  }, [(0, _h2.default)('div.ff-dashboard-panelHeader', [isLeft ? header : (0, _closeButton2.default)(state), !isLeft ? header : (0, _closeButton2.default)(state)]), (0, _h2.default)('div.ff-dashboard-panelBody', [body])]);
-};
-
-var setHeight = function setHeight(panel) {
-  var header = panel.parentElement.querySelector('.ff-dashboard-panelHeader');
-  panel.style.paddingTop = header.offsetHeight + 'px';
-};
-
-var setWidth = function setWidth(state, isLeft) {
-  return function (panel) {
-    var parentWidth = panel.parentElement.offsetWidth;
-    var width = isLeft ? state.leftPanelWidth : state.rightPanelWidth;
-    var offset = isLeft ? state.leftPanelOffset : state.rightPanelOffset;
-    var remainder = parentWidth - offset;
-    panel.style.width = parentWidth >= width + offset ? width + 'px' : remainder + 'px';
-  };
-};
-
-},{"./close-button":35,"snabbdom/h":25}]},{},[5]);
+},{}]},{},[5]);
