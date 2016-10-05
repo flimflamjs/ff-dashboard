@@ -8,7 +8,7 @@ const checkboxes = (state, arr, name) =>
   h('form', {on: {change: state.filterInput$}}
   , R.flatten(
       R.map(x => [
-        h('input', {props: {type: 'checkbox', name, value: x}})
+        h('input', {props: {type: 'checkbox', name: `${name}[]`, value: x}})
       , h('span.pl1', x)
       , h('br')
       ], arr)

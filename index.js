@@ -46,7 +46,7 @@ const filterByPersonnel = searchNames =>
   , data)
 
 const filterData = filterBy => {
-  if(!R.toPairs(filterBy).length) return data 
+  if(!R.keys(filterBy).length) return data 
   let filteredData = []
   if(filterBy.personnel) {
     filteredData = R.concat(filteredData, filterByPersonnel(filterBy.personnel))
