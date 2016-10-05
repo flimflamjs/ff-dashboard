@@ -34,7 +34,7 @@ module.exports = function (state) {
   }, state.dataDetails$().tracks || [])), (0, _h2.default)('h4.mb1', 'Musicians'), (0, _h2.default)('table.small', _ramda2.default.map(personnel, state.dataDetails$().personnel || []))]);
 };
 
-},{"flyd":23,"ramda":31,"snabbdom/h":32}],3:[function(require,module,exports){
+},{"flyd":23,"ramda":32,"snabbdom/h":33}],3:[function(require,module,exports){
 'use strict';
 
 var _h = require('snabbdom/h');
@@ -55,16 +55,10 @@ var _data2 = _interopRequireDefault(_data);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var input = function input(type, name) {
-  return function (value) {
-    return (0, _h2.default)('div.small', [(0, _h2.default)('input', { props: { type: type, name: name, value: value } }), (0, _h2.default)('span.pl1', value)]);
-  };
-};
-
-var checkboxes = function checkboxes(arr, name) {
-  return (0, _h2.default)('div', _ramda2.default.map(function (x) {
-    return input('checkbox', name)(x);
-  }, arr));
+var checkboxes = function checkboxes(state, arr, name) {
+  return (0, _h2.default)('form', { on: { change: state.filterInput$ } }, _ramda2.default.flatten(_ramda2.default.map(function (x) {
+    return [(0, _h2.default)('input', { props: { type: 'checkbox', name: name, value: x } }), (0, _h2.default)('span.pl1', x), (0, _h2.default)('br')];
+  }, arr)));
 };
 
 var getPersonnel = function getPersonnel(_) {
@@ -76,13 +70,12 @@ var getPersonnel = function getPersonnel(_) {
 };
 
 module.exports = function (state) {
-  // let instruments = R.map(x => R.concat(R.map(y => y.instruments, x.personnel)), data)
   var personnel = getPersonnel();
 
-  return (0, _h2.default)('div', [(0, _h2.default)('p.bold.mt0.mb1', 'Personnel'), checkboxes(personnel, 'personnel')]);
+  return (0, _h2.default)('div', [(0, _h2.default)('p.bold.mt0.mb1', 'Personnel'), checkboxes(state, personnel, 'personnel')]);
 };
 
-},{"./data":1,"flyd":23,"ramda":31,"snabbdom/h":32}],4:[function(require,module,exports){
+},{"./data":1,"flyd":23,"ramda":32,"snabbdom/h":33}],4:[function(require,module,exports){
 'use strict';
 
 var _h = require('snabbdom/h');
@@ -97,7 +90,7 @@ module.exports = function (state) {
       } } }, 'Filter'), (0, _h2.default)('h4.table-cell.align-middle', 'Kraftwerk Discography')]);
 };
 
-},{"snabbdom/h":32}],5:[function(require,module,exports){
+},{"snabbdom/h":33}],5:[function(require,module,exports){
 'use strict';
 
 var _h = require('snabbdom/h');
@@ -123,6 +116,10 @@ var _flimflamRender2 = _interopRequireDefault(_flimflamRender);
 var _snabbdom = require('snabbdom');
 
 var _snabbdom2 = _interopRequireDefault(_snabbdom);
+
+var _formSerialize = require('form-serialize');
+
+var _formSerialize2 = _interopRequireDefault(_formSerialize);
 
 var _index = require('../lib/index');
 
@@ -158,13 +155,11 @@ var init = function init(_) {
     return _ramda2.default.find(_ramda2.default.propEq('id', i), _data2.default);
   }, state.dataId$));
 
-  var data$ = _flyd2.default.stream(_data2.default);
+  state.filterInput$ = _flyd2.default.stream();
 
-  state.filterClick$ = _flyd2.default.stream();
+  state.filterBy$ = _flyd2.default.merge(_flyd2.default.stream({}), _flyd2.default.map(inputToFilter, state.filterInput$));
 
-  state.filterBy$ = _flyd2.default.stream();
-
-  state.dataMain$ = _flyd2.default.map(filterData(state.filterBy$()), data$);
+  state.dataMain$ = _flyd2.default.map(filterData, state.filterBy$);
 
   var displayPanel$ = _flyd2.default.merge(_flyd2.default.map(_ramda2.default.always('left'), state.showFilters$), _flyd2.default.map(function (x) {
     return x.name ? 'right' : undefined;
@@ -174,22 +169,24 @@ var init = function init(_) {
   return state;
 };
 
-var filterByPersonnel = function filterByPersonnel(searchNames, data) {
+var inputToFilter = function inputToFilter(x) {
+  return (0, _formSerialize2.default)(x.target.parentElement, { hash: true });
+};
+
+var filterByPersonnel = function filterByPersonnel(searchNames) {
   return _ramda2.default.filter(function (d) {
     var names = _ramda2.default.pluck('name', d.personnel);
     if (_ramda2.default.intersection(searchNames, names).length) return d;
-  }, data);
+  }, _data2.default);
 };
 
 var filterData = function filterData(filterBy) {
-  return function (data) {
-    if (!filterBy) return data;
-    var filteredData = [];
-    if (_ramda2.default.has('personnel')(filterBy)) {
-      filteredData = _ramda2.default.concat(filteredData, filterByPersonnel(filterBy.personnel, data));
-    }
-    return filteredData;
-  };
+  if (!_ramda2.default.toPairs(filterBy).length) return _data2.default;
+  var filteredData = [];
+  if (filterBy.personnel) {
+    filteredData = _ramda2.default.concat(filteredData, filterByPersonnel(filterBy.personnel));
+  }
+  return filteredData;
 };
 
 var view = function view(state) {
@@ -209,7 +206,7 @@ var container = document.querySelector('#container');
 
 (0, _flimflamRender2.default)({ patch: patch, container: container, view: view, state: init() });
 
-},{"../lib/index":9,"./data":1,"./details":2,"./filter":3,"./header":4,"./main":6,"flimflam-render":14,"flyd":23,"flyd/module/filter":24,"ramda":31,"snabbdom":40,"snabbdom/h":32,"snabbdom/modules/attributes":35,"snabbdom/modules/class":36,"snabbdom/modules/eventlisteners":37,"snabbdom/modules/props":38,"snabbdom/modules/style":39}],6:[function(require,module,exports){
+},{"../lib/index":9,"./data":1,"./details":2,"./filter":3,"./header":4,"./main":6,"flimflam-render":14,"flyd":23,"flyd/module/filter":24,"form-serialize":31,"ramda":32,"snabbdom":41,"snabbdom/h":33,"snabbdom/modules/attributes":36,"snabbdom/modules/class":37,"snabbdom/modules/eventlisteners":38,"snabbdom/modules/props":39,"snabbdom/modules/style":40}],6:[function(require,module,exports){
 'use strict';
 
 var _ramda = require('ramda');
@@ -236,7 +233,7 @@ module.exports = function (state) {
   return (0, _h2.default)('table.fullWidth', _ramda2.default.concat([(0, _h2.default)('tr.bold', [(0, _h2.default)('td', 'Name'), (0, _h2.default)('td', 'Year'), (0, _h2.default)('td', 'Length'), (0, _h2.default)('td', 'Musicians')])], _ramda2.default.map(row(state), state.dataMain$() || [])));
 };
 
-},{"ramda":31,"snabbdom/h":32}],7:[function(require,module,exports){
+},{"ramda":32,"snabbdom/h":33}],7:[function(require,module,exports){
 'use strict';
 
 var _h = require('snabbdom/h');
@@ -256,7 +253,7 @@ module.exports = function (state) {
   });
 };
 
-},{"snabbdom/h":32}],8:[function(require,module,exports){
+},{"snabbdom/h":33}],8:[function(require,module,exports){
 'use strict';
 
 var _h = require('snabbdom/h');
@@ -271,7 +268,7 @@ module.exports = function (content) {
   return (0, _h2.default)('div.ff-dashboard-header', [content]);
 };
 
-},{"snabbdom/h":32}],9:[function(require,module,exports){
+},{"snabbdom/h":33}],9:[function(require,module,exports){
 'use strict';
 
 var _h = require('snabbdom/h');
@@ -356,7 +353,7 @@ var view = function view(state, content) {
 
 module.exports = { init: init, view: view };
 
-},{"./header":8,"./left-panel":10,"./main-panel":11,"./right-panel":12,"flyd":23,"flyd/module/filter":24,"ramda":31,"snabbdom/h":32}],10:[function(require,module,exports){
+},{"./header":8,"./left-panel":10,"./main-panel":11,"./right-panel":12,"flyd":23,"flyd/module/filter":24,"ramda":32,"snabbdom/h":33}],10:[function(require,module,exports){
 'use strict';
 
 var _h = require('snabbdom/h');
@@ -375,7 +372,7 @@ module.exports = function (state, header, body) {
   return (0, _sidePanel2.default)(state, header, body, 'left');
 };
 
-},{"./side-panel":13,"snabbdom/h":32}],11:[function(require,module,exports){
+},{"./side-panel":13,"snabbdom/h":33}],11:[function(require,module,exports){
 'use strict';
 
 var _h = require('snabbdom/h');
@@ -407,7 +404,7 @@ module.exports = function (state, content) {
   }, [(0, _h2.default)('div.ff-dashboard-panelBody', [content])]);
 };
 
-},{"snabbdom/h":32}],12:[function(require,module,exports){
+},{"snabbdom/h":33}],12:[function(require,module,exports){
 'use strict';
 
 var _h = require('snabbdom/h');
@@ -426,7 +423,7 @@ module.exports = function (state, header, body) {
   return (0, _sidePanel2.default)(state, header, body, 'right');
 };
 
-},{"./side-panel":13,"snabbdom/h":32}],13:[function(require,module,exports){
+},{"./side-panel":13,"snabbdom/h":33}],13:[function(require,module,exports){
 'use strict';
 
 var _h = require('snabbdom/h');
@@ -484,7 +481,7 @@ var setWidth = function setWidth(state, isLeft) {
   };
 };
 
-},{"./close-button":7,"snabbdom/h":32}],14:[function(require,module,exports){
+},{"./close-button":7,"snabbdom/h":33}],14:[function(require,module,exports){
 'use strict';
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
@@ -10293,6 +10290,268 @@ module.exports = function _isPlaceholder(a) {
 };
 
 },{}],31:[function(require,module,exports){
+// get successful control from form and assemble into object
+// http://www.w3.org/TR/html401/interact/forms.html#h-17.13.2
+
+// types which indicate a submit action and are not successful controls
+// these will be ignored
+var k_r_submitter = /^(?:submit|button|image|reset|file)$/i;
+
+// node names which could be successful controls
+var k_r_success_contrls = /^(?:input|select|textarea|keygen)/i;
+
+// Matches bracket notation.
+var brackets = /(\[[^\[\]]*\])/g;
+
+// serializes form fields
+// @param form MUST be an HTMLForm element
+// @param options is an optional argument to configure the serialization. Default output
+// with no options specified is a url encoded string
+//    - hash: [true | false] Configure the output type. If true, the output will
+//    be a js object.
+//    - serializer: [function] Optional serializer function to override the default one.
+//    The function takes 3 arguments (result, key, value) and should return new result
+//    hash and url encoded str serializers are provided with this module
+//    - disabled: [true | false]. If true serialize disabled fields.
+//    - empty: [true | false]. If true serialize empty fields
+function serialize(form, options) {
+    if (typeof options != 'object') {
+        options = { hash: !!options };
+    }
+    else if (options.hash === undefined) {
+        options.hash = true;
+    }
+
+    var result = (options.hash) ? {} : '';
+    var serializer = options.serializer || ((options.hash) ? hash_serializer : str_serialize);
+
+    var elements = form && form.elements ? form.elements : [];
+
+    //Object store each radio and set if it's empty or not
+    var radio_store = Object.create(null);
+
+    for (var i=0 ; i<elements.length ; ++i) {
+        var element = elements[i];
+
+        // ingore disabled fields
+        if ((!options.disabled && element.disabled) || !element.name) {
+            continue;
+        }
+        // ignore anyhting that is not considered a success field
+        if (!k_r_success_contrls.test(element.nodeName) ||
+            k_r_submitter.test(element.type)) {
+            continue;
+        }
+
+        var key = element.name;
+        var val = element.value;
+
+        // we can't just use element.value for checkboxes cause some browsers lie to us
+        // they say "on" for value when the box isn't checked
+        if ((element.type === 'checkbox' || element.type === 'radio') && !element.checked) {
+            val = undefined;
+        }
+
+        // If we want empty elements
+        if (options.empty) {
+            // for checkbox
+            if (element.type === 'checkbox' && !element.checked) {
+                val = '';
+            }
+
+            // for radio
+            if (element.type === 'radio') {
+                if (!radio_store[element.name] && !element.checked) {
+                    radio_store[element.name] = false;
+                }
+                else if (element.checked) {
+                    radio_store[element.name] = true;
+                }
+            }
+
+            // if options empty is true, continue only if its radio
+            if (!val && element.type == 'radio') {
+                continue;
+            }
+        }
+        else {
+            // value-less fields are ignored unless options.empty is true
+            if (!val) {
+                continue;
+            }
+        }
+
+        // multi select boxes
+        if (element.type === 'select-multiple') {
+            val = [];
+
+            var selectOptions = element.options;
+            var isSelectedOptions = false;
+            for (var j=0 ; j<selectOptions.length ; ++j) {
+                var option = selectOptions[j];
+                var allowedEmpty = options.empty && !option.value;
+                var hasValue = (option.value || allowedEmpty);
+                if (option.selected && hasValue) {
+                    isSelectedOptions = true;
+
+                    // If using a hash serializer be sure to add the
+                    // correct notation for an array in the multi-select
+                    // context. Here the name attribute on the select element
+                    // might be missing the trailing bracket pair. Both names
+                    // "foo" and "foo[]" should be arrays.
+                    if (options.hash && key.slice(key.length - 2) !== '[]') {
+                        result = serializer(result, key + '[]', option.value);
+                    }
+                    else {
+                        result = serializer(result, key, option.value);
+                    }
+                }
+            }
+
+            // Serialize if no selected options and options.empty is true
+            if (!isSelectedOptions && options.empty) {
+                result = serializer(result, key, '');
+            }
+
+            continue;
+        }
+
+        result = serializer(result, key, val);
+    }
+
+    // Check for all empty radio buttons and serialize them with key=""
+    if (options.empty) {
+        for (var key in radio_store) {
+            if (!radio_store[key]) {
+                result = serializer(result, key, '');
+            }
+        }
+    }
+
+    return result;
+}
+
+function parse_keys(string) {
+    var keys = [];
+    var prefix = /^([^\[\]]*)/;
+    var children = new RegExp(brackets);
+    var match = prefix.exec(string);
+
+    if (match[1]) {
+        keys.push(match[1]);
+    }
+
+    while ((match = children.exec(string)) !== null) {
+        keys.push(match[1]);
+    }
+
+    return keys;
+}
+
+function hash_assign(result, keys, value) {
+    if (keys.length === 0) {
+        result = value;
+        return result;
+    }
+
+    var key = keys.shift();
+    var between = key.match(/^\[(.+?)\]$/);
+
+    if (key === '[]') {
+        result = result || [];
+
+        if (Array.isArray(result)) {
+            result.push(hash_assign(null, keys, value));
+        }
+        else {
+            // This might be the result of bad name attributes like "[][foo]",
+            // in this case the original `result` object will already be
+            // assigned to an object literal. Rather than coerce the object to
+            // an array, or cause an exception the attribute "_values" is
+            // assigned as an array.
+            result._values = result._values || [];
+            result._values.push(hash_assign(null, keys, value));
+        }
+
+        return result;
+    }
+
+    // Key is an attribute name and can be assigned directly.
+    if (!between) {
+        result[key] = hash_assign(result[key], keys, value);
+    }
+    else {
+        var string = between[1];
+        // +var converts the variable into a number
+        // better than parseInt because it doesn't truncate away trailing
+        // letters and actually fails if whole thing is not a number
+        var index = +string;
+
+        // If the characters between the brackets is not a number it is an
+        // attribute name and can be assigned directly.
+        if (isNaN(index)) {
+            result = result || {};
+            result[string] = hash_assign(result[string], keys, value);
+        }
+        else {
+            result = result || [];
+            result[index] = hash_assign(result[index], keys, value);
+        }
+    }
+
+    return result;
+}
+
+// Object/hash encoding serializer.
+function hash_serializer(result, key, value) {
+    var matches = key.match(brackets);
+
+    // Has brackets? Use the recursive assignment function to walk the keys,
+    // construct any missing objects in the result tree and make the assignment
+    // at the end of the chain.
+    if (matches) {
+        var keys = parse_keys(key);
+        hash_assign(result, keys, value);
+    }
+    else {
+        // Non bracket notation can make assignments directly.
+        var existing = result[key];
+
+        // If the value has been assigned already (for instance when a radio and
+        // a checkbox have the same name attribute) convert the previous value
+        // into an array before pushing into it.
+        //
+        // NOTE: If this requirement were removed all hash creation and
+        // assignment could go through `hash_assign`.
+        if (existing) {
+            if (!Array.isArray(existing)) {
+                result[key] = [ existing ];
+            }
+
+            result[key].push(value);
+        }
+        else {
+            result[key] = value;
+        }
+    }
+
+    return result;
+}
+
+// urlform encoding serializer
+function str_serialize(result, key, value) {
+    // encode newlines as \r\n cause the html spec says so
+    value = value.replace(/(\r)?\n/g, '\r\n');
+    value = encodeURIComponent(value);
+
+    // spaces should be '+' rather than '%20'.
+    value = value.replace(/%20/g, '+');
+    return result + (result ? '&' : '') + encodeURIComponent(key) + '=' + value;
+}
+
+module.exports = serialize;
+
+},{}],32:[function(require,module,exports){
 //  Ramda v0.22.1
 //  https://github.com/ramda/ramda
 //  (c) 2013-2016 Scott Sauyet, Michael Hurley, and David Chambers
@@ -19125,7 +19384,7 @@ module.exports = function _isPlaceholder(a) {
 
 }.call(this));
 
-},{}],32:[function(require,module,exports){
+},{}],33:[function(require,module,exports){
 var VNode = require('./vnode');
 var is = require('./is');
 
@@ -19161,7 +19420,7 @@ module.exports = function h(sel, b, c) {
   return VNode(sel, data, children, text, undefined);
 };
 
-},{"./is":34,"./vnode":41}],33:[function(require,module,exports){
+},{"./is":35,"./vnode":42}],34:[function(require,module,exports){
 function createElement(tagName){
   return document.createElement(tagName);
 }
@@ -19217,13 +19476,13 @@ module.exports = {
   setTextContent: setTextContent
 };
 
-},{}],34:[function(require,module,exports){
+},{}],35:[function(require,module,exports){
 module.exports = {
   array: Array.isArray,
   primitive: function(s) { return typeof s === 'string' || typeof s === 'number'; },
 };
 
-},{}],35:[function(require,module,exports){
+},{}],36:[function(require,module,exports){
 var booleanAttrs = ["allowfullscreen", "async", "autofocus", "autoplay", "checked", "compact", "controls", "declare",
                 "default", "defaultchecked", "defaultmuted", "defaultselected", "defer", "disabled", "draggable",
                 "enabled", "formnovalidate", "hidden", "indeterminate", "inert", "ismap", "itemscope", "loop", "multiple",
@@ -19268,7 +19527,7 @@ function updateAttrs(oldVnode, vnode) {
 
 module.exports = {create: updateAttrs, update: updateAttrs};
 
-},{}],36:[function(require,module,exports){
+},{}],37:[function(require,module,exports){
 function updateClass(oldVnode, vnode) {
   var cur, name, elm = vnode.elm,
       oldClass = oldVnode.data.class,
@@ -19293,7 +19552,7 @@ function updateClass(oldVnode, vnode) {
 
 module.exports = {create: updateClass, update: updateClass};
 
-},{}],37:[function(require,module,exports){
+},{}],38:[function(require,module,exports){
 function invokeHandler(handler, vnode, event) {
   if (typeof handler === "function") {
     // call function handler
@@ -19396,7 +19655,7 @@ module.exports = {
   destroy: updateEventListeners
 };
 
-},{}],38:[function(require,module,exports){
+},{}],39:[function(require,module,exports){
 function updateProps(oldVnode, vnode) {
   var key, cur, old, elm = vnode.elm,
       oldProps = oldVnode.data.props, props = vnode.data.props;
@@ -19421,7 +19680,7 @@ function updateProps(oldVnode, vnode) {
 
 module.exports = {create: updateProps, update: updateProps};
 
-},{}],39:[function(require,module,exports){
+},{}],40:[function(require,module,exports){
 var raf = (typeof window !== 'undefined' && window.requestAnimationFrame) || setTimeout;
 var nextFrame = function(fn) { raf(function() { raf(fn); }); };
 
@@ -19492,7 +19751,7 @@ function applyRemoveStyle(vnode, rm) {
 
 module.exports = {create: updateStyle, update: updateStyle, destroy: applyDestroyStyle, remove: applyRemoveStyle};
 
-},{}],40:[function(require,module,exports){
+},{}],41:[function(require,module,exports){
 // jshint newcap: false
 /* global require, module, document, Node */
 'use strict';
@@ -19754,7 +20013,7 @@ function init(modules, api) {
 
 module.exports = {init: init};
 
-},{"./htmldomapi":33,"./is":34,"./vnode":41}],41:[function(require,module,exports){
+},{"./htmldomapi":34,"./is":35,"./vnode":42}],42:[function(require,module,exports){
 module.exports = function(sel, data, children, text, elm) {
   var key = data === undefined ? undefined : data.key;
   return {sel: sel, data: data, children: children,
