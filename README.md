@@ -1,6 +1,8 @@
 # ff-dashboard
 
-The ff-dashboard component is comprised of a header, a main panel, a left panel and a side panel. As a user of the component, you only have to set the dashboard's `displayPanel$` stream to either 'main', 'right' or 'left'. Some CSS is included only for functional styling. We recommend using [`postcss-import`](https://github.com/postcss/postcss-import) for importing the CSS.
+The ff-dashboard component is a [flimflam](http://flimflamjs.github.io/) component comprised of a header, a main panel, a left panel and a right panel. As a user of the component, you just have to set the dashboard's `displayPanel$` stream to either 'main', 'right' or 'left'. Some CSS is included but only for functional styling (as opposed to aesthetic styling). We recommend using [`postcss-import`](https://github.com/postcss/postcss-import) for importing the CSS.
+
+You can see an example of the dashboard [here](http://flimflamjs.github.io/). The example uses some minimal aesthetic styling that you can see [here](https://github.com/flimflamjs/ff-dashboard/blob/master/example/index.css).
 
 ### Getting started
 
@@ -16,8 +18,8 @@ const init = _ => {
   }
   
   const displayPanel$ = flyd.merge(
-      flyd.map(R.always('left'), state.openLeftPanel$)
-    , flyd.map(R.always('right'), state.openRightPanel$)
+      flyd.map(_ => 'left', state.openLeftPanel$)
+    , flyd.map(_ => 'right', state.openRightPanel$)
   )
   
   state.dashboard = dashboard.init({displayPanel$})
@@ -25,7 +27,7 @@ const init = _ => {
 }
 ```
 
-Here are all of the options that can be passed to the init function: 
+Here are all of the options that can be passed to the dashboard's init function: 
 
 | key | type | default | description |
 |:----|:-----|:--------|:------------|
@@ -40,7 +42,8 @@ Here are all of the options that can be passed to the init function:
 
 Each side panel has a built in close button that sets the `displayPanel$`'s value to 'main', which closes the side panels.
 
-Next call the dashboard's view function: 
+Next, call the dashboard's view function:
+
 ```es6
 const view = state => 
   h('div', [
@@ -49,7 +52,7 @@ const view = state =>
           h('button', {on: {click: state.openRightPanel$}}, 'Open Right Panel')
         , h('button', {on: {click: state.openLeftPanel$}}, 'Open Left Panel')
         ])
-      , mainPanelBody: h('main', 'Main content') 
+      , mainPanelBody: h('div', 'Main content') 
       , rightPanelHeader: h('h3', 'Right panel header')
       , rightPanelBody: h('div', 'Right panel content')
       , leftPanelHeader: h('h3', 'Left panel header')
