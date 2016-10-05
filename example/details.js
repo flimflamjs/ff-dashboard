@@ -1,16 +1,17 @@
 import R from 'ramda'
 import h from 'snabbdom/h'
 import flyd from 'flyd'
+import high from './highlight-match'
 
-const personnel = d => 
+const personnel = state => p => 
   h('tr', 
-    [ h('td.bold', d.name)
-    , h('td', `${R.map(x => x, d.instruments).join(', ')}`)
+    [ h('td.bold', high(state.filterBy$().personnel, p.name),  p.name)
+    , h('td', `${R.map(x => x, p.instruments).join(', ')}`)
     ]
   )
 
 module.exports = state => 
-   h('div.pb2', [
+  h('div.pb2', [
     h('div.table', [
       h('img.table-cell.align-middle', {props: {src: state.dataDetails$().img}})
     , h('table.small.table-cell.align-middle.pl1', [
@@ -27,6 +28,6 @@ module.exports = state =>
   , h('h4.mb1', 'Tracks')
   , h('ol.small', R.map(x => h('li', x), state.dataDetails$().tracks || []))
   , h('h4.mb1', 'Musicians')
-  , h('table.small', R.map(personnel, state.dataDetails$().personnel || []))
+  , h('table.small', R.map(personnel(state), state.dataDetails$().personnel || []))
   ])
 

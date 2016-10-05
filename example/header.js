@@ -6,9 +6,11 @@ module.exports = state => h('div', [
       h('a.table-cell.align-middle.bold', {on: {click: x => state.showFilters$(true)}}, 'Filter')
     , h('h4.table-cell.align-middle', 'Kraftwerk Discography')
     ])
-  , !R.toPairs(state.filterBy$()).length 
+  , !R.keys(state.filterBy$()).length 
     ? ''
-    : h('small', `Filtering by 
-      ${R.map(x => x[0], R.toPairs(state.filterBy$())).join(', ')}`)
+    : h('small', R.concat(
+        ['Filtering by:']
+      , R.map(x => h('span.ml1.highlight', x), R.keys(state.filterBy$()))
+      ))
   ])
 
