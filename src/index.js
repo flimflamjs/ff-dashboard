@@ -43,10 +43,14 @@ const view = (state, content) =>
   h('div.ff-dashboard', {attrs: {'data-display-panel': state.displayPanel$()}}, [
     header(content.header)
   , h('div.ff-dashboard-panels'
-    , {hook: {insert: vnode => {
-        setHeight(vnode.elm)
-        window.addEventListener('resize', ev => setHeight(vnode.elm))
-        }
+    , {hook: {
+          insert: vnode => {
+            setHeight(vnode.elm)
+            window.addEventListener('resize', ev => setHeight(vnode.elm))
+          }
+        , update: vnode => {
+            setHeight(vnode.elm)
+          }
       }
     }
     , [ leftPanel(state, content.leftPanelHeader || '', content.leftPanelBody || '')
