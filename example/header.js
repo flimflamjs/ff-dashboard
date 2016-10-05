@@ -8,7 +8,7 @@ module.exports = state => h('div', [
     ])
   , !R.toPairs(state.filterBy$()).length 
     ? ''
-    : h('span', 'Filtering by')
-
+    : h('small', `Filtering by 
+      ${R.map(x => x[0], R.toPairs(state.filterBy$())).join(', ')}`)
   ])
 

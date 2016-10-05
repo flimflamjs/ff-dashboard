@@ -91,7 +91,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 module.exports = function (state) {
   return (0, _h2.default)('div', [(0, _h2.default)('div.table.fullWidth', [(0, _h2.default)('a.table-cell.align-middle.bold', { on: { click: function click(x) {
         return state.showFilters$(true);
-      } } }, 'Filter'), (0, _h2.default)('h4.table-cell.align-middle', 'Kraftwerk Discography')]), !_ramda2.default.toPairs(state.filterBy$()).length ? '' : (0, _h2.default)('span', 'Filtering by')]);
+      } } }, 'Filter'), (0, _h2.default)('h4.table-cell.align-middle', 'Kraftwerk Discography')]), !_ramda2.default.toPairs(state.filterBy$()).length ? '' : (0, _h2.default)('small', 'Filtering by \n      ' + _ramda2.default.map(function (x) {
+    return x[0];
+  }, _ramda2.default.toPairs(state.filterBy$())).join(', '))]);
 };
 
 },{"ramda":32,"snabbdom/h":33}],5:[function(require,module,exports){
@@ -353,10 +355,9 @@ var view = function view(state, content) {
         });
       },
       update: function update(vnode) {
-        setHeight(vnode.elm);
+        return setHeight(vnode.elm);
       }
-    }
-  }, [(0, _leftPanel2.default)(state, content.leftPanelHeader || '', content.leftPanelBody || ''), (0, _mainPanel2.default)(state, content.mainPanelBody || ''), (0, _rightPanel2.default)(state, content.rightPanelHeader || '', content.rightPanelBody || '')])]);
+    } }, [(0, _leftPanel2.default)(state, content.leftPanelHeader || '', content.leftPanelBody || ''), (0, _mainPanel2.default)(state, content.mainPanelBody || ''), (0, _rightPanel2.default)(state, content.rightPanelHeader || '', content.rightPanelBody || '')])]);
 };
 
 module.exports = { init: init, view: view };

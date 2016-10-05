@@ -48,11 +48,8 @@ const view = (state, content) =>
             setHeight(vnode.elm)
             window.addEventListener('resize', ev => setHeight(vnode.elm))
           }
-        , update: vnode => {
-            setHeight(vnode.elm)
-          }
-      }
-    }
+        , update: vnode => setHeight(vnode.elm)
+      }}
     , [ leftPanel(state, content.leftPanelHeader || '', content.leftPanelBody || '')
       , mainPanel(state, content.mainPanelBody || '')
       , rightPanel(state, content.rightPanelHeader || '', content.rightPanelBody || '')
