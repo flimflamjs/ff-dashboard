@@ -82,15 +82,19 @@ var _h = require('snabbdom/h');
 
 var _h2 = _interopRequireDefault(_h);
 
+var _ramda = require('ramda');
+
+var _ramda2 = _interopRequireDefault(_ramda);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 module.exports = function (state) {
-  return (0, _h2.default)('div.table.fullWidth', [(0, _h2.default)('a.table-cell.align-middle.bold', { on: { click: function click(x) {
+  return (0, _h2.default)('div', [(0, _h2.default)('div.table.fullWidth', [(0, _h2.default)('a.table-cell.align-middle.bold', { on: { click: function click(x) {
         return state.showFilters$(true);
-      } } }, 'Filter'), (0, _h2.default)('h4.table-cell.align-middle', 'Kraftwerk Discography')]);
+      } } }, 'Filter'), (0, _h2.default)('h4.table-cell.align-middle', 'Kraftwerk Discography')]), !_ramda2.default.toPairs(state.filterBy$()).length ? '' : (0, _h2.default)('span', 'Filtering by')]);
 };
 
-},{"snabbdom/h":33}],5:[function(require,module,exports){
+},{"ramda":32,"snabbdom/h":33}],5:[function(require,module,exports){
 'use strict';
 
 var _h = require('snabbdom/h');
@@ -341,11 +345,15 @@ var resetRightPanelScroll = function resetRightPanelScroll(_) {
 };
 
 var view = function view(state, content) {
-  return (0, _h2.default)('div.ff-dashboard', { attrs: { 'data-display-panel': state.displayPanel$() } }, [(0, _header2.default)(content.header), (0, _h2.default)('div.ff-dashboard-panels', { hook: { insert: function insert(vnode) {
+  return (0, _h2.default)('div.ff-dashboard', { attrs: { 'data-display-panel': state.displayPanel$() } }, [(0, _header2.default)(content.header), (0, _h2.default)('div.ff-dashboard-panels', { hook: {
+      insert: function insert(vnode) {
         setHeight(vnode.elm);
         window.addEventListener('resize', function (ev) {
           return setHeight(vnode.elm);
         });
+      },
+      update: function update(vnode) {
+        setHeight(vnode.elm);
       }
     }
   }, [(0, _leftPanel2.default)(state, content.leftPanelHeader || '', content.leftPanelBody || ''), (0, _mainPanel2.default)(state, content.mainPanelBody || ''), (0, _rightPanel2.default)(state, content.rightPanelHeader || '', content.rightPanelBody || '')])]);
