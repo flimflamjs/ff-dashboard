@@ -2,7 +2,7 @@
 
 The ff-dashboard component is a [flimflam](http://flimflamjs.github.io/) component comprised of a header, a main panel, a left panel and a right panel. As a user of the component, you just have to set the dashboard's `displayPanel$` stream to either 'main', 'right' or 'left'. Some CSS is included but only for functional styling (as opposed to aesthetic styling). We recommend using [`postcss-import`](https://github.com/postcss/postcss-import) for importing the CSS.
 
-You can see an example of the dashboard [here](http://flimflamjs.github.io/). The example uses some minimal aesthetic styling that you can see [here](https://github.com/flimflamjs/ff-dashboard/blob/master/example/index.css).
+You can see an example of the dashboard [here](https://flimflamjs.github.io/ff-dashboard/). The example uses some minimal aesthetic styling that you can see [here](https://github.com/flimflamjs/ff-dashboard/blob/master/example/index.css).
 
 ### Getting started
 
@@ -60,5 +60,12 @@ const view = state =>
     })
   ])
  ```
+ 
+The dashboard's view function takes the dashboard's state as the first argument and an object with snabbdom views as the second argument. You can safely omit any of the views if you want. Here are all of the views that you can pass in:
 
-
+- header
+- mainPanelBody
+- rightPanelHeader
+- rightPanelBody
+- leftPanelHeader
+- leftPanelBody
