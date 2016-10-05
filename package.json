@@ -1,4 +1,4 @@
-{
+ {
   "name": "ff-dashboard",
   "version": "0.0.1",
   "description": "Flimflam dashboard component comprised of a main panel and two side panels",
@@ -10,7 +10,8 @@
     "watch-example-js": "watchify example/index.js -o example/build.js -t [babelify --presets es2015] -v",
     "watch-example-css": "postcss -c example/postcss.watch.js -w -l",
     "build-example-css": "postcss -c example/postcss.build.js -l",
-    "build-example-js": "browserify example/index.js -o example/build.js -t [babelify --presets es2015] && uglifyjs example/build.js -o example/build.js -v"
+    "build-example-js": "browserify example/index.js -o example/build.js -t [babelify --presets es2015] && uglifyjs example/build.js -o example/build.js -v",
+    "gh-pages": "npm run build-example-css && npm run build-example-js && git subtree push --prefix example origin gh-pages"
   },
   "repository": {
     "type": "git",
