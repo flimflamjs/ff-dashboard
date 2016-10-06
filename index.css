@@ -1,3 +1,8 @@
+body,
+html {
+  height: 100%;
+}
+
 .ff-dashboard-panels {
   position: relative;
   overflow: hidden;
