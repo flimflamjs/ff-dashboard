@@ -223,9 +223,9 @@ var view = function view(state) {
   return (0, _h2.default)('div', [_index2.default.view(state.dashboard, {
     header: (0, _header2.default)(state),
     mainPanelBody: (0, _main2.default)(state),
-    rightPanelHeader: (0, _h2.default)('h3', state.dataDetails$().name),
+    rightPanelHeader: (0, _h2.default)('h4', state.dataDetails$().name),
     rightPanelBody: (0, _details2.default)(state),
-    leftPanelHeader: (0, _h2.default)('h3', 'Filter'),
+    leftPanelHeader: (0, _h2.default)('h4', 'Filter'),
     leftPanelBody: (0, _filter4.default)(state)
   })]);
 };
