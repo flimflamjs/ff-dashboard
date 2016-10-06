@@ -1,6 +1,6 @@
 {
   "name": "ff-dashboard",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Flimflam dashboard component comprised of a main panel and two side panels",
   "main": "lib/index.js",
   "style": "index.css",
