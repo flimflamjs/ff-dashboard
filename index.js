@@ -59,9 +59,9 @@ const view = state =>
     dashboard.view(state.dashboard, {
         header: header(state)
       , mainPanelBody: main(state)
-      , rightPanelHeader: h('h3', state.dataDetails$().name)
+      , rightPanelHeader: h('h4', state.dataDetails$().name)
       , rightPanelBody: details(state)
-      , leftPanelHeader: h('h3', 'Filter')
+      , leftPanelHeader: h('h4', 'Filter')
       , leftPanelBody: filter(state)
     })
   ])
