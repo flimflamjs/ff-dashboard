@@ -61,10 +61,18 @@ var _data2 = _interopRequireDefault(_data);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+var hyph = function hyph(st) {
+  return st.replace(/\s/g, '-');
+};
+
+var check = function check(name) {
+  return function (id) {
+    return [(0, _h2.default)('input', { props: { type: 'checkbox', name: name + '[]', value: id, id: hyph(id) } }), (0, _h2.default)('label', { attrs: { for: hyph(id) } }, id), (0, _h2.default)('br')];
+  };
+};
+
 var checkboxes = function checkboxes(state, arr, name) {
-  return (0, _h2.default)('form', { on: { change: state.filterInput$ } }, _ramda2.default.flatten(_ramda2.default.map(function (x) {
-    return [(0, _h2.default)('input', { props: { type: 'checkbox', name: name + '[]', value: x } }), (0, _h2.default)('span.pl1', x), (0, _h2.default)('br')];
-  }, arr)));
+  return (0, _h2.default)('form', { on: { change: state.filterInput$ } }, _ramda2.default.flatten(_ramda2.default.map(check(name), arr)));
 };
 
 var getPersonnel = function getPersonnel(_) {
