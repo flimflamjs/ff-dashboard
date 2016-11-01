@@ -373,6 +373,7 @@ var setHeight = function setHeight(panels) {
 
 var resetRightPanelScroll = function resetRightPanelScroll(_) {
   var elm = document.querySelector('.ff-dashboard-rightPanel .ff-dashboard-panelBody');
+  if (!elm) return;
   elm.scrollTop = 0;
 };
 

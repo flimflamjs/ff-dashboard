@@ -36,6 +36,7 @@ const setHeight = panels => {
 
 const resetRightPanelScroll = _ => {
   let elm = document.querySelector('.ff-dashboard-rightPanel .ff-dashboard-panelBody') 
+  if(!elm) return
   elm.scrollTop = 0
 }
 
