@@ -1,82 +1,35 @@
 @import '../index.css';
+@import '@commitchange/grey-scale-variables';
+@import '@commitchange/color-variables';
+@import '@commitchange/commons.css';
+@import '@commitchange/dashboard-styles';
+
+@media screen and (max-width: 600px) {
+  [data-ff-dashboard-mainpanel] td:nth-of-type(2), 
+  [data-ff-dashboard-mainpanel] td:nth-of-type(3) {
+    display: none;
+  }
+}
+
+input[type='checkbox'] + label:hover:before { background: $green-light }
+
+input[type='checkbox']:checked + label:before { background: $green } 
+
+/* unicode character for checkmark  */
+input[type='checkbox'] + label:before { content: '\2713' }
+
+a {
+  color: $blue;
+  cursor: pointer;
+}
 
 body {
-   font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
+   font-family: 'Open Sans', Helvetica, Arial, sans-serif; 
    font-weight: 300;
 }
 
 .highlight {
-  background: rgba(45, 148, 185, 0.2); 
-}
-
-tr:nth-of-type(2n) {
-  background: rgba(0,0,0,0.04);
-}
-
-td {
-  padding: 10px;
-}
-
-.ff-dashboard-panelHeader h4 {
-  padding: 0;
-  margin: 0;
-}
-
-.ff-dashboard-closeButton,
-a {
-  color: #2d94b9;
-  cursor: pointer;
-}
-
-.ff-dashboard {
-  background: #f3f3f3;
-}
-
-.ff-dashboard-panelHeader,
-.ff-dashboard-header {
-  background: #fbfbfb;
-  padding: 10px;
-  border-bottom: 1px solid rgba(0,0,0,0.1);
-}
-
-.ff-dashboard-closeButton {
-  font-size: 42px;
-  line-height: 1;
-  font-family: monospace;
-}
-
-.ff-dashboard-leftPanel,
-.ff-dashboard-rightPanel {
-  background: #f9f9f9;
-}
-
-.ff-dashboard-rightPanel .ff-dashboard-panelBody,
-.ff-dashboard-leftPanel .ff-dashboard-panelBody {
-  padding: 10px;
-}
-
-.ff-dashboard-rightPanel .ff-dashboard-closeButton {
-  padding-right: 20px;
-}
-
-.ff-dashboard-leftPanel .ff-dashboard-closeButton {
-  padding-left: 20px;
-}
-
-.ff-dashboard-leftPanel {
-  border-right: 1px solid rgba(0,0,0,0.1);
-  box-shadow: 1px 1px 1px rgba(0,0,0,0.07);
-}
-
-.ff-dashboard-rightPanel {
-  border-left: 1px solid rgba(0,0,0,0.1);
-  box-shadow: -1px 1px 1px rgba(0,0,0,0.07);
-}
-
-@media screen and (max-width: 600px) {
-  .ff-dashboard-mainpanel td:nth-of-type(2), 
-  .ff-dashboard-mainpanel td:nth-of-type(3) {
-    display: none;
-  }
+  background: $green; 
+  color: white;
 }
 
