@@ -1,4 +1,8 @@
 import h from 'snabbdom/h'
 
-module.exports = content => h('div.ff-dashboard-header', [content])
+module.exports = content => 
+  h('div'
+  , {attrs: { 'data-ff-dashboard-header' : ''}}
+  , [content]
+  )
 

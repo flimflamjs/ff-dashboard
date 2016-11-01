@@ -9,11 +9,16 @@ module.exports = (state, body, dir) => {
     , visibility: state.displayPanel$() === dir ? 'visible' : 'hidden' 
     }
 
-  return h(`div.ff-dashboard-${dir}Panel`, {
+  const attrs = {}
+  attrs[`data-ff-dashboard-${dir}-panel`] = ''
+
+  return h('div', {
     style
-  , hook: {insert: vnode => {
-      setWidth(state, isLeft)(vnode.elm)
-      window.addEventListener('resize', ev => setWidth(state, isLeft)(vnode.elm))
+  , attrs
+  , hook: {
+      insert: vnode => {
+        setWidth(state, isLeft)(vnode.elm)
+        window.addEventListener('resize', ev => setWidth(state, isLeft)(vnode.elm))
       }
     , update: vnode => {
         let elm = vnode.elm
@@ -21,7 +26,10 @@ module.exports = (state, body, dir) => {
       }
     }
   }
-  , [ h('div.ff-dashboard-panelBody', R.concat([closeButton(state)], [body])) ]
+  , [ h('div'
+    , {attrs: { 'data-ff-dashboard-panel-body' : ''}}
+    , R.concat([closeButton(state)], [body])) 
+    ]
   )
 }
 

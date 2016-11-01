@@ -1,65 +1,36 @@
 body,
-html {
-  height: 100%;
-}
+html { height: 100% }
 
-.ff-dashboard-panels {
+[data-ff-dashboard-panels] {
   position: relative;
   overflow: hidden;
 }
 
-.ff-dashboard-panelHeader {
-  width: 100%;
-  display: table;
-  position: absolute;
-  top: 0;
-}
-
-.ff-dashboard-leftPanel .ff-dashboard-closeButton {
-  text-align: right;
-}
-
-.ff-dashboard-panelHeader > * {
-  display: table-cell;
-  vertical-align: middle;
-}
-
-.ff-dashboard-closeButton {
-  width: 1%;
-  white-space: nowrap;
-}
-
-.ff-dashboard-leftPanel,
-.ff-dashboard-rightPanel {
+[data-ff-dashboard-leftPanel],
+[data-ff-dashboard-rightPanel] {
   max-width: 100%;
   z-index: 1;
 }
 
-.ff-dashboard-leftPanel,
-.ff-dashboard-mainPanel,
-.ff-dashboard-rightPanel {
+[data-ff-dashboard-leftPanel],
+[data-ff-dashboard-mainPanel],
+[data-ff-dashboard-rightPanel] {
   position: absolute;
   height: 100%;
   top: 0;
 }
 
-.ff-dashboard-panelBody {
+[data-ff-dashboard-panelBody] {
   overflow-y: auto;
   overflow-x: hidden;
   height: 100%;
 }
 
-.ff-dashboard-mainPanel {
-  width: 100%;
-}
+[data-ff-dashboard-mainPanel] { width: 100% }
 
-.ff-dashboard-leftPanel {
-  left: 0;
-}
+[data-ff-dashboard-leftPanel] { left: 0 }
 
-.ff-dashboard-rightPanel {
-  right: 0;
-}
+[data-ff-dashboard-rightPanel] { right: 0 }
 
 body {
    font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 

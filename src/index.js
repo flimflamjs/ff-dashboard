@@ -29,34 +29,40 @@ const init = state => {
 
 const setHeight = panels => {
   panels.style.height = 0
-  let headerHeight = document.querySelector('.ff-dashboard-header').offsetHeight 
+  let headerHeight = document.querySelector('[data-ff-dashboard-header]').offsetHeight 
   let bodyHeight = document.body.offsetHeight
   panels.style.height = `${bodyHeight - headerHeight}px`
 }
 
 const resetRightPanelScroll = _ => {
-  let elm = document.querySelector('.ff-dashboard-rightPanel .ff-dashboard-panelBody') 
+  let elm = document.querySelector('[data-ff-dashboard-right-panel] [data-ff-dashboard-panel-body]') 
   if(!elm) return
   elm.scrollTop = 0
 }
 
 const view = (state, content) => 
-  h('div.ff-dashboard', {attrs: {'data-display-panel': state.displayPanel$()}}, [
-    header(content.header)
-  , h('div.ff-dashboard-panels'
-    , {hook: {
-          insert: vnode => {
-            setHeight(vnode.elm)
-            window.addEventListener('resize', ev => setHeight(vnode.elm))
+  h('div'
+  , {attrs: { 'data-ff-dashboard' : ''}}
+  , [
+      header(content.header)
+    , h('div'
+      , {
+          attrs: { 'data-ff-dashboard-panels' : ''}
+        , hook: {
+            insert: vnode => {
+              setHeight(vnode.elm)
+              window.addEventListener('resize', ev => setHeight(vnode.elm))
+            }
+          , update: vnode => setHeight(vnode.elm)
           }
-        , update: vnode => setHeight(vnode.elm)
-      }}
-    , [ leftPanel(state, content.leftPanel || '')
-      , mainPanel(state, content.mainPanel || '')
-      , rightPanel(state, content.rightPanel || '')
-      ]
-    ) 
-  ]) 
+        }
+      , [ leftPanel(state, content.leftPanel || '')
+        , mainPanel(state, content.mainPanel || '')
+        , rightPanel(state, content.rightPanel || '')
+        ]
+      ) 
+    ]
+  ) 
 
 module.exports = {init, view}
 
