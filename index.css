@@ -6,29 +6,29 @@ html { height: 100% }
   overflow: hidden;
 }
 
-[data-ff-dashboard-leftPanel],
-[data-ff-dashboard-rightPanel] {
+[data-ff-dashboard-left-panel],
+[data-ff-dashboard-right-panel] {
   max-width: 100%;
   z-index: 1;
 }
 
-[data-ff-dashboard-leftPanel],
-[data-ff-dashboard-mainPanel],
-[data-ff-dashboard-rightPanel] {
+[data-ff-dashboard-left-panel],
+[data-ff-dashboard-main-panel],
+[data-ff-dashboard-right-panel] {
   position: absolute;
   height: 100%;
   top: 0;
 }
 
-[data-ff-dashboard-panelBody] {
+[data-ff-dashboard-panel-body] {
   overflow-y: auto;
   overflow-x: hidden;
   height: 100%;
 }
 
-[data-ff-dashboard-mainPanel] { width: 100% }
+[data-ff-dashboard-main-panel] { width: 100% }
 
-[data-ff-dashboard-leftPanel] { left: 0 }
+[data-ff-dashboard-left-panel] { left: 0 }
 
-[data-ff-dashboard-rightPanel] { right: 0 }
+[data-ff-dashboard-right-panel] { right: 0 }
 
