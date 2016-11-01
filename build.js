@@ -222,11 +222,9 @@ var filterData = function filterData(filterBy) {
 var view = function view(state) {
   return (0, _h2.default)('div', [_index2.default.view(state.dashboard, {
     header: (0, _header2.default)(state),
-    mainPanelBody: (0, _main2.default)(state),
-    rightPanelHeader: (0, _h2.default)('h4', state.dataDetails$().name),
-    rightPanelBody: (0, _details2.default)(state),
-    leftPanelHeader: (0, _h2.default)('h4', 'Filter'),
-    leftPanelBody: (0, _filter4.default)(state)
+    mainPanel: (0, _main2.default)(state),
+    rightPanel: (0, _details2.default)(state),
+    leftPanel: (0, _filter4.default)(state)
   })]);
 };
 
@@ -283,7 +281,7 @@ function _interopRequireDefault(obj) {
 }
 
 module.exports = function (state) {
-  return (0, _h2.default)('div.ff-dashboard-closeButton', {
+  return (0, _h2.default)('span.ff-dashboard-closeButton', {
     on: { click: function click(_) {
         return state.displayPanel$('main');
       } },
@@ -389,7 +387,7 @@ var view = function view(state, content) {
       update: function update(vnode) {
         return setHeight(vnode.elm);
       }
-    } }, [(0, _leftPanel2.default)(state, content.leftPanelHeader || '', content.leftPanelBody || ''), (0, _mainPanel2.default)(state, content.mainPanelBody || ''), (0, _rightPanel2.default)(state, content.rightPanelHeader || '', content.rightPanelBody || '')])]);
+    } }, [(0, _leftPanel2.default)(state, content.leftPanel || ''), (0, _mainPanel2.default)(state, content.mainPanel || ''), (0, _rightPanel2.default)(state, content.rightPanel || '')])]);
 };
 
 module.exports = { init: init, view: view };
@@ -409,8 +407,8 @@ function _interopRequireDefault(obj) {
   return obj && obj.__esModule ? obj : { default: obj };
 }
 
-module.exports = function (state, header, body) {
-  return (0, _sidePanel2.default)(state, header, body, 'left');
+module.exports = function (state, body) {
+  return (0, _sidePanel2.default)(state, body, 'left');
 };
 
 },{"./side-panel":14,"snabbdom/h":34}],12:[function(require,module,exports){
@@ -460,12 +458,16 @@ function _interopRequireDefault(obj) {
   return obj && obj.__esModule ? obj : { default: obj };
 }
 
-module.exports = function (state, header, body) {
-  return (0, _sidePanel2.default)(state, header, body, 'right');
+module.exports = function (state, body) {
+  return (0, _sidePanel2.default)(state, body, 'right');
 };
 
 },{"./side-panel":14,"snabbdom/h":34}],14:[function(require,module,exports){
 'use strict';
+
+var _ramda = require('ramda');
+
+var _ramda2 = _interopRequireDefault(_ramda);
 
 var _h = require('snabbdom/h');
 
@@ -479,7 +481,7 @@ function _interopRequireDefault(obj) {
   return obj && obj.__esModule ? obj : { default: obj };
 }
 
-module.exports = function (state, header, body, dir) {
+module.exports = function (state, body, dir) {
   var isLeft = dir === 'left';
   var style = {
     transition: dir + ' ' + state.transition + ', visibility ' + state.transition,
@@ -490,10 +492,6 @@ module.exports = function (state, header, body, dir) {
     style: style,
     hook: { insert: function insert(vnode) {
         setWidth(state, isLeft)(vnode.elm);
-        setHeight(vnode.elm);
-        window.addEventListener('resize', function (ev) {
-          return setHeight(vnode.elm);
-        });
         window.addEventListener('resize', function (ev) {
           return setWidth(state, isLeft)(vnode.elm);
         });
@@ -501,15 +499,9 @@ module.exports = function (state, header, body, dir) {
       update: function update(vnode) {
         var elm = vnode.elm;
         elm.style[dir] = dir === state.displayPanel$() ? 0 : '-' + elm.offsetWidth + 'px';
-        setHeight(elm);
       }
     }
-  }, [(0, _h2.default)('div.ff-dashboard-panelHeader', [isLeft ? header : (0, _closeButton2.default)(state), !isLeft ? header : (0, _closeButton2.default)(state)]), (0, _h2.default)('div.ff-dashboard-panelBody', [body])]);
-};
-
-var setHeight = function setHeight(panel) {
-  var header = panel.parentElement.querySelector('.ff-dashboard-panelHeader');
-  panel.style.paddingTop = header.offsetHeight + 'px';
+  }, [(0, _h2.default)('div.ff-dashboard-panelBody', _ramda2.default.concat([(0, _closeButton2.default)(state)], [body]))]);
 };
 
 var setWidth = function setWidth(state, isLeft) {
@@ -522,7 +514,7 @@ var setWidth = function setWidth(state, isLeft) {
   };
 };
 
-},{"./close-button":8,"snabbdom/h":34}],15:[function(require,module,exports){
+},{"./close-button":8,"ramda":33,"snabbdom/h":34}],15:[function(require,module,exports){
 'use strict';
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }

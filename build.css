@@ -1,1 +1,143 @@
-body,html{height:100%}.ff-dashboard-panels{position:relative;overflow:hidden}.ff-dashboard-panelHeader{width:100%;display:table;position:absolute;top:0}.ff-dashboard-leftPanel .ff-dashboard-closeButton{text-align:right}.ff-dashboard-panelHeader>*{display:table-cell;vertical-align:middle}.ff-dashboard-closeButton{width:1%;white-space:nowrap}.ff-dashboard-leftPanel,.ff-dashboard-rightPanel{max-width:100%;z-index:1}.ff-dashboard-leftPanel,.ff-dashboard-mainPanel,.ff-dashboard-rightPanel{position:absolute;height:100%;top:0}.ff-dashboard-panelBody{overflow-y:auto;overflow-x:hidden;height:100%}.ff-dashboard-mainPanel{width:100%}.ff-dashboard-leftPanel{left:0}.ff-dashboard-rightPanel{right:0}body{font-family:HelveticaNeue-Light,Helvetica Neue Light,Helvetica Neue,Helvetica,Arial,Lucida Grande,sans-serif;font-weight:300}.highlight{background:rgba(45,148,185,.2)}tr:nth-of-type(2n){background:rgba(0,0,0,.04)}td{padding:10px}.ff-dashboard-panelHeader h4{padding:0;margin:0}.ff-dashboard-closeButton,a{color:#2d94b9;cursor:pointer}.ff-dashboard{background:#f3f3f3}.ff-dashboard-header,.ff-dashboard-panelHeader{background:#fbfbfb;padding:10px;border-bottom:1px solid rgba(0,0,0,.1)}.ff-dashboard-closeButton{font-size:42px;line-height:1;font-family:monospace}.ff-dashboard-leftPanel,.ff-dashboard-rightPanel{background:#f9f9f9}.ff-dashboard-leftPanel .ff-dashboard-panelBody,.ff-dashboard-rightPanel .ff-dashboard-panelBody{padding:10px}.ff-dashboard-rightPanel .ff-dashboard-closeButton{padding-right:20px}.ff-dashboard-leftPanel .ff-dashboard-closeButton{padding-left:20px}.ff-dashboard-leftPanel{border-right:1px solid rgba(0,0,0,.1);box-shadow:1px 1px 1px rgba(0,0,0,.07)}.ff-dashboard-rightPanel{border-left:1px solid rgba(0,0,0,.1);box-shadow:-1px 1px 1px rgba(0,0,0,.07)}@media screen and (max-width:600px){.ff-dashboard-mainpanel td:nth-of-type(2),.ff-dashboard-mainpanel td:nth-of-type(3){display:none}}
+body,
+html {
+  height: 100%;
+}
+
+.ff-dashboard-panels {
+  position: relative;
+  overflow: hidden;
+}
+
+.ff-dashboard-panelHeader {
+  width: 100%;
+  display: table;
+  position: absolute;
+  top: 0;
+}
+
+.ff-dashboard-leftPanel .ff-dashboard-closeButton {
+  text-align: right;
+}
+
+.ff-dashboard-panelHeader > * {
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.ff-dashboard-closeButton {
+  width: 1%;
+  white-space: nowrap;
+}
+
+.ff-dashboard-leftPanel,
+.ff-dashboard-rightPanel {
+  max-width: 100%;
+  z-index: 1;
+}
+
+.ff-dashboard-leftPanel,
+.ff-dashboard-mainPanel,
+.ff-dashboard-rightPanel {
+  position: absolute;
+  height: 100%;
+  top: 0;
+}
+
+.ff-dashboard-panelBody {
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 100%;
+}
+
+.ff-dashboard-mainPanel {
+  width: 100%;
+}
+
+.ff-dashboard-leftPanel {
+  left: 0;
+}
+
+.ff-dashboard-rightPanel {
+  right: 0;
+}
+
+body {
+   font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
+   font-weight: 300;
+}
+
+.highlight {
+  background: rgba(45, 148, 185, 0.2); 
+}
+
+tr:nth-of-type(2n) {
+  background: rgba(0,0,0,0.04);
+}
+
+td {
+  padding: 10px;
+}
+
+.ff-dashboard-panelHeader h4 {
+  padding: 0;
+  margin: 0;
+}
+
+.ff-dashboard-closeButton,
+a {
+  color: #2d94b9;
+  cursor: pointer;
+}
+
+.ff-dashboard {
+  background: #f3f3f3;
+}
+
+.ff-dashboard-panelHeader,
+.ff-dashboard-header {
+  background: #fbfbfb;
+  padding: 10px;
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+
+.ff-dashboard-closeButton {
+  font-size: 42px;
+  line-height: 1;
+  font-family: monospace;
+}
+
+.ff-dashboard-leftPanel,
+.ff-dashboard-rightPanel {
+  background: #f9f9f9;
+}
+
+.ff-dashboard-rightPanel .ff-dashboard-panelBody,
+.ff-dashboard-leftPanel .ff-dashboard-panelBody {
+  padding: 10px;
+}
+
+.ff-dashboard-rightPanel .ff-dashboard-closeButton {
+  padding-right: 20px;
+}
+
+.ff-dashboard-leftPanel .ff-dashboard-closeButton {
+  padding-left: 20px;
+}
+
+.ff-dashboard-leftPanel {
+  border-right: 1px solid rgba(0,0,0,0.1);
+  box-shadow: 1px 1px 1px rgba(0,0,0,0.07);
+}
+
+.ff-dashboard-rightPanel {
+  border-left: 1px solid rgba(0,0,0,0.1);
+  box-shadow: -1px 1px 1px rgba(0,0,0,0.07);
+}
+
+@media screen and (max-width: 600px) {
+  .ff-dashboard-mainpanel td:nth-of-type(2), 
+  .ff-dashboard-mainpanel td:nth-of-type(3) {
+    display: none;
+  }
+}
+
