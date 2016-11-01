@@ -50,9 +50,9 @@ const view = (state, content) =>
           }
         , update: vnode => setHeight(vnode.elm)
       }}
-    , [ leftPanel(state, content.leftPanelHeader || '', content.leftPanelBody || '')
-      , mainPanel(state, content.mainPanelBody || '')
-      , rightPanel(state, content.rightPanelHeader || '', content.rightPanelBody || '')
+    , [ leftPanel(state, content.leftPanel || '')
+      , mainPanel(state, content.mainPanel || '')
+      , rightPanel(state, content.rightPanel || '')
       ]
     ) 
   ]) 
