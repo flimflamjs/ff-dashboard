@@ -1,6 +1,7 @@
 import h from 'snabbdom/h'
 import flyd from 'flyd'
 import flydFilter from 'flyd/module/filter'
+import mergeAll from 'flyd/module/mergeall'
 import R from 'ramda'
 import render from 'flimflam-render'
 import snabbdom from 'snabbdom'
@@ -17,6 +18,7 @@ const init = _ => {
   const state = {}
   state.showFilters$ = flyd.stream()
   state.dataId$ = flyd.stream()
+  state.showMain$ = flyd.stream()
   state.dataDetails$ = flyd.merge(
       flyd.stream({})
     , flyd.map(i => R.find(R.propEq('id', i), data), state.dataId$))
@@ -27,10 +29,11 @@ const init = _ => {
 
   state.dataMain$ = flyd.map(filterData, state.filterBy$)
 
-  const displayPanel$ = flyd.merge(
+  const displayPanel$ = mergeAll([
       flyd.map(R.always('left'), state.showFilters$)
+    , flyd.map(R.always('main'), state.showMain$)
     , flyd.map(x => x.name ? 'right' : undefined , state.dataDetails$)
-  )
+  ])
 
   state.dashboard = dashboard.init({displayPanel$})
   return state
