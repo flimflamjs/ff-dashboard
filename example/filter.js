@@ -35,7 +35,7 @@ module.exports = state => {
 
   return h('div', [
     h('div.table.px-2.py-1.width-full', [
-      h('h4.pr-2.table-cell.align-middle.m-0.line-height-1', 'Filter')
+      h('p.bold.pr-2.table-cell.align-middle.m-0.line-height-1', 'Filter')
     , h('span.align-right.table-cell.align-middle', [close(state)])
     ])
   , h('hr.m-0')

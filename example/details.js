@@ -15,7 +15,7 @@ module.exports = state =>
   h('div', [
     h('div.table.px-2.py-1', [
       h('span.table-cell.align-middle', [close(state)])
-    , h('h4.pl-2.table-cell.align-middle.m-0.line-height-1', state.dataDetails$().name)
+    , h('p.bold.pl-2.table-cell.align-middle.m-0.line-height-1', state.dataDetails$().name)
     ])
   , h('hr.m-0')
   , h('div.p-2', [
@@ -32,9 +32,9 @@ module.exports = state =>
         ])
       ])
     , h('p.mt-2', state.dataDetails$().blurb)
-    , h('h4.mb-1', 'Tracks')
+    , h('p.bold.mb-1', 'Tracks')
     , h('ol', R.map(x => h('li', x), state.dataDetails$().tracks || []))
-    , h('h4.mb-1', 'Personnel')
+    , h('p.bold.mb-1', 'Personnel')
     , h('table', R.map(personnel(state), state.dataDetails$().personnel || []))
     ])
   ])
