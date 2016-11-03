@@ -1,6 +1,6 @@
 {
   "name": "ff-dashboard",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Flimflam dashboard component comprised of a main panel and two side panels",
   "main": "lib/index.js",
   "style": "index.css",
@@ -13,7 +13,7 @@
     "build-example-js": "browserify example/index.js -o example/build.js -t [babelify --presets es2015] && uglifyjs example/build.js -o example/build.js -v",
     "prepublish": "npm run build-example-css && npm run build-example-js",
     "gh-pages": "git subtree push --prefix example origin gh-pages",
-    "test": "zuul --local 1234 -- test.js"
+    "test": "zuul --local 1234 -- test/index.js"
   },
   "repository": {
     "type": "git",

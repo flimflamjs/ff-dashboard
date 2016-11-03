@@ -44,7 +44,7 @@ const view = (state, content) =>
   h('div'
   , {attrs: { 'data-ff-dashboard' : ''}}
   , [
-      header(content.header)
+      header(content.header || '')
     , h('div'
       , {
           attrs: { 'data-ff-dashboard-panels' : ''}
