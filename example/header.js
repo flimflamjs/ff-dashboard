@@ -1,7 +1,7 @@
 import h from 'snabbdom/h'
 import R from 'ramda'
 
-module.exports = state => h('div', [
+module.exports = state => h('div.p-1', [
     h('div.table', [
       h('button.table-cell.align-middle.bold', {on: {click: _ => state.showFilters$(true)}}, 'Filter')
     , h('h4.table-cell.align-middle.pl-3', 'Kraftwerk Discography')

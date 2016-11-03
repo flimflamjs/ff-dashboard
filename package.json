@@ -34,7 +34,7 @@
   "devDependencies": {
     "@commitchange/color-variables": "0.0.1",
     "@commitchange/commons.css": "0.0.3",
-    "@commitchange/dashboard-styles": "0.0.1",
+    "@commitchange/dashboard-styles": "0.0.2",
     "@commitchange/grey-scale-variables": "0.0.2",
     "autoprefixer": "6.4.1",
     "babel-cli": "6.16.0",

@@ -1,6 +1,5 @@
 import R from 'ramda'
 import h from 'snabbdom/h'
-import closeButton from './close-button'
 
 module.exports = (state, body, dir) => {
   let isLeft = dir === 'left' 
@@ -28,8 +27,7 @@ module.exports = (state, body, dir) => {
   }
   , [ h('div'
     , {attrs: { 'data-ff-dashboard-panel-body' : ''}}
-    , R.concat([closeButton(state)], [body])) 
-    ]
+    , [body])]
   )
 }
 

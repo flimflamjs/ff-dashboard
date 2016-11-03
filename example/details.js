@@ -2,6 +2,7 @@ import R from 'ramda'
 import h from 'snabbdom/h'
 import flyd from 'flyd'
 import high from './highlight-match'
+import close from './close-button'
 
 const personnel = state => p => 
   h('tr', 
@@ -12,7 +13,10 @@ const personnel = state => p =>
 
 module.exports = state => 
   h('div', [
-    h('h4.p-2.m-0.line-height-1', state.dataDetails$().name)
+    h('div.table.px-2.py-1', [
+      h('span.table-cell.align-middle', [close(state)])
+    , h('h4.pl-2.table-cell.align-middle.m-0.line-height-1', state.dataDetails$().name)
+    ])
   , h('hr.m-0')
   , h('div.p-2', [
       h('div.table', [

@@ -2,6 +2,7 @@ import h from 'snabbdom/h'
 import flyd from 'flyd'
 import R from 'ramda'
 import data from './data'
+import close from './close-button'
 
 const hyph = st => st.replace(/\s/g, '-')
 
@@ -11,7 +12,6 @@ const check = name => id =>
   , h('label', {attrs: {for: hyph(id)}}, id)
   , h('br')
   ]
-
 
 const clear = state => v => {
   if(R.keys(state.filterBy$()).length) return
@@ -33,11 +33,16 @@ const getPersonnel = _ =>
 module.exports = state => {
   const personnel = getPersonnel()
 
-  return h('div.p-2', [
-    h('p.mt-0.mb-2', 'Only show albums with...')
-  , checkboxes(state, personnel, 'personnel')
+  return h('div', [
+    h('div.table.px-2.py-1.width-full', [
+      h('h4.pr-2.table-cell.align-middle.m-0.line-height-1', 'Filter')
+    , h('span.align-right.table-cell.align-middle', [close(state)])
+    ])
+  , h('hr.m-0')
+  , h('div.p-2', [
+      h('p.mt-0', 'Only show albums with...')
+    , checkboxes(state, personnel, 'personnel')
+    ])
   ])
 }
-
-
 
