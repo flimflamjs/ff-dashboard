@@ -10,17 +10,21 @@ In the parent state's init function, initialize the dashboard by calling its ini
 
 ```es6
 import dashboard from 'ff-dashboard'
+import flyd from 'flyd'
+import flydMergeall from 'flyd/module/mergeall'
 
 const init = _ => {
   const state = {
     openLeftPanel$: flyd.stream()
   , openRightPanel$: flyd.stream()
+  , openMainPanel$: flyd.stream()
   }
   
-  const displayPanel$ = flyd.merge(
+  const displayPanel$ = flydMergeall([
       flyd.map(_ => 'left', state.openLeftPanel$)
     , flyd.map(_ => 'right', state.openRightPanel$)
-  )
+    , flyd.map(_ => 'main', state.openMainPanel$)
+  ])
   
   state.dashboard = dashboard.init({displayPanel$})
   return state
@@ -39,8 +43,6 @@ Here are all of the options that can be passed to the dashboard's init function:
 |`transition`| string | `'0.2s ease-out'` | transition style to be applied to panel movements |
 
 
-Each side panel has a built in close button that sets the `displayPanel$`'s value to 'main', which closes the side panels.
-
 Next, call the dashboard's view function:
 
 ```es6
@@ -48,8 +50,9 @@ const view = state =>
   h('div', [
     dashboard.view(state.dashboard, {
         header: h('header', [
-          h('button', {on: {click: state.openRightPanel$}}, 'Open Right Panel')
-        , h('button', {on: {click: state.openLeftPanel$}}, 'Open Left Panel')
+          h('button', {on: {click: state.openLeftPanel$}}, 'Open Left Panel')
+        , h('button', {on: {click: state.openRightPanel$}}, 'Open Right Panel')
+        , h('button', {on: {click: state.openMainPanel$}}, 'Open Main Panel')
         ])
       , mainPanel: h('div', 'Main content') 
       , rightPanel: h('div', 'Right panel content')
