@@ -18,14 +18,27 @@ input[type='checkbox']:checked + label:before { background: $green }
 /* unicode character for checkmark  */
 input[type='checkbox'] + label:before { content: '\2713' }
 
-a {
-  color: $blue;
-  cursor: pointer;
+button,
+a { color: $blue; }
+
+a:hover { color: $blue-dark; }
+
+table {
+  font-size: inherit;
+  line-height: inherit;
+}
+
+button {
+  background: white;
+  line-height: 1;
+}
+[data-ff-dashboard-left-panel] [data-ff-dashboard-panel-body], 
+[data-ff-dashboard-right-panel] [data-ff-dashboard-panel-body] {
+  padding: 0;
 }
 
 body {
    font-family: 'Open Sans', Helvetica, Arial, sans-serif; 
-   font-weight: 300;
 }
 
 .highlight {

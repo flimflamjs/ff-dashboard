@@ -1400,14 +1400,26 @@ input[type='checkbox']:checked + label:before { background: #5fb88d }
 
 input[type='checkbox'] + label:before { content: '\2713' }
 
-a {
-  color: #39aad6;
-  cursor: pointer;
+button, a { color: #39aad6; }
+
+a:hover { color: rgb(37, 141, 182); }
+
+table {
+  font-size: inherit;
+  line-height: inherit;
+}
+
+button {
+  background: white;
+  line-height: 1;
+}
+
+[data-ff-dashboard-left-panel] [data-ff-dashboard-panel-body], [data-ff-dashboard-right-panel] [data-ff-dashboard-panel-body] {
+  padding: 0;
 }
 
 body {
    font-family: 'Open Sans', Helvetica, Arial, sans-serif; 
-   font-weight: 300;
 }
 
 .highlight {
