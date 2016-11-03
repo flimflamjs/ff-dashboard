@@ -4,7 +4,7 @@ import R from 'ramda'
 module.exports = state => h('div.p-1', [
     h('div.table', [
       h('button.table-cell.align-middle.bold', {on: {click: _ => state.showFilters$(true)}}, 'Filter')
-    , h('h4.table-cell.align-middle.pl-3', 'Kraftwerk Discography')
+    , h('p.bold.line-height-1.table-cell.align-middle.pl-2.m-0', 'Kraftwerk Albums')
     ])
   , !R.keys(state.filterBy$()).length 
     ? ''
