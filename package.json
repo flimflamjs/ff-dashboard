@@ -42,6 +42,7 @@
     "babelify": "7.3.0",
     "browserify": "13.1.0",
     "cssify": "^1.0.3",
+    "cssnano": "^3.8.0",
     "mocha": "2.5.3",
     "postcss-cli": "2.6.0",
     "postcss-color-function": "^2.0.1",
