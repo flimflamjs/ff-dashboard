@@ -1,6 +1,6 @@
 {
   "name": "ff-dashboard",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Flimflam dashboard component comprised of a main panel and two side panels",
   "main": "lib/index.js",
   "style": "index.css",
@@ -33,9 +33,8 @@
   },
   "devDependencies": {
     "@commitchange/color-variables": "0.0.1",
-    "@commitchange/commons.css": "0.0.3",
-    "@commitchange/dashboard-styles": "0.0.2",
-    "@commitchange/grey-scale-variables": "0.0.2",
+    "@commitchange/commons.css": "0.0.5",
+    "@commitchange/dashboard-styles": "0.0.4",
     "autoprefixer": "6.4.1",
     "babel-cli": "6.16.0",
     "babel-preset-es2015": "6.14.0",
