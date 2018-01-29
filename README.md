@@ -15,15 +15,15 @@ import flydMergeall from 'flyd/module/mergeall'
 
 const init = _ => {
   const state = {
-    openLeftPanel$: flyd.stream()
-  , openRightPanel$: flyd.stream()
-  , openMainPanel$: flyd.stream()
+    openLeftPanel$: flyd.stream(),
+    openRightPanel$: flyd.stream(),
+    openMainPanel$: flyd.stream()
   }
   
   const displayPanel$ = flydMergeall([
-      flyd.map(_ => 'left', state.openLeftPanel$)
-    , flyd.map(_ => 'right', state.openRightPanel$)
-    , flyd.map(_ => 'main', state.openMainPanel$)
+      flyd.map(_ => 'left', state.openLeftPanel$),
+      flyd.map(_ => 'right', state.openRightPanel$),
+      flyd.map(_ => 'main', state.openMainPanel$)
   ])
   
   state.dashboard = dashboard.init({displayPanel$})
@@ -50,13 +50,13 @@ const view = state =>
   h('div', [
     dashboard.view(state.dashboard, {
         header: h('header', [
-          h('button', {on: {click: state.openLeftPanel$}}, 'Open Left Panel')
-        , h('button', {on: {click: state.openRightPanel$}}, 'Open Right Panel')
-        , h('button', {on: {click: state.openMainPanel$}}, 'Open Main Panel')
-        ])
-      , mainPanel: h('div', 'Main content') 
-      , rightPanel: h('div', 'Right panel content')
-      , leftPanel: h('div', 'Left panel content')
+          h('button', {on: {click: state.openLeftPanel$}}, 'Open Left Panel'),
+          h('button', {on: {click: state.openRightPanel$}}, 'Open Right Panel'),
+          h('button', {on: {click: state.openMainPanel$}}, 'Open Main Panel')
+        ]),
+        mainPanel: h('div', 'Main content'),
+        rightPanel: h('div', 'Right panel content'),
+        leftPanel: h('div', 'Left panel content')
     })
   ])
  ```
